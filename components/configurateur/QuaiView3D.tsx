@@ -180,7 +180,7 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         scene.add(bordure2);
 
         // ─── Label helper ────
-        function createLabel(text: string, position: THREE.Vector3) {
+        const createLabel = (text: string, position: THREE.Vector3) => {
           const canvas2d = document.createElement("canvas");
           canvas2d.width = 128;
           canvas2d.height = 32;
@@ -203,7 +203,7 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         }
 
         // ─── Module builder ────
-        function addBlock(m: PlacedModule, zOff: number) {
+        const addBlock = (m: PlacedModule, zOff: number) => {
           const w = m.spec.longueur * S;
           const h = m.spec.hauteur * S;
           const d = ROW_DEPTH;
@@ -277,7 +277,7 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         }
 
         // ─── Abribus ────
-        function buildBusShelter(posX: number, posZ: number) {
+        const buildBusShelter = (posX: number, posZ: number) => {
           const shelterGroup = new THREE.Group();
 
           const metalColor = "#5A5A5A";
@@ -415,7 +415,7 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         let theta = -0.5, phi = 0.55, radius = dist;
         const target = new THREE.Vector3(cx, 0.1, (Z_VOIRIE + Z_TROTTOIR) / 2);
 
-        function updateCam() {
+        const updateCam = () => {
           camera.position.set(
             target.x + radius * Math.sin(phi) * Math.cos(theta),
             target.y + radius * Math.cos(phi),
@@ -445,7 +445,7 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         cvs.addEventListener("wheel", onWheel, { passive: false });
 
         let animId: number;
-        function animate() { animId = requestAnimationFrame(animate); renderer.render(scene, camera); }
+        const animate = () => { animId = requestAnimationFrame(animate); renderer.render(scene, camera); };
         animate();
 
         const onResize = () => {
