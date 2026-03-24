@@ -8,6 +8,7 @@ import {
   FileText,
   Users,
   BarChart3,
+  PanelTop,
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,7 @@ const NAV = [
   { href: "/admin/documents", label: "Documents", icon: FileText },
   { href: "/admin/leads", label: "Leads", icon: Users },
   { href: "/admin/stats", label: "Stats", icon: BarChart3 },
+  { href: "/admin/pages", label: "Pages", icon: PanelTop },
 ];
 
 export function AdminSidebar() {

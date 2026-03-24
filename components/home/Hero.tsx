@@ -1,10 +1,24 @@
-"use client";
-
 import { ArrowRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { getPageContents } from "@/lib/content";
 
-export function Hero() {
+const DEFAULTS = {
+  hero_titre: "Le quai bus accessible. En 48h.",
+  hero_sous_titre: "Système breveté URBAMAT Environnement",
+  hero_description:
+    "URBAQUAI est le système modulaire en béton haute performance pour la mise en accessibilité des arrêts de bus. Provisoire ou définitif, conforme à toutes les normes en vigueur.",
+  hero_cta: "Voir le système",
+};
+
+export async function Hero() {
+  const c = await getPageContents("home", DEFAULTS);
+
+  // Séparer le titre pour colorer la fin en accent
+  const parts = c.hero_titre.split(".");
+  const mainTitle = parts.slice(0, -1).join(".") + ".";
+  const accentTitle = parts[parts.length - 1]?.trim();
+
   return (
     <section className="relative bg-neutral-dark min-h-[85vh] flex items-center overflow-hidden">
       <div className="absolute inset-0">
@@ -22,23 +36,23 @@ export function Hero() {
       <Container className="relative z-10 py-20 lg:py-28">
         <div className="max-w-3xl animate-fade-in">
           <span className="inline-block px-3 py-1 mb-6 text-sm font-medium text-accent bg-accent/10 rounded-full border border-accent/20">
-            Système breveté URBAMAT Environnement
+            {c.hero_sous_titre}
           </span>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1]">
-            Le quai bus accessible.{" "}
-            <span className="text-accent">En 48h.</span>
+            {mainTitle}{" "}
+            {accentTitle && (
+              <span className="text-accent">{accentTitle}</span>
+            )}
           </h1>
 
           <p className="mt-6 text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl">
-            URBAQUAI est le système modulaire en béton haute performance pour la
-            mise en accessibilité des arrêts de bus. Provisoire ou définitif,
-            conforme à toutes les normes en vigueur.
+            {c.hero_description}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-4 animate-slide-up">
             <Button href="/produit" size="lg">
-              Voir le système
+              {c.hero_cta}
               <ArrowRight size={18} className="ml-2" />
             </Button>
             <Button

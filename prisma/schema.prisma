@@ -7,24 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─── Réalisations (chantiers) ────────────────────────────────────
-
 model Realisation {
   id            String @id @default(cuid())
-  titre         String // "Carquefou (44) — Mobilité autonome"
+  titre         String
   ville         String
   departement   String
   annee         Int
-  typologieQuai String // "6 stations — 9ml à 16ml"
-  contexte      String // "Service expérimental mobilité autonome"
+  typologieQuai String
+  contexte      String
   longueurMl    Float
   nbStations    Int
   slug          String @unique
 
   @@map("realisations")
 }
-
-// ─── Documents téléchargeables ───────────────────────────────────
 
 model Document {
   id          String       @id @default(cuid())
@@ -38,39 +34,20 @@ model Document {
   @@map("documents")
 }
 
-enum DocumentType {
-  fiche
-  guide
-  cctp
-  plan
-}
-
-// ─── Leads (prospects) ───────────────────────────────────────────
-
 model Lead {
-  id                    String    @id @default(cuid())
-  prenom                String
-  nom                   String
-  societe               String
-  email                 String
-  profil                ProfilType
-  departement           String
-  message               String?   @db.Text
-  documentsTelecharges  String[]  // IDs ou noms des docs
-  createdAt             DateTime  @default(now())
+  id                   String     @id @default(cuid())
+  prenom               String
+  nom                  String
+  societe              String
+  email                String
+  profil               ProfilType
+  departement          String
+  message              String?
+  documentsTelecharges String[]
+  createdAt            DateTime   @default(now())
 
   @@map("leads")
 }
-
-enum ProfilType {
-  moe
-  moa
-  tp
-  collectivite
-  autre
-}
-
-// ─── Stats (chiffres clés homepage) ──────────────────────────────
 
 model Stat {
   id     String @id @default(cuid())
@@ -81,31 +58,49 @@ model Stat {
   @@map("stats")
 }
 
-// ─── Paramètres du site (single row) ─────────────────────────────
-
 model Parametres {
-  id           String  @id @default("singleton")
-  nomSite      String  @default("URBAQUAI")
-  emailContact String  @default("contact@urbamat.fr")
-  tel          String  @default("")
-  adresse      String  @default("")
-  linkedin     String  @default("")
+  id           String @id @default("singleton")
+  nomSite      String @default("URBAQUAI")
+  emailContact String @default("contact@urbamat.fr")
+  tel          String @default("")
+  adresse      String @default("")
+  linkedin     String @default("")
 
   @@map("parametres")
 }
-
-// ─── Articles réglementation ─────────────────────────────────────
 
 model ArticleReglementation {
   id        String   @id @default(cuid())
   titre     String
   slug      String   @unique
-  contenu   String   @db.Text
+  contenu   String
   ordre     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("articles_reglementation")
+}
+
+// ─── Contenus éditables (CMS léger) ─────────────────────────────
+
+model PageContent {
+  id        String      @id @default(cuid())
+  page      String      // "home", "produit", "contact", etc.
+  section   String      // "hero_titre", "hero_description", etc.
+  contenu   String
+  type      ContentType @default(texte)
+  ordre     Int         @default(0)
+  updatedAt DateTime    @updatedAt
+
+  @@unique([page, section])
+  @@map("page_contents")
+}
+
+enum ContentType {
+  texte
+  html
+  image
+  lien
 }
 
 // ─── Sessions admin ──────────────────────────────────────────────
@@ -117,4 +112,19 @@ model AdminSession {
   createdAt DateTime @default(now())
 
   @@map("admin_sessions")
+}
+
+enum DocumentType {
+  fiche
+  guide
+  cctp
+  plan
+}
+
+enum ProfilType {
+  moe
+  moa
+  tp
+  collectivite
+  autre
 }
