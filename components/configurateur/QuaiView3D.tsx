@@ -180,7 +180,8 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         scene.add(bordure2);
 
         // ─── Label helper ────
-        const createLabel = (text: string, position: THREE.Vector3) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const createLabel = (text: string, position: any) => {
           const canvas2d = document.createElement("canvas");
           canvas2d.width = 128;
           canvas2d.height = 32;
