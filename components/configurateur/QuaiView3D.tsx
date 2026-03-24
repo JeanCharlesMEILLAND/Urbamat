@@ -13,7 +13,7 @@ interface QuaiView3DProps {
 
 const S = 1 / 1000; // mm → m
 const ROW_DEPTH = 1.5; // 1500mm
-const GAP = 0.03;
+const GAP = 0.15;
 
 // Couleurs par rôle — identiques au 2D
 const ROLE_COLORS: Record<string, string> = {
@@ -204,7 +204,7 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         }
 
         // ─── Module builder ────
-        const addBlock = (m: PlacedModule, zOff: number) => {
+        const addBlock = (m: PlacedModule, zOff: number, rowLen: number) => {
           const w = m.spec.longueur * S;
           const h = m.spec.hauteur * S;
           const d = ROW_DEPTH;
@@ -212,28 +212,45 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
           const py = h / 2;
           const { base, edge } = getModuleColor(coloris, m.spec.role);
 
+          const MODULE_GAP = 0.02; // 2cm gap entre modules
+
           if (m.spec.role === "rampe") {
-            // Rampe biseautée
+            // Détecter si la rampe est à gauche ou à droite du quai
+            const moduleCenter = m.x * S + w / 2;
+            const isLeftRampe = moduleCenter < rowLen / 2;
+
+            // Rampe biseautée avec gap — inversée si à droite
+            const rw = w - MODULE_GAP;
+            const rd = d - MODULE_GAP;
             const shape = new THREE.Shape();
-            shape.moveTo(0, 0);
-            shape.lineTo(w, 0);
-            shape.lineTo(w, h);
-            shape.lineTo(0, h * 0.1);
+            if (isLeftRampe) {
+              // Pente montante : bas à gauche, haut à droite
+              shape.moveTo(0, 0);
+              shape.lineTo(rw, 0);
+              shape.lineTo(rw, h);
+              shape.lineTo(0, h * 0.1);
+            } else {
+              // Pente descendante : haut à gauche, bas à droite
+              shape.moveTo(0, 0);
+              shape.lineTo(rw, 0);
+              shape.lineTo(rw, h * 0.1);
+              shape.lineTo(0, h);
+            }
             shape.closePath();
-            const geo = new THREE.ExtrudeGeometry(shape, { depth: d, bevelEnabled: false });
+            const geo = new THREE.ExtrudeGeometry(shape, { depth: rd, bevelEnabled: false });
             const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: base, roughness: 0.6 }));
-            mesh.position.set(m.x * S, 0, zOff - d / 2);
+            mesh.position.set(m.x * S + MODULE_GAP / 2, 0, zOff - rd / 2);
             mesh.castShadow = true;
             scene.add(mesh);
             scene.add(new THREE.LineSegments(
               new THREE.EdgesGeometry(geo),
               new THREE.LineBasicMaterial({ color: edge })
-            ).translateX(m.x * S).translateZ(zOff - d / 2));
+            ).translateX(m.x * S + MODULE_GAP / 2).translateZ(zOff - rd / 2));
 
             // Label
             createLabel(m.ref, new THREE.Vector3(m.x * S + w / 2, h + 0.1, zOff));
           } else {
-            const geo = new THREE.BoxGeometry(w - 0.006, h, d - 0.006);
+            const geo = new THREE.BoxGeometry(w - MODULE_GAP, h, d - MODULE_GAP);
             const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: base, roughness: 0.55, metalness: 0.03 }));
             mesh.position.set(px, py, zOff);
             mesh.castShadow = true;
@@ -268,13 +285,13 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
         // ─── Rang voirie (haut 2D) = SUR la route ────
         for (const m of modulesHaut) {
           if (m.spec.role === "vide") continue;
-          addBlock(m, Z_VOIRIE);
+          addBlock(m, Z_VOIRIE, lenH);
         }
 
         // ─── Rang trottoir (bas 2D) = sur le trottoir ────
         for (const m of modulesBas) {
           if (m.spec.role === "vide") continue;
-          addBlock(m, Z_TROTTOIR);
+          addBlock(m, Z_TROTTOIR, lenB);
         }
 
         // ─── Abribus ────
