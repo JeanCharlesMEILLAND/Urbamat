@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Réalisations (chantiers) ────────────────────────────────────
+
+model Realisation {
+  id            String @id @default(cuid())
+  titre         String // "Carquefou (44) — Mobilité autonome"
+  ville         String
+  departement   String
+  annee         Int
+  typologieQuai String // "6 stations — 9ml à 16ml"
+  contexte      String // "Service expérimental mobilité autonome"
+  longueurMl    Float
+  nbStations    Int
+  slug          String @unique
+
+  @@map("realisations")
+}
+
+// ─── Documents téléchargeables ───────────────────────────────────
+
+model Document {
+  id          String       @id @default(cuid())
+  titre       String
+  type        DocumentType
+  fichierUrl  String
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("documents")
+}
+
+enum DocumentType {
+  fiche
+  guide
+  cctp
+  plan
+}
+
+// ─── Leads (prospects) ───────────────────────────────────────────
+
+model Lead {
+  id                    String    @id @default(cuid())
+  prenom                String
+  nom                   String
+  societe               String
+  email                 String
+  profil                ProfilType
+  departement           String
+  message               String?   @db.Text
+  documentsTelecharges  String[]  // IDs ou noms des docs
+  createdAt             DateTime  @default(now())
+
+  @@map("leads")
+}
+
+enum ProfilType {
+  moe
+  moa
+  tp
+  collectivite
+  autre
+}
+
+// ─── Stats (chiffres clés homepage) ──────────────────────────────
+
+model Stat {
+  id     String @id @default(cuid())
+  label  String
+  valeur String
+  ordre  Int
+
+  @@map("stats")
+}
+
+// ─── Paramètres du site (single row) ─────────────────────────────
+
+model Parametres {
+  id           String  @id @default("singleton")
+  nomSite      String  @default("URBAQUAI")
+  emailContact String  @default("contact@urbamat.fr")
+  tel          String  @default("")
+  adresse      String  @default("")
+  linkedin     String  @default("")
+
+  @@map("parametres")
+}
+
+// ─── Articles réglementation ─────────────────────────────────────
+
+model ArticleReglementation {
+  id        String   @id @default(cuid())
+  titre     String
+  slug      String   @unique
+  contenu   String   @db.Text
+  ordre     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("articles_reglementation")
+}
+
+// ─── Sessions admin ──────────────────────────────────────────────
+
+model AdminSession {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("admin_sessions")
+}
