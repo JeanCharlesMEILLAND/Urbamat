@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, lazy, Suspense } from "react";
+import { useTranslations } from "next-intl";
 import { RotateCcw, Send, Download, Box, Layout, Tag, EyeOff } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
@@ -22,6 +23,7 @@ import { cn } from "@/lib/utils";
 const QuaiView3D = lazy(() => import("@/components/configurateur/QuaiView3D").then((m) => ({ default: m.QuaiView3D })));
 
 export default function ConfigurateurPage() {
+  const t = useTranslations("configurateur");
   const [nbRangees, setNbRangees] = useState<NbRangees>(1);
   const [modulesByRow, setModulesByRow] = useState<Record<ModuleRow, PlacedModule[]>>({ 1: [], 2: [], 3: [], 4: [] });
   const [selectedModule, setSelectedModule] = useState<ModuleRef | null>(null);
@@ -155,10 +157,10 @@ export default function ConfigurateurPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-neutral-dark">
-                Configurateur URBAQUAI
+                {t("titre")}
               </h1>
               <p className="text-sm text-gray-500 mt-1">
-                Construisez votre quai module par module — cliquez, placez, visualisez.
+                {t("sousTitre")}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -169,7 +171,7 @@ export default function ConfigurateurPage() {
                   size="sm"
                   onClick={() => setNbRangees((nbRangees + 1) as NbRangees)}
                 >
-                  + Ajouter un rang
+                  {t("ajouterRang")}
                 </Button>
               )}
               {nbRangees > 1 && (
@@ -181,15 +183,15 @@ export default function ConfigurateurPage() {
                     setNbRangees((nbRangees - 1) as NbRangees);
                   }}
                 >
-                  − Retirer rang {nbRangees}
+                  {t("retirerRang", { rang: nbRangees })}
                 </Button>
               )}
               <Button variant="ghost" size="sm" onClick={handleLoadTemplate}>
-                Charger un exemple
+                {t("chargerExemple")}
               </Button>
               <Button variant="outline" size="sm" onClick={handleReset}>
                 <RotateCcw size={14} className="mr-1" />
-                Réinitialiser
+                {t("reinitialiser")}
               </Button>
             </div>
           </div>
@@ -214,14 +216,14 @@ export default function ConfigurateurPage() {
                 {/* Environnement */}
                 <div className="space-y-2">
                   <h3 className="text-sm font-bold text-neutral-dark uppercase tracking-wider">
-                    Environnement
+                    {t("environnement")}
                   </h3>
                   <div className="space-y-2">
                     {([
-                      { key: "trottoir" as const, label: "Trottoir" },
-                      { key: "parking" as const, label: "Parking" },
-                      { key: "cyclable" as const, label: "Piste cyclable" },
-                      { key: "voie" as const, label: "Voie circulation" },
+                      { key: "trottoir" as const, label: t("trottoir") },
+                      { key: "parking" as const, label: t("parking") },
+                      { key: "cyclable" as const, label: t("pisteCyclable") },
+                      { key: "voie" as const, label: t("voieCirculation") },
                     ]).map((field) => (
                       <div key={field.key} className="flex items-center gap-2">
                         <label className="text-xs text-gray-600 w-24 shrink-0">{field.label}</label>
@@ -249,12 +251,12 @@ export default function ConfigurateurPage() {
               <div className="bg-neutral-light rounded-xl p-4 lg:p-6 border border-gray-200">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-sm font-bold text-neutral-dark uppercase tracking-wider">
-                    {view3D ? "Vue 3D" : "Plan du quai"}
+                    {view3D ? t("vue3D") : t("planQuai")}
                   </h2>
                   <div className="flex items-center gap-2">
                     {!view3D && (
                       <span className="text-xs text-gray-400 hidden sm:inline">
-                        Cliquez sur un module posé pour le retirer
+                        {t("retirerModule")}
                       </span>
                     )}
                     {/* Toggle 2D / 3D */}
@@ -289,7 +291,7 @@ export default function ConfigurateurPage() {
                   <Suspense
                     fallback={
                       <div className="w-full h-[450px] bg-neutral-dark/5 rounded-lg flex items-center justify-center text-gray-400 text-sm">
-                        Chargement de la vue 3D...
+                        {t("chargement3D")}
                       </div>
                     }
                   >
@@ -306,7 +308,7 @@ export default function ConfigurateurPage() {
                     />
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-xs text-gray-400">
-                        Clic gauche + glisser pour orbiter · Molette pour zoomer
+                        {t("orbiter")}
                       </p>
                       <div className="flex items-center gap-2">
                         <button
@@ -319,7 +321,7 @@ export default function ConfigurateurPage() {
                           )}
                         >
                           {showLabels ? <Tag size={12} /> : <EyeOff size={12} />}
-                          {showLabels ? "Masquer les labels" : "Afficher les labels"}
+                          {showLabels ? t("masquerLabels") : t("afficherLabels")}
                         </button>
                         <button
                           onClick={() => setShowShelter(!showShelter)}
@@ -330,7 +332,7 @@ export default function ConfigurateurPage() {
                               : "bg-gray-100 border-gray-200 text-gray-500"
                           )}
                         >
-                          {showShelter ? "Masquer l'abribus" : "Afficher l'abribus"}
+                          {showShelter ? t("masquerAbribus") : t("afficherAbribus")}
                         </button>
                       </div>
                     </div>
@@ -353,15 +355,15 @@ export default function ConfigurateurPage() {
               {allModules.length === 0 && (
                 <div className="text-center py-8 text-gray-400">
                   <div className="text-4xl mb-3">&#x1f9f1;</div>
-                  <p className="text-sm font-medium">Comment ça marche ?</p>
+                  <p className="text-sm font-medium">{t("commentCaMarche")}</p>
                   <ol className="text-xs mt-2 space-y-1 text-gray-400">
-                    <li><strong>1.</strong> Sélectionnez une rangée dans la palette</li>
-                    <li><strong>2.</strong> Cliquez sur un module pour le sélectionner</li>
-                    <li><strong>3.</strong> Cliquez sur <strong>+</strong> dans le plan pour le placer</li>
-                    <li><strong>4.</strong> Cliquez sur un module posé pour le retirer</li>
+                    <li><strong>1.</strong> {t("instructions.step1")}</li>
+                    <li><strong>2.</strong> {t("instructions.step2")}</li>
+                    <li><strong>3.</strong> {t("instructions.step3")}</li>
+                    <li><strong>4.</strong> {t("instructions.step4")}</li>
                   </ol>
                   <Button variant="ghost" size="sm" onClick={handleLoadTemplate} className="mt-4">
-                    Ou charger un exemple de quai 19 m
+                    {t("chargerExemple19m")}
                   </Button>
                 </div>
               )}
@@ -371,7 +373,7 @@ export default function ConfigurateurPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                   <div className="lg:col-span-3">
                     <h2 className="text-sm font-bold text-neutral-dark uppercase tracking-wider mb-3">
-                      Nomenclature
+                      {t("nomenclature")}
                     </h2>
                     <BomTable modules={allModules} />
                   </div>
@@ -382,28 +384,28 @@ export default function ConfigurateurPage() {
                       {showForm ? (
                         <div className="bg-neutral-light rounded-lg p-5 border border-gray-200">
                           <h3 className="font-bold text-neutral-dark mb-2">
-                            Recevez votre plan
+                            {t("recevoirPlan")}
                           </h3>
                           <p className="text-xs text-gray-500 mb-4">
-                            Nomenclature + chiffrage personnalisé par email.
+                            {t("nomenclatureEmail")}
                           </p>
                           <LeadForm compact onSuccess={() => setShowForm(false)} />
                         </div>
                       ) : (
                         <div className="bg-primary/5 rounded-lg p-5 border border-primary/20 text-center">
                           <h3 className="font-bold text-neutral-dark">
-                            Configuration prête ?
+                            {t("configPrete")}
                           </h3>
                           <p className="text-xs text-gray-500 mt-1">
-                            Recevez la nomenclature et un chiffrage.
+                            {t("recevoirNomenclature")}
                           </p>
                           <div className="space-y-2 mt-4">
                             <Button onClick={() => setShowForm(true)} className="w-full" size="sm">
                               <Send size={14} className="mr-2" />
-                              Recevoir le devis
+                              {t("recevoirDevis")}
                             </Button>
                             <Button href="/contact" variant="outline" className="w-full" size="sm">
-                              Nous contacter
+                              {t("nousContacter")}
                             </Button>
                           </div>
                         </div>

@@ -1,0 +1,577 @@
+{
+  "nav": {
+    "urbaquai": "URBAQUAI",
+    "urbaterra": "URBATERRA",
+    "configurateur": "Konfigurator",
+    "realisations": "Referenzen",
+    "reglementation": "Vorschriften",
+    "telechargements": "Downloads",
+    "contact": "Kontakt",
+    "devis": "Angebot anfordern"
+  },
+  "footer": {
+    "description": "Modulares Bushaltestellen-System aus Hochleistungsbeton. Temporär oder dauerhaft, barrierefrei, in 48 Stunden installiert.",
+    "solution": "Eine Lösung von {company}",
+    "produit": "Produkte",
+    "ressources": "Ressourcen",
+    "contact": "Kontakt",
+    "links": {
+      "urbaquai": "URBAQUAI — Bushaltestelle",
+      "urbaterra": "URBATERRA — Terrasse",
+      "configurations": "Konfigurationen",
+      "realisations": "Referenzen",
+      "telechargements": "Downloads",
+      "reglementation": "Vorschriften",
+      "contact": "Kontakt"
+    },
+    "legal": "Alle Rechte vorbehalten.",
+    "mentionsLegales": "Impressum",
+    "confidentialite": "Datenschutz"
+  },
+  "hero": {
+    "titre": "Die barrierefreie Bushaltestelle. In 48h.",
+    "sousTitre": "Patentiertes System von URBAMAT Environnement",
+    "description": "URBAQUAI ist das modulare Hochleistungsbeton-System für die barrierefreie Gestaltung von Bushaltestellen. Temporär oder dauerhaft, konform mit allen geltenden Normen.",
+    "cta": "System ansehen",
+    "ficheTechnique": "Datenblatt"
+  },
+  "stats": {
+    "expertise": "Beton-Expertise",
+    "pose": "Installation vor Ort",
+    "quais": "installierte Bahnsteige in Frankreich"
+  },
+  "problemSolution": {
+    "titre": "Ein nationales Problem. Eine konkrete Lösung.",
+    "sousTitre": "In Frankreich sind Tausende von Bushaltestellen für Menschen mit eingeschränkter Mobilität nicht zugänglich. URBAQUAI ändert das.",
+    "constat": "Die Situation",
+    "reponse": "Die URBAQUAI-Antwort",
+    "problems": {
+      "inaccessibles": {
+        "title": "Nicht barrierefreie Haltestellen",
+        "text": "Tausende von Bushaltestellen in Frankreich entsprechen noch immer nicht dem Barrierefreiheitsgesetz von 2005."
+      },
+      "travaux": {
+        "title": "Lange und teure Bauarbeiten",
+        "text": "Ortbeton-Lösungen erfordern wochenlange Bauarbeiten, Erdarbeiten und Aushärtung."
+      },
+      "perturbation": {
+        "title": "Verkehrsbehinderung",
+        "text": "Herkömmliche Baustellen erfordern Umleitungen und längere Betriebsunterbrechungen."
+      }
+    },
+    "solutions": {
+      "accessibilite": {
+        "title": "Sofortige Barrierefreiheit",
+        "text": "Bahnsteig in normierter Höhe für stufenfreien Zugang, ab Installation rollstuhlgerecht."
+      },
+      "pose48h": {
+        "title": "Installation in 48h",
+        "text": "Vorgefertigte Module, lieferfertig. Keine Schalung, keine Aushärtung, kein Warten."
+      },
+      "modulaire": {
+        "title": "Modular und reversibel",
+        "text": "Temporäre oder dauerhafte Konfiguration. Demontierbar und umsetzbar ohne Zerstörung."
+      },
+      "hydraulique": {
+        "title": "Hydraulische Transparenz",
+        "text": "Durchgehender Funktionshohlraum unter der Platte — seitliche und längsseitige Regenwasserableitung, ohne Rückhaltung."
+      },
+      "albedo": {
+        "title": "Hohe Albedo",
+        "text": "Reduzierung der Oberflächenerwärmung und Wärmeinseln. 4 helle Naturfarben verfügbar."
+      },
+      "certifie": {
+        "title": "CERIB EN 1339 zertifiziert",
+        "text": "C40/50-Beton, NF-Zement mit niedrigem CO₂-Ausstoß, validierte CERIB-Tests. Konform mit CEREMA 2018 und Barrierefreiheitsgesetz 2005."
+      }
+    }
+  },
+  "configurationsGrid": {
+    "titre": "4 Konfigurationen für jede Situation",
+    "sousTitre": "Jede Bushaltestelle ist einzigartig. URBAQUAI passt sich mit 4 modularen Konfigurationen an jedes Szenario an.",
+    "voirTout": "Alle Konfigurationen im Detail ansehen"
+  },
+  "configurations": {
+    "avancee": {
+      "titre": "Gehwegvorstreckung",
+      "sousTitre": "Boarding bulb",
+      "description": "Gehwegerweiterung auf Höhe der Bushaltestelle, die ein optimales Andocken des Fahrzeugs und stufenfreien Zugang für Rollstuhlfahrer ermöglicht.",
+      "avantages": ["Präzises Andocken des Busses", "Stufenfreier Zugang", "Fahrspurerhaltung", "Schnelle Installation ohne schwere Erdarbeiten"],
+      "casUsage": ["Haltestellen in gerader Linie", "Straßen mit Seitenparken", "Dichte Stadtgebiete"]
+    },
+    "avancee_velo": {
+      "titre": "Vorstreckung mit Radweg",
+      "sousTitre": "Boarding bulb + cycle lane",
+      "description": "Erweiterte Konfiguration mit integriertem, sicherem Radweg hinter dem Bahnsteig für die Koexistenz von Bus und Fahrrad.",
+      "avantages": ["Sichere Bus-Fahrrad-Koexistenz", "Integrierter Radweg", "Radwegenetz-Kontinuität", "Integrierte Beschilderung"],
+      "casUsage": ["Strecken mit bestehendem Radweg", "Projekte für sanfte Mobilität", "Multimodale Entwicklungen"]
+    },
+    "ile": {
+      "titre": "Inselkonfiguration",
+      "sousTitre": "Island platform",
+      "description": "Zentraler, vom Verkehr isolierter Bahnsteig, der eine oder zwei Richtungen bedient. Ideal für Busspuren und BRT.",
+      "avantages": ["Maximale Fahrgastsicherheit", "Bidirektionale Bedienung möglich", "BRT-geeignet", "Optimierte Grundfläche"],
+      "casUsage": ["Eigene Busspuren", "BRT und Straßenbahnen", "Haltestellen mit hohem Verkehrsaufkommen"]
+    },
+    "ile_velo": {
+      "titre": "Insel mit Radweg",
+      "sousTitre": "Island platform + cycle lane",
+      "description": "Inselkonfiguration mit Radweg-Integration, die die Kontinuität der Radrouten durch die Haltestelle gewährleistet.",
+      "avantages": ["Fahrgast- + Radfahrersicherheit", "Radweg-Kontinuität erhalten", "Integrierte Beschilderung", "Vollständige Modularität"],
+      "casUsage": ["BRT mit Radwegenetz", "Fahrradplan-Projekte", "Komplette Stadtentwicklungen"]
+    }
+  },
+  "comparison": {
+    "titre": "Warum URBAQUAI?",
+    "sousTitre": "Objektiver Vergleich mit modularen Kunststofflösungen und traditionellen Ortbeton-Bauweisen.",
+    "critere": "Kriterium",
+    "urbaquai": "URBAQUAI®",
+    "urbaquaiSub": "Modularer C40/50-Beton",
+    "plastique": "Modularer Kunststoff",
+    "plastiqueSub": "z.B. Zicla Vectorial",
+    "traditionnel": "Ortbeton",
+    "traditionnelSub": "Traditionelle Lösung",
+    "rows": {
+      "perennite": "Langlebigkeit",
+      "gelDegel": "Frost-/Tauwiderstand",
+      "stabilite": "Stabilität (Gewicht)",
+      "antiderapante": "Rutschfeste Oberfläche",
+      "reemploi": "Wiederverwendung / Reversibilität",
+      "certification": "CERIB-Zertifizierung",
+      "poseSol": "Verlegung auf flexiblem UND festem Untergrund",
+      "hydraulique": "Hydraulische Transparenz",
+      "albedo": "Hohe Albedo (thermischer Komfort)",
+      "impact": "Umweltauswirkung",
+      "delai": "Installationszeit"
+    },
+    "values": {
+      "cimentBasCarbone": "NF-Zement mit niedrigem CO₂",
+      "plastiqueRecycle": "Recycling-Kunststoff",
+      "betonStandard": "Standard-Beton",
+      "surfacePlastique": "Kunststoffoberfläche",
+      "variable": "Variabel",
+      "massif": "Massiv"
+    }
+  },
+  "featuredRealisations": {
+    "titre": "Sie vertrauen uns",
+    "sousTitre": "Entdecken Sie unsere Projekte in ganz Frankreich. Jedes Projekt ist eine maßgeschneiderte Antwort auf lokale Barrierefreiheitsanforderungen.",
+    "voirProjet": "Projekt ansehen",
+    "toutesRealisations": "Alle unsere Projekte",
+    "stations": "Stationen"
+  },
+  "reglementationBlock": {
+    "titre": "100% konform. Ohne Kompromisse.",
+    "sousTitre": "URBAQUAI wurde entwickelt, um den gesamten französischen Regulierungsrahmen für Verkehrsbarrierefreiheit zu erfüllen.",
+    "loi2005": {
+      "titre": "Gesetz vom 11. Februar 2005",
+      "description": "Gleichheit der Rechte und Chancen: Alle Haltestellen des öffentlichen Verkehrs müssen barrierefrei zugänglich sein."
+    },
+    "cerema": {
+      "titre": "CEREMA-Leitfaden 2018",
+      "description": "Technische Empfehlungen für barrierefreie Bushaltestellen. URBAQUAI erfüllt jede Anforderung."
+    },
+    "norme": {
+      "titre": "Norm NF P 98-352",
+      "description": "Anforderungen an Festigkeit und Haltbarkeit von Bordsteinen und Bahnsteigelementen. Zertifizierter Hochleistungsbeton."
+    },
+    "explorer": "Regulierungsrahmen erkunden"
+  },
+  "ctaContact": {
+    "titre": "Ein Barrierefreiheitsprojekt?",
+    "sousTitre": "Erzählen Sie uns von Ihrem Bedarf. Unser Team antwortet innerhalb von 24 Stunden mit einem maßgeschneiderten technischen Vorschlag.",
+    "merci": "Vielen Dank für Ihre Nachricht!",
+    "recontact": "Unser Team wird sich so schnell wie möglich bei Ihnen melden.",
+    "prenom": "Vorname",
+    "nom": "Nachname",
+    "societe": "Unternehmen",
+    "email": "Geschäftliche E-Mail",
+    "message": "Beschreiben Sie kurz Ihren Bedarf",
+    "placeholder": "Anzahl der Haltestellen, gewünschte Konfiguration, Zeitrahmen...",
+    "envoyer": "Anfrage senden",
+    "confidentialite": "Ihre Daten werden ausschließlich zur Beantwortung Ihrer Anfrage verarbeitet. Siehe unsere",
+    "politique": "Datenschutzrichtlinie"
+  },
+  "leadForm": {
+    "prenom": "Vorname *",
+    "nom": "Nachname *",
+    "societe": "Unternehmen *",
+    "email": "Geschäftliche E-Mail *",
+    "profil": "Sie sind *",
+    "departement": "Abteilung",
+    "messageLabel": "Nachricht (optional)",
+    "messagePlaceholder": "Beschreiben Sie Ihr Projekt...",
+    "select": "— Auswählen —",
+    "envoyer": "Senden",
+    "accesDocuments": "Zugang zu Dokumenten",
+    "envoi": "Wird gesendet...",
+    "merci": "Vielen Dank!",
+    "merciDescription": "Ihre Dokumente sind jetzt zugänglich. Eine Bestätigungs-E-Mail wurde gesendet.",
+    "champsObligatoires": "* Pflichtfelder. Ihre Daten werden ausschließlich zur Beantwortung Ihrer Anfrage verarbeitet.",
+    "erreurServeur": "Serverfehler",
+    "erreurGenerale": "Ein Fehler ist aufgetreten",
+    "placeholders": {
+      "prenom": "Max",
+      "nom": "Mustermann",
+      "societe": "Ingenieurbüro XYZ",
+      "email": "m.mustermann@beispiel.de"
+    }
+  },
+  "profils": {
+    "moe": "Projektleiter",
+    "moa": "Auftraggeber",
+    "tp": "Tiefbauunternehmen",
+    "collectivite": "Gemeinde / Verkehrsbehörde",
+    "autre": "Sonstiges"
+  },
+  "validation": {
+    "prenomRequis": "Vorname ist erforderlich",
+    "nomRequis": "Nachname ist erforderlich",
+    "societeRequise": "Unternehmen ist erforderlich",
+    "emailInvalide": "Ungültige E-Mail",
+    "profilRequis": "Bitte wählen Sie ein Profil",
+    "messageMin": "Die Nachricht muss mindestens 10 Zeichen lang sein"
+  },
+  "produit": {
+    "metaTitle": "URBAQUAI 140+50 — Modularer Beton-Busbahnsteig C40/50",
+    "metaDescription": "URBAQUAI 140+50 System: vorgefertigter modularer Busbahnsteig aus C40/50-Beton, direkte Installation auf Asphalt, barrierefrei. Module 3000×1500 mm, CERIB EN 1339 geprüft.",
+    "systemeBrevete": "Patentiertes System",
+    "sousTitre": "Vorgefertigter modularer Bus- & Reisebus-Bahnsteig — Direkte Verlegung auf Asphalt",
+    "description1": "Die vorgefertigten URBAQUAI®-Module ermöglichen den schnellen Bau von Bus- & Reisebus-Haltestellen, die für alle Fahrgäste zugänglich sind. Bahnsteiglänge und -höhe passen sich den Eigenschaften des Fahrzeugs an.",
+    "description2": "Jedes Modul wird werksseitig aus monolithischem Hochleistungsbeton {classe} mit NF-Zement mit niedrigem CO₂-Ausstoß gefertigt, was gleichbleibende Qualität und überlegene Haltbarkeit garantiert. Sofort nutzbar, wiederverwendbar, minimale Verkehrsbeeinträchtigung.",
+    "features": {
+      "hauteurs": "Höhen",
+      "beton": "Beton",
+      "tests": "Tests",
+      "gelDegel": "Frost/Tau",
+      "coloris": "Farben",
+      "pose": "Installation"
+    },
+    "featureValues": {
+      "hauteurs": "18 / 21 cm",
+      "coloris": "4 natürliche",
+      "pose": "48h vor Ort"
+    },
+    "ficheTechniquePdf": "Datenblatt PDF",
+    "demanderDevis": "Angebot anfordern",
+    "specsTitre": "Technische Daten",
+    "specsSousTitre": "C40/50-Beton, CERIB EN 1339 Tests, NF-Zement mit niedrigem CO₂. Jedes Detail für Langlebigkeit und Konformität konzipiert.",
+    "miseEnOeuvre": "Installation",
+    "miseEnOeuvreSousTitre": "Direkte Verlegung auf bestehendem Asphalt. Anschlagmittel, Ø12 mm Dübel, sofort nutzbar.",
+    "ctaTitre": "Welche Konfiguration für Ihr Projekt?",
+    "ctaSousTitre": "Gehwegvorstreckung, Insel, mit Radweg... Entdecken Sie die 4 URBAQUAI-Konfigurationen.",
+    "voirConfigurations": "Konfigurationen ansehen",
+    "accordion": {
+      "gamme": "URBAQUAI 140+50 Reihe — Module und Abmessungen",
+      "reference": "Referenz",
+      "module": "Modul",
+      "dimensions": "Abmessungen",
+      "poids": "Gewicht",
+      "hauteursDisponibles": "Verfügbare Höhen:",
+      "hauteur210": "Höhe h=210: Zentralmodul ~1.715 kg, Seitenmodul ~860 kg",
+      "longueurQuai": "Bahnsteiglänge: maßgefertigt durch Modulkombination (Vielfache von 1,5 m)",
+      "beton": "Beton und Zusammensetzung",
+      "composition": "Zusammensetzung:",
+      "classeResistance": "Festigkeitsklasse:",
+      "classeExposition": "Expositionsklasse:",
+      "ciment": "Zement:",
+      "taquets": "Werkseitig montierte Abstandshalter",
+      "bandeGuidage": "Tastbare Leitstreifen gemäß NF P 98-352",
+      "resistances": "Mechanische Festigkeit — CERIB EN 1339 Tests",
+      "gelDegel": "Frost/Tau & Streusalze:",
+      "abrasion": "Abriebfestigkeit:",
+      "chocs": "Stoßfestigkeit:",
+      "taches": "Fleckenbeständigkeit:",
+      "srtNeuf": "Rutschfestigkeit SRT neu/nass:",
+      "srtUse": "Rutschfestigkeit SRT verschmutzt/abgenutzt:",
+      "testsValides": "Tests vom CERIB nach EN 1339 validiert",
+      "finition": "Oberfläche und Farben",
+      "finitionSurface": "Oberflächenbehandlung:",
+      "scoreSrt": "Durchschnittlicher SRT-Wert im Neuzustand und nass",
+      "colorisNaturels": "4 Naturfarben:",
+      "rampes": "Zugangsrampen und Barrierefreiheit",
+      "zoneAttente": "Integrierter sicherer Wartebereich",
+      "accessiblePMR": "100% rollstuhlgerecht",
+      "options": "Optionen und Zubehör",
+      "optionsList": {
+        "antisalissure": "Schmutzabweisend behandelter Beton S.O.",
+        "mobilier": "Vorbereitungen für Stadtmöbel und Geländer",
+        "pmr": "Rollstuhlzugangsmodule für Busbahnhöfe",
+        "ile": "Module für Inselbahnsteige",
+        "terrasse": "Sonderanfertigungen für temporäre gewerbliche Terrassenerweiterung (URBATERRA-Reihe)"
+      }
+    }
+  },
+  "installation": {
+    "step1": {
+      "titre": "Untergrundvorbereitung",
+      "description": "Reinigung der bestehenden Oberfläche (Asphalt, Beton oder Bitumen). Kein Erdaushub, kein Fräsen. Der Untergrund muss lediglich eben und stabil sein. Markierung der Dübelstandorte."
+    },
+    "step2": {
+      "titre": "Lieferung und Handhabung",
+      "description": "URBAQUAI-Module kommen einbaufertig auf der Baustelle an. Positionierung mit Anschlagmitteln (1.800 kg Kapazität). Zentralmodul M 1.18: ~1.400 kg, Seitenmodule: ~700 kg."
+    },
+    "step3": {
+      "titre": "Positionierung und Befestigung",
+      "description": "Modulausrichtung mit werkseitig montierten Abstandshaltern. Befestigung mit Ø12 mm Dübeln in 15 cm Tiefe im bestehenden Untergrund. Verbindung der Module untereinander."
+    },
+    "step4": {
+      "titre": "Rampen und Abschluss",
+      "description": "Installation der Rollstuhlrampen (Beton D-009a oder verzinkter Stahl mit automatischer Höhenanpassung und manipulationssicherer Verschraubung). Überprüfung der Leitstreifen. Bahnsteig sofort nutzbar."
+    }
+  },
+  "contact": {
+    "metaTitle": "Kontakt — Angebot für URBAQUAI anfordern",
+    "metaDescription": "Kontaktieren Sie URBAMAT Environnement für Ihr modulares Busbahnsteig-Projekt. Kostenloses Angebot innerhalb von 24h, persönliche technische Beratung.",
+    "titre": "Sprechen wir über Ihr Projekt",
+    "sousTitre": "Beschreiben Sie uns Ihren Bedarf an Barrierefreiheit. Unser Team antwortet innerhalb von 24 Stunden mit einem maßgeschneiderten technischen Vorschlag und Kostenvoranschlag.",
+    "formulaire": "Kontaktformular",
+    "coordonnees": "Kontaktdaten",
+    "telephone": "Telefon",
+    "emailLabel": "E-Mail",
+    "adresse": "Adresse",
+    "horaires": "Öffnungszeiten",
+    "horairesValue": "Mo — Fr: 8:00 — 17:30 Uhr",
+    "prescripteur": "Sind Sie Planer?",
+    "prescripteurTexte": "Wir stellen kostenlos Standard-CCTP/BPU-Auszüge für Ihre Ausschreibungsunterlagen sowie DWG-Pläne für Ihre CAD-Projekte zur Verfügung.",
+    "accesTelechargements": "Zu den Downloads"
+  },
+  "telechargements": {
+    "titre": "Downloads",
+    "sousTitre": "Zugang zu allen technischen URBAQUAI-Dokumenten: Produktdatenblätter, Installationsanleitungen, Standardspezifikationen und CAD-Pläne.",
+    "documentsDisponibles": "Verfügbare Dokumente",
+    "accesDebloque": "Zugang freigeschaltet!",
+    "cliquezTelecharger": "Klicken Sie auf das Download-Symbol neben jedem Dokument, um es herunterzuladen.",
+    "accesDocuments": "Zugang zu Dokumenten",
+    "remplissezFormulaire": "Füllen Sie das untenstehende Formular aus, um Zugang zu allen technischen URBAQUAI-Dokumenten zu erhalten.",
+    "documents": {
+      "fiche": {
+        "titre": "URBAQUAI Datenblatt",
+        "description": "Abmessungen, Festigkeiten, Materialien, Farben. Das wesentliche Dokument für Ihre Spezifikationen."
+      },
+      "guide": {
+        "titre": "Installations- und Montageanleitung",
+        "description": "Detaillierte Installationsanweisungen, Montageschemas, benötigtes Werkzeug."
+      },
+      "cctp": {
+        "titre": "Standard-CCTP / BPU Auszug",
+        "description": "Standard-Technische Klauseln, direkt integrierbar in Ihre öffentlichen Ausschreibungsunterlagen."
+      },
+      "plan": {
+        "titre": "DWG / AutoCAD Pläne",
+        "description": "2D-Pläne der 4 Konfigurationen zur Integration in Ihre CAD-Projekte."
+      }
+    },
+    "types": {
+      "fiche": "Datenblatt",
+      "guide": "Installationsanleitung",
+      "cctp": "CCTP / BPU Auszug",
+      "plan": "DWG Plan"
+    }
+  },
+  "realisations": {
+    "metaTitle": "Referenzen — Unsere URBAQUAI-Projekte in Frankreich",
+    "metaDescription": "Entdecken Sie unsere URBAQUAI-Projekte in ganz Frankreich: detaillierte Beschreibungen unserer modularen Busbahnsteige, Stationen und verlegten Längen.",
+    "titre": "Unsere Referenzen",
+    "sousTitre": "URBAQUAI-Modulbahnsteige in ganz Frankreich eingesetzt. Jedes Projekt ist eine maßgeschneiderte Antwort auf lokale Barrierefreiheitsanforderungen.",
+    "projets": "Projekte",
+    "stations": "Stationen",
+    "quaisPoses": "verlegte Bahnsteige"
+  },
+  "reglementation": {
+    "metaTitle": "Vorschriften — Barrierefreiheitsstandards für Bushaltestellen",
+    "metaDescription": "Regulierungsrahmen für die Barrierefreiheit von Bushaltestellen in Frankreich: Gesetz vom 11. Februar 2005, CEREMA-Leitfaden 2018, NF-Normen. URBAQUAI konform mit allen Anforderungen.",
+    "titre": "Regulierungsrahmen",
+    "sousTitre": "Die Barrierefreiheit von Bushaltestellen wird durch ein umfassendes Regelwerk reguliert. URBAQUAI entspricht jedem einzelnen davon.",
+    "conformiteUrbaquai": "URBAQUAI-Konformität",
+    "ressources": "Zusätzliche Ressourcen",
+    "ctaTitre": "Unsicher bei der Konformität?",
+    "ctaSousTitre": "Unser technisches Team unterstützt Sie bei der Überprüfung der Konformität Ihres Projekts mit den geltenden Normen.",
+    "nousConsulter": "Uns kontaktieren",
+    "loi2005": {
+      "titre": "Gesetz vom 11. Februar 2005",
+      "sousTitre": "Gleichheit der Rechte und Chancen",
+      "contenu": [
+        "Das Gesetz Nr. 2005-102 vom 11. Februar 2005 legt den Grundsatz der allgemeinen Barrierefreiheit in der gesamten Mobilitätskette fest.",
+        "Es verlangt, dass alle Haltestellen des öffentlichen Verkehrs für Menschen mit eingeschränkter Mobilität zugänglich gemacht werden.",
+        "Die Barrierefreiheits-Masterpläne – Programmierte Barrierefreiheitsagenden (SDA-Ad'AP) legen die Fristen für jede Verkehrsbehörde fest."
+      ],
+      "conformite": [
+        "Normierte Bahnsteighöhe (18-21 cm) für stufenfreien Zugang",
+        "Konforme taktile Warnstreifen (BEV)",
+        "Zugangsrampen unter 5%",
+        "Rutschfeste und kontrastierte Oberflächen"
+      ]
+    },
+    "cerema": {
+      "titre": "CEREMA-Leitfaden 2018",
+      "sousTitre": "Barrierefreie Bushaltestellen-Gestaltung",
+      "contenu": [
+        "Der CEREMA-Leitfaden \u201EBus- und Reisebus-Haltestellen für alle zugänglich\u201C (2018) ist die technische Referenz für Bauherren und Planer.",
+        "Er beschreibt geometrische Anforderungen, Andockhilfen und ergänzende Einrichtungen für jeden Konfigurationstyp.",
+        "URBAQUAI wurde in strikter Übereinstimmung mit allen Empfehlungen dieses Leitfadens entwickelt."
+      ],
+      "conformite": [
+        "Bahnsteiggeometrie konform mit CEREMA-Vorlagen",
+        "Einstiegszone 2m × 1,40m eingehalten",
+        "Andockhilfen integrierbar",
+        "Barrierefreie Wegführung gewährleistet"
+      ]
+    },
+    "normeNF": {
+      "titre": "Normen NF P 98-352",
+      "sousTitre": "Bordsteine und Bahnsteigelemente",
+      "contenu": [
+        "Die Norm NF P 98-352 definiert Anforderungen an mechanische Festigkeit, Haltbarkeit und Dimensionierung von vorgefertigten Betonbordsteinen.",
+        "Sie spezifiziert Biege-, Abrieb-, Frost-/Tau- und chemische Angriffsprüfungen (Streusalze).",
+        "Der Hochleistungsbeton von URBAQUAI übertrifft die Mindestgrenzwerte der Norm bei jedem Kriterium."
+      ],
+      "conformite": [
+        "Biegefestigkeit ≥ 5 MPa (NF-Grenzwert: 3,5 MPa)",
+        "Frost-/Tau-Zertifizierung F2 (extreme Umgebung)",
+        "Abriebfestigkeit Klasse 4 (starker Verkehr)",
+        "Rollbelastung Klasse T (60t)"
+      ]
+    },
+    "ressourcesList": {
+      "sdaAdap": {
+        "titre": "SDA-Ad'AP: Pflichten und Zeitplan",
+        "description": "Verständnis der Barrierefreiheits-Masterpläne und programmierten Barrierefreiheitsagenden."
+      },
+      "subventions": {
+        "titre": "Zuschüsse und Finanzierung",
+        "description": "Verfügbare Fördermittel für die Barrierefreiheit von Haltestellen (DSIL, DETR, Grüne Fonds)."
+      },
+      "visaSncf": {
+        "titre": "SNCF Réseau Zulassung",
+        "description": "URBAQUAI verfügt über die SNCF Réseau Zulassung, die die Installation in Bahnnähe ermöglicht."
+      }
+    }
+  },
+  "configurationsPage": {
+    "metaTitle": "Konfigurationen — 4 Lösungen für jede Bushaltestelle",
+    "metaDescription": "Entdecken Sie die 4 URBAQUAI-Konfigurationen: Gehwegvorstreckung, Vorstreckung mit Radweg, Inselbahnsteig und Insel mit Radweg. Modulare Lösung für jede Situation.",
+    "titre": "URBAQUAI-Konfigurationen",
+    "sousTitre": "4 modulare Konfigurationen für jede Bushaltestellen-Situation. Wählen Sie die Lösung, die zu Ihrem Projekt passt.",
+    "configuration": "Konfiguration {num}/4",
+    "vueSchematique": "Schematische Draufsicht —",
+    "avantages": "Vorteile",
+    "casUsage": "Anwendungsfälle",
+    "besoinAide": "Hilfe bei der Auswahl?",
+    "besoinAideSousTitre": "Unser Team unterstützt Sie bei der Wahl der optimalen Konfiguration für Ihr Projekt.",
+    "nousContacter": "Kontaktieren Sie uns",
+    "voirExemples": "Beispiele ansehen"
+  },
+  "urbaterra": {
+    "metaTitle": "URBATERRA — Modulare gewerbliche Terrassenerweiterung",
+    "metaDescription": "URBATERRA: temporäre modulare Beton-Terrassenerweiterung. Gewinnen Sie 9 bis 18 m² in 48h, direkte Verlegung auf Asphalt, 100% barrierefrei.",
+    "badge": "Neu — URBATERRA Reihe",
+    "titre": "Gewinnen Sie 9 bis 18 m² Terrasse. In 48h.",
+    "description": "URBATERRA® ist eine modulare gewerbliche Terrassenerweiterung aus Hochleistungsbeton. Direkt auf dem bestehenden Asphalt verlegt, ohne schwere Bauarbeiten, bietet sie sofort nutzbaren Zusatzraum, 100% barrierefrei.",
+    "simuler": "Meine Terrasse simulieren",
+    "ficheTechnique": "Datenblatt",
+    "features": {
+      "surface": "Fläche",
+      "beton": "Beton",
+      "usage": "Nutzung",
+      "coloris": "Farben",
+      "pose": "Installation",
+      "capacite": "Kapazität"
+    },
+    "featureValues": {
+      "surface": "9 bis 18 m²",
+      "usage": "Gewerblich",
+      "coloris": "4 natürliche",
+      "pose": "48h",
+      "capacite": "Bis zu 36 Sitzplätze"
+    },
+    "pourQui": "Für wen?",
+    "pourQuiSousTitre": "URBATERRA richtet sich an alle Fachleute, die schnell und unkompliziert zusätzlichen Raum benötigen.",
+    "cibles": {
+      "restaurateurs": {
+        "titre": "Gastronomen",
+        "description": "Erweitern Sie Ihre Terrasse um 9 bis 18 m² für bis zu 36 zusätzliche Sitzplätze. Sofort nutzbar."
+      },
+      "mairies": {
+        "titre": "Gemeinden & Behörden",
+        "description": "Gestalten Sie temporäre oder dauerhafte öffentliche Räume: Märkte, Veranstaltungen, barrierefreie Fußgängerzonen."
+      },
+      "gestionnaires": {
+        "titre": "Flächenmanager",
+        "description": "Schaffen Sie wiederverwendbare modulare Plattformen für jeden Zweck: Handel, Wartebereiche, Veranstaltungen."
+      }
+    },
+    "configsTitre": "2 einbaufertige Konfigurationen",
+    "configsSousTitre": "Wählen Sie die passende Fläche für Ihren Bedarf. Jede Konfiguration ist durch Hinzufügen von Modulen erweiterbar.",
+    "config9": {
+      "titre": "Konfiguration 9 m²",
+      "modules": "1 zentral + 2 seitlich",
+      "optimise": "6 bis 9 Tische für 2 (12-18 Plätze)",
+      "confortable": "4 Tische für 2 oder 3 Tische für 4 (8-10 Plätze)"
+    },
+    "config18": {
+      "titre": "Konfiguration 18 m²",
+      "modules": "2 zentral + 2 seitlich",
+      "optimise": "12 bis 18 Tische für 2 (24-36 Plätze)",
+      "confortable": "8 Tische für 2 oder 5-6 Tische für 4 (16-24 Plätze)"
+    },
+    "optimise": "Optimiert (Bistro-Stil)",
+    "confortable": "Komfortabel (Standard-Abstand)",
+    "specsTitre": "Technische Daten",
+    "ctaTitre": "Bereit, Ihre Terrasse zu erweitern?",
+    "ctaSousTitre": "Kontaktieren Sie uns für eine kostenlose Studie. Wir schlagen die passende Konfiguration für Ihren Raum und Ihre Aktivität vor.",
+    "voirUrbaquai": "URBAQUAI-System ansehen"
+  },
+  "configurateur": {
+    "titre": "URBAQUAI Konfigurator",
+    "sousTitre": "Bauen Sie Ihren Bahnsteig Modul für Modul — klicken, platzieren, visualisieren.",
+    "ajouterRang": "+ Reihe hinzufügen",
+    "retirerRang": "− Reihe {rang} entfernen",
+    "chargerExemple": "Beispiel laden",
+    "reinitialiser": "Zurücksetzen",
+    "vue3D": "3D-Ansicht",
+    "planQuai": "Bahnsteigplan",
+    "retirerModule": "Klicken Sie auf ein platziertes Modul, um es zu entfernen",
+    "chargement3D": "3D-Ansicht wird geladen...",
+    "orbiter": "Linksklick + Ziehen zum Drehen · Scrollen zum Zoomen",
+    "masquerLabels": "Beschriftungen ausblenden",
+    "afficherLabels": "Beschriftungen anzeigen",
+    "masquerAbribus": "Wartehäuschen ausblenden",
+    "afficherAbribus": "Wartehäuschen anzeigen",
+    "commentCaMarche": "Wie funktioniert es?",
+    "instructions": {
+      "step1": "Wählen Sie eine Reihe in der Palette",
+      "step2": "Klicken Sie auf ein Modul, um es auszuwählen",
+      "step3": "Klicken Sie auf + im Plan, um es zu platzieren",
+      "step4": "Klicken Sie auf ein platziertes Modul, um es zu entfernen"
+    },
+    "chargerExemple19m": "Oder ein 19 m Bahnsteig-Beispiel laden",
+    "nomenclature": "Stückliste",
+    "recevoirPlan": "Ihren Plan erhalten",
+    "nomenclatureEmail": "Stückliste + persönliches Angebot per E-Mail.",
+    "configPrete": "Konfiguration fertig?",
+    "recevoirNomenclature": "Stückliste und Angebot erhalten.",
+    "recevoirDevis": "Angebot erhalten",
+    "nousContacter": "Kontaktieren Sie uns",
+    "environnement": "Umgebung",
+    "trottoir": "Gehweg",
+    "parking": "Parkplatz",
+    "pisteCyclable": "Radweg",
+    "voieCirculation": "Fahrspur"
+  },
+  "notFound": {
+    "titre": "Seite nicht gefunden",
+    "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "retour": "Zurück zur Startseite",
+    "contact": "Kontaktieren Sie uns"
+  },
+  "metadata": {
+    "defaultTitle": "{name} — Barrierefreier modularer Busbahnsteig | {company}",
+    "defaultDescription": "URBAQUAI: modulares Hochleistungsbeton-Bushaltestellen-System. Barrierefrei, in 48h installiert, temporär oder dauerhaft. Konform mit CEREMA 2018 und Barrierefreiheitsgesetz 2005."
+  },
+  "languageSwitcher": {
+    "fr": "FR",
+    "en": "EN",
+    "de": "DE"
+  }
+}

@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { Send } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 
 export function CtaContact() {
   const [submitted, setSubmitted] = useState(false);
+  const t = useTranslations("ctaContact");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -42,20 +44,19 @@ export function CtaContact() {
       <Container>
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-dark">
-            Un projet d'accessibilité ?
+            {t("titre")}
           </h2>
           <p className="mt-4 text-lg text-gray-600 leading-relaxed">
-            Parlez-nous de votre besoin. Notre équipe vous répond sous 24h avec
-            une proposition technique adaptée.
+            {t("sousTitre")}
           </p>
 
           {submitted ? (
             <div className="mt-10 p-8 bg-success/10 rounded-lg border border-success/20">
               <p className="text-lg font-semibold text-success">
-                Merci pour votre message !
+                {t("merci")}
               </p>
               <p className="mt-2 text-sm text-gray-600">
-                Notre équipe vous recontactera dans les plus brefs délais.
+                {t("recontact")}
               </p>
             </div>
           ) : (
@@ -63,7 +64,7 @@ export function CtaContact() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="cta-prenom" className="block text-sm font-medium text-gray-700 mb-1">
-                    Prénom
+                    {t("prenom")}
                   </label>
                   <input
                     id="cta-prenom"
@@ -76,7 +77,7 @@ export function CtaContact() {
                 </div>
                 <div>
                   <label htmlFor="cta-nom" className="block text-sm font-medium text-gray-700 mb-1">
-                    Nom
+                    {t("nom")}
                   </label>
                   <input
                     id="cta-nom"
@@ -92,7 +93,7 @@ export function CtaContact() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="cta-societe" className="block text-sm font-medium text-gray-700 mb-1">
-                    Société
+                    {t("societe")}
                   </label>
                   <input
                     id="cta-societe"
@@ -100,12 +101,11 @@ export function CtaContact() {
                     type="text"
                     required
                     className="w-full px-4 py-2.5 rounded border border-gray-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
-                    placeholder="Bureau d'études XYZ"
                   />
                 </div>
                 <div>
                   <label htmlFor="cta-email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email professionnel
+                    {t("email")}
                   </label>
                   <input
                     id="cta-email"
@@ -113,36 +113,34 @@ export function CtaContact() {
                     type="email"
                     required
                     className="w-full px-4 py-2.5 rounded border border-gray-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors"
-                    placeholder="j.dupont@exemple.fr"
                   />
                 </div>
               </div>
 
               <div>
                 <label htmlFor="cta-message" className="block text-sm font-medium text-gray-700 mb-1">
-                  Votre besoin en quelques mots
+                  {t("message")}
                 </label>
                 <textarea
                   id="cta-message"
                   name="message"
                   rows={3}
                   className="w-full px-4 py-2.5 rounded border border-gray-300 text-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-colors resize-y"
-                  placeholder="Nombre d'arrêts, configuration souhaitée, délais..."
+                  placeholder={t("placeholder")}
                 />
               </div>
 
               <div className="pt-2">
                 <Button type="submit" size="lg" className="w-full sm:w-auto">
                   <Send size={16} className="mr-2" />
-                  Envoyer ma demande
+                  {t("envoyer")}
                 </Button>
               </div>
 
               <p className="text-xs text-gray-400 pt-1">
-                Vos données sont traitées uniquement pour répondre à votre demande.
-                Consultez notre{" "}
+                {t("confidentialite")}{" "}
                 <a href="/confidentialite" className="underline hover:text-gray-600">
-                  politique de confidentialité
+                  {t("politique")}
                 </a>.
               </p>
             </form>

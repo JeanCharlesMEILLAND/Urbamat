@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { useInView } from "@/hooks/useInView";
 import { useCounter } from "@/hooks/useCounter";
@@ -25,14 +26,15 @@ function StatItem({ value, suffix, label, started }: StatItemProps) {
   );
 }
 
-const STATS = [
-  { value: 35, suffix: " ans", label: "d'expertise béton" },
-  { value: 48, suffix: "h", label: "de pose sur site" },
-  { value: 200, suffix: "+", label: "quais posés en France" },
-];
-
 export function StatsBar() {
   const { ref, isInView } = useInView<HTMLDivElement>({ threshold: 0.3 });
+  const t = useTranslations("stats");
+
+  const STATS = [
+    { value: 35, suffix: " ans", label: t("expertise") },
+    { value: 48, suffix: "h", label: t("pose") },
+    { value: 200, suffix: "+", label: t("quais") },
+  ];
 
   return (
     <section className="bg-primary py-8 lg:py-10" ref={ref}>

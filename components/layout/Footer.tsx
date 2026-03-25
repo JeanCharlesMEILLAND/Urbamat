@@ -1,23 +1,25 @@
-import Link from "next/link";
-import { MapPin, Mail, Phone, Linkedin } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { MapPin, Mail, Phone } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
-import { NAV_ITEMS, SITE_CONFIG } from "@/lib/constants";
+import { SITE_CONFIG } from "@/lib/constants";
 
-const FOOTER_LINKS = {
-  produit: [
-    { label: "URBAQUAI — Quai bus", href: "/produit" },
-    { label: "URBATERRA — Terrasse", href: "/urbaterra" },
-    { label: "Configurations", href: "/configurations" },
-    { label: "Réalisations", href: "/realisations" },
-    { label: "Téléchargements", href: "/telechargements" },
-  ],
-  ressources: [
-    { label: "Réglementation", href: "/reglementation" },
-    { label: "Contact", href: "/contact" },
-  ],
-};
+const FOOTER_PRODUCT_LINKS = [
+  { key: "urbaquai", href: "/produit" },
+  { key: "urbaterra", href: "/urbaterra" },
+  { key: "configurations", href: "/configurations" },
+  { key: "realisations", href: "/realisations" },
+  { key: "telechargements", href: "/telechargements" },
+] as const;
+
+const FOOTER_RESOURCE_LINKS = [
+  { key: "reglementation", href: "/reglementation" },
+  { key: "contact", href: "/contact" },
+] as const;
 
 export function Footer() {
+  const t = useTranslations("footer");
+
   return (
     <footer className="bg-neutral-dark text-gray-300" role="contentinfo">
       <Container>
@@ -34,27 +36,26 @@ export function Footer() {
                 />
               </Link>
               <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                Système de quai bus modulaire en béton haute performance.
-                Provisoire ou définitif, accessible PMR, posé en 48h.
+                {t("description")}
               </p>
               <p className="mt-4 text-sm font-medium text-gray-400">
-                Une solution {SITE_CONFIG.company}
+                {t("solution", { company: SITE_CONFIG.company })}
               </p>
             </div>
 
             {/* Colonne 2 — Produit */}
             <div>
               <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Produit
+                {t("produit")}
               </h3>
               <ul className="space-y-3">
-                {FOOTER_LINKS.produit.map((link) => (
+                {FOOTER_PRODUCT_LINKS.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
                       className="text-sm text-gray-400 hover:text-white transition-colors"
                     >
-                      {link.label}
+                      {t(`links.${link.key}`)}
                     </Link>
                   </li>
                 ))}
@@ -64,16 +65,16 @@ export function Footer() {
             {/* Colonne 3 — Ressources */}
             <div>
               <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Ressources
+                {t("ressources")}
               </h3>
               <ul className="space-y-3">
-                {FOOTER_LINKS.ressources.map((link) => (
+                {FOOTER_RESOURCE_LINKS.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
                       className="text-sm text-gray-400 hover:text-white transition-colors"
                     >
-                      {link.label}
+                      {t(`links.${link.key}`)}
                     </Link>
                   </li>
                 ))}
@@ -83,12 +84,12 @@ export function Footer() {
             {/* Colonne 4 — Contact */}
             <div>
               <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-                Contact
+                {t("contact")}
               </h3>
               <ul className="space-y-3">
                 <li>
                   <a
-                    href={`tel:+33388010961`}
+                    href="tel:+33388010961"
                     className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
                   >
                     <Phone size={16} className="shrink-0" />
@@ -118,18 +119,18 @@ export function Footer() {
         {/* Barre légale */}
         <div className="border-t border-gray-700 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} {SITE_CONFIG.company}. Tous droits réservés.
+            &copy; {new Date().getFullYear()} {SITE_CONFIG.company}. {t("legal")}
           </p>
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <Link href="/mentions-legales" className="hover:text-gray-300 transition-colors">
-              Mentions légales
+              {t("mentionsLegales")}
             </Link>
             <Link href="/confidentialite" className="hover:text-gray-300 transition-colors">
-              Politique de confidentialité
+              {t("confidentialite")}
             </Link>
-            <Link href="/admin" className="hover:text-gray-300 transition-colors opacity-40 hover:opacity-100">
+            <a href="/admin" className="hover:text-gray-300 transition-colors opacity-40 hover:opacity-100">
               Admin
-            </Link>
+            </a>
           </div>
         </div>
       </Container>

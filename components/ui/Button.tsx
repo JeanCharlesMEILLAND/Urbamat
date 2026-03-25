@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "ghost";
@@ -41,10 +42,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
 
     if (href) {
+      // External links or admin links use plain <a>
+      if (href.startsWith("http") || href.startsWith("/admin")) {
+        return (
+          <a href={href} className={classes}>
+            {children}
+          </a>
+        );
+      }
+      // Internal links use i18n-aware Link
       return (
-        <a href={href} className={classes}>
+        <Link href={href} className={classes}>
           {children}
-        </a>
+        </Link>
       );
     }
 

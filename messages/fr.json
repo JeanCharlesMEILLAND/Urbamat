@@ -1,0 +1,577 @@
+{
+  "nav": {
+    "urbaquai": "URBAQUAI",
+    "urbaterra": "URBATERRA",
+    "configurateur": "Configurateur",
+    "realisations": "Réalisations",
+    "reglementation": "Réglementation",
+    "telechargements": "Téléchargements",
+    "contact": "Contact",
+    "devis": "Demander un devis"
+  },
+  "footer": {
+    "description": "Système de quai bus modulaire en béton haute performance. Provisoire ou définitif, accessible PMR, posé en 48h.",
+    "solution": "Une solution {company}",
+    "produit": "Produit",
+    "ressources": "Ressources",
+    "contact": "Contact",
+    "links": {
+      "urbaquai": "URBAQUAI — Quai bus",
+      "urbaterra": "URBATERRA — Terrasse",
+      "configurations": "Configurations",
+      "realisations": "Réalisations",
+      "telechargements": "Téléchargements",
+      "reglementation": "Réglementation",
+      "contact": "Contact"
+    },
+    "legal": "Tous droits réservés.",
+    "mentionsLegales": "Mentions légales",
+    "confidentialite": "Politique de confidentialité"
+  },
+  "hero": {
+    "titre": "Le quai bus accessible. En 48h.",
+    "sousTitre": "Système breveté URBAMAT Environnement",
+    "description": "URBAQUAI est le système modulaire en béton haute performance pour la mise en accessibilité des arrêts de bus. Provisoire ou définitif, conforme à toutes les normes en vigueur.",
+    "cta": "Voir le système",
+    "ficheTechnique": "Fiche technique"
+  },
+  "stats": {
+    "expertise": "d'expertise béton",
+    "pose": "de pose sur site",
+    "quais": "quais posés en France"
+  },
+  "problemSolution": {
+    "titre": "Un problème national. Une solution concrète.",
+    "sousTitre": "En France, des milliers d'arrêts de bus restent inaccessibles aux personnes à mobilité réduite. URBAQUAI change la donne.",
+    "constat": "Le constat",
+    "reponse": "La réponse URBAQUAI",
+    "problems": {
+      "inaccessibles": {
+        "title": "Arrêts inaccessibles",
+        "text": "Des milliers d'arrêts de bus en France ne sont toujours pas conformes à la loi accessibilité de 2005."
+      },
+      "travaux": {
+        "title": "Travaux longs et coûteux",
+        "text": "Les solutions en béton coulé nécessitent des semaines de travaux, de terrassement et de séchage."
+      },
+      "perturbation": {
+        "title": "Perturbation du trafic",
+        "text": "Les chantiers classiques imposent des déviations et des interruptions de service prolongées."
+      }
+    },
+    "solutions": {
+      "accessibilite": {
+        "title": "Accessibilité immédiate",
+        "text": "Quai à hauteur normalisée pour un accès de plain-pied, conforme PMR dès la pose."
+      },
+      "pose48h": {
+        "title": "Pose en 48h",
+        "text": "Modules préfabriqués livrés prêts à poser. Pas de coffrage, pas de séchage, pas d'attente."
+      },
+      "modulaire": {
+        "title": "Modulaire et réversible",
+        "text": "Configuration provisoire ou définitive. Démontable et repositionnable sans destruction."
+      },
+      "hydraulique": {
+        "title": "Transparence hydraulique",
+        "text": "Vide fonctionnel continu sous dalle — évacuation latérale et longitudinale des eaux pluviales, sans rétention."
+      },
+      "albedo": {
+        "title": "Albédo élevé",
+        "text": "Réduction de l'échauffement de surface et des îlots de chaleur. 4 coloris naturels clairs disponibles."
+      },
+      "certifie": {
+        "title": "Certifié CERIB EN 1339",
+        "text": "Béton C40/50, ciment NF bas carbone, tests CERIB validés. Conforme CEREMA 2018 et loi accessibilité 2005."
+      }
+    }
+  },
+  "configurationsGrid": {
+    "titre": "4 configurations, toutes les situations",
+    "sousTitre": "Chaque arrêt de bus est unique. URBAQUAI s'adapte avec 4 configurations modulaires pour répondre à tous les cas de figure.",
+    "voirTout": "Voir toutes les configurations en détail"
+  },
+  "configurations": {
+    "avancee": {
+      "titre": "Avancée de trottoir",
+      "sousTitre": "Boarding bulb",
+      "description": "Extension du trottoir au niveau de l'arrêt de bus, permettant un accostage optimal du véhicule et un accès de plain-pied pour les PMR.",
+      "avantages": ["Accostage précis du bus", "Accès de plain-pied PMR", "Maintien de la voie de circulation", "Pose rapide sans terrassement lourd"],
+      "casUsage": ["Arrêts en ligne droite", "Rues à stationnement latéral", "Zones urbaines denses"]
+    },
+    "avancee_velo": {
+      "titre": "Avancée avec piste cyclable",
+      "sousTitre": "Boarding bulb + cycle lane",
+      "description": "Configuration avancée intégrant une piste cyclable sécurisée à l'arrière du quai, permettant la cohabitation bus-vélo.",
+      "avantages": ["Cohabitation bus-vélo sécurisée", "Piste cyclable intégrée", "Continuité du réseau cyclable", "Signalétique intégrée"],
+      "casUsage": ["Axes avec piste cyclable existante", "Projets de mobilité douce", "Aménagements multimodaux"]
+    },
+    "ile": {
+      "titre": "Configuration en île",
+      "sousTitre": "Island platform",
+      "description": "Quai central isolé de la circulation, desservant une ou deux directions. Idéal pour les couloirs bus et BHNS.",
+      "avantages": ["Sécurité maximale des voyageurs", "Desserte bidirectionnelle possible", "Adapté aux BHNS", "Emprise au sol optimisée"],
+      "casUsage": ["Couloirs bus en site propre", "BHNS et tramways", "Arrêts à fort trafic"]
+    },
+    "ile_velo": {
+      "titre": "Île avec piste cyclable",
+      "sousTitre": "Island platform + cycle lane",
+      "description": "Configuration en île avec intégration d'une piste cyclable, assurant la continuité des itinéraires vélo à travers l'arrêt.",
+      "avantages": ["Sécurité voyageurs + cyclistes", "Continuité cyclable maintenue", "Signalisation intégrée", "Modularité complète"],
+      "casUsage": ["BHNS avec réseau cyclable", "Projets Plan Vélo", "Aménagements urbains complets"]
+    }
+  },
+  "comparison": {
+    "titre": "Pourquoi URBAQUAI ?",
+    "sousTitre": "Comparaison objective avec les solutions plastiques modulaires et les aménagements traditionnels en béton coulé.",
+    "critere": "Critère",
+    "urbaquai": "URBAQUAI®",
+    "urbaquaiSub": "Béton modulaire C40/50",
+    "plastique": "Plastique modulaire",
+    "plastiqueSub": "Ex: Zicla Vectorial",
+    "traditionnel": "Béton coulé",
+    "traditionnelSub": "Solution traditionnelle",
+    "rows": {
+      "perennite": "Pérennité",
+      "gelDegel": "Résistance gel/dégel",
+      "stabilite": "Stabilité (poids)",
+      "antiderapante": "Finition antidérapante",
+      "reemploi": "Réemploi / réversibilité",
+      "certification": "Certification CERIB",
+      "poseSol": "Pose sur sol souple ET rigide",
+      "hydraulique": "Transparence hydraulique",
+      "albedo": "Albédo élevé (confort thermique)",
+      "impact": "Impact environnemental",
+      "delai": "Délai de pose"
+    },
+    "values": {
+      "cimentBasCarbone": "Ciment NF bas carbone",
+      "plastiqueRecycle": "Plastique recyclé",
+      "betonStandard": "Béton standard",
+      "surfacePlastique": "Surface plastique",
+      "variable": "Variable",
+      "massif": "Massif"
+    }
+  },
+  "featuredRealisations": {
+    "titre": "Ils nous font confiance",
+    "sousTitre": "Découvrez nos réalisations à travers la France. Chaque projet est une réponse sur-mesure aux enjeux locaux d'accessibilité.",
+    "voirProjet": "Voir le projet",
+    "toutesRealisations": "Toutes nos réalisations",
+    "stations": "stations"
+  },
+  "reglementationBlock": {
+    "titre": "100% conforme. Sans compromis.",
+    "sousTitre": "URBAQUAI est conçu pour satisfaire l'ensemble du cadre réglementaire français en matière d'accessibilité des transports.",
+    "loi2005": {
+      "titre": "Loi du 11 février 2005",
+      "description": "Égalité des droits et des chances : tous les points d'arrêt de transport collectif doivent être rendus accessibles."
+    },
+    "cerema": {
+      "titre": "Guide CEREMA 2018",
+      "description": "Recommandations techniques pour l'aménagement des arrêts de bus accessibles. URBAQUAI répond à chaque exigence."
+    },
+    "norme": {
+      "titre": "Norme NF P 98-352",
+      "description": "Exigences de résistance et de durabilité des bordures et éléments de quai. Béton haute performance certifié."
+    },
+    "explorer": "Explorer le cadre réglementaire"
+  },
+  "ctaContact": {
+    "titre": "Un projet d'accessibilité ?",
+    "sousTitre": "Parlez-nous de votre besoin. Notre équipe vous répond sous 24h avec une proposition technique adaptée.",
+    "merci": "Merci pour votre message !",
+    "recontact": "Notre équipe vous recontactera dans les plus brefs délais.",
+    "prenom": "Prénom",
+    "nom": "Nom",
+    "societe": "Société",
+    "email": "Email professionnel",
+    "message": "Votre besoin en quelques mots",
+    "placeholder": "Nombre d'arrêts, configuration souhaitée, délais...",
+    "envoyer": "Envoyer ma demande",
+    "confidentialite": "Vos données sont traitées uniquement pour répondre à votre demande. Consultez notre",
+    "politique": "politique de confidentialité"
+  },
+  "leadForm": {
+    "prenom": "Prénom *",
+    "nom": "Nom *",
+    "societe": "Société *",
+    "email": "Email professionnel *",
+    "profil": "Vous êtes *",
+    "departement": "Département",
+    "messageLabel": "Message (optionnel)",
+    "messagePlaceholder": "Décrivez votre projet...",
+    "select": "— Sélectionner —",
+    "envoyer": "Envoyer",
+    "accesDocuments": "Accéder aux documents",
+    "envoi": "Envoi en cours...",
+    "merci": "Merci !",
+    "merciDescription": "Vos documents sont maintenant accessibles. Un email de confirmation vous a été envoyé.",
+    "champsObligatoires": "* Champs obligatoires. Vos données sont traitées uniquement pour répondre à votre demande.",
+    "erreurServeur": "Erreur serveur",
+    "erreurGenerale": "Une erreur est survenue",
+    "placeholders": {
+      "prenom": "Jean",
+      "nom": "Dupont",
+      "societe": "Bureau d'études XYZ",
+      "email": "j.dupont@exemple.fr"
+    }
+  },
+  "profils": {
+    "moe": "Maître d'Œuvre",
+    "moa": "Maître d'Ouvrage",
+    "tp": "Entreprise de Travaux Publics",
+    "collectivite": "Collectivité / AOT",
+    "autre": "Autre"
+  },
+  "validation": {
+    "prenomRequis": "Le prénom est requis",
+    "nomRequis": "Le nom est requis",
+    "societeRequise": "La société est requise",
+    "emailInvalide": "Email invalide",
+    "profilRequis": "Veuillez sélectionner un profil",
+    "messageMin": "Le message doit faire au moins 10 caractères"
+  },
+  "produit": {
+    "metaTitle": "URBAQUAI 140+50 — Quai bus modulaire béton C40/50",
+    "metaDescription": "Système URBAQUAI 140+50 : quai bus modulaire préfabriqué en béton C40/50, pose directe sur enrobé, accessibilité PMR. Modules 3000×1500 mm, tests CERIB EN 1339.",
+    "systemeBrevete": "Système breveté",
+    "sousTitre": "Quai préfabriqué modulaire bus & cars — Pose directe sur enrobé",
+    "description1": "Les modules préfabriqués URBAQUAI® permettent de construire rapidement des points d'arrêt bus & cars accessibles à tous les voyageurs. La longueur et la hauteur des quais s'adaptent aux caractéristiques du matériel roulant.",
+    "description2": "Chaque module est fabriqué en usine en béton monolithique haute résistance {classe}, avec ciment NF bas carbone, garantissant une qualité constante et une durabilité supérieure. Praticabilité immédiate, réemployable, perturbation du trafic réduite au minimum.",
+    "features": {
+      "hauteurs": "Hauteurs",
+      "beton": "Béton",
+      "tests": "Tests",
+      "gelDegel": "Gel/dégel",
+      "coloris": "Coloris",
+      "pose": "Pose"
+    },
+    "featureValues": {
+      "hauteurs": "18 / 21 cm",
+      "coloris": "4 naturels",
+      "pose": "48h sur site"
+    },
+    "ficheTechniquePdf": "Fiche technique PDF",
+    "demanderDevis": "Demander un devis",
+    "specsTitre": "Caractéristiques techniques",
+    "specsSousTitre": "Béton C40/50, tests CERIB EN 1339, ciment NF bas carbone. Chaque détail est pensé pour la durabilité et la conformité.",
+    "miseEnOeuvre": "Mise en œuvre",
+    "miseEnOeuvreSousTitre": "Pose directe sur enrobé existant. Élingues, chevilles Ø12 mm, praticabilité immédiate.",
+    "ctaTitre": "Quelle configuration pour votre projet ?",
+    "ctaSousTitre": "Avancée de trottoir, île centrale, avec piste cyclable... Découvrez les 4 configurations URBAQUAI.",
+    "voirConfigurations": "Voir les configurations",
+    "accordion": {
+      "gamme": "Gamme URBAQUAI 140+50 — Modules et dimensions",
+      "reference": "Référence",
+      "module": "Module",
+      "dimensions": "Dimensions",
+      "poids": "Poids",
+      "hauteursDisponibles": "Hauteurs disponibles :",
+      "hauteur210": "Hauteur h=210 : module central ~1 715 kg, latéral ~860 kg",
+      "longueurQuai": "Longueur de quai : sur mesure par association de modules (multiples de 1.5 m)",
+      "beton": "Béton et composition",
+      "composition": "Composition :",
+      "classeResistance": "Classe de résistance :",
+      "classeExposition": "Classe d'exposition :",
+      "ciment": "Ciment :",
+      "taquets": "Taquets d'écartement montés en usine",
+      "bandeGuidage": "Bande de guidage tactile contrastée conforme NF P 98-352",
+      "resistances": "Résistances mécaniques — Tests CERIB EN 1339",
+      "gelDegel": "Gel/dégel & sels de déneigement :",
+      "abrasion": "Résistance à l'abrasion :",
+      "chocs": "Résistance aux chocs durs :",
+      "taches": "Résistance aux taches :",
+      "srtNeuf": "Glissance SRT neuf/humide :",
+      "srtUse": "Glissance SRT sali/usé :",
+      "testsValides": "Tests validés par le CERIB selon EN 1339",
+      "finition": "Finition et coloris",
+      "finitionSurface": "Finition de surface :",
+      "scoreSrt": "Score SRT moyen à l'état neuf et humide",
+      "colorisNaturels": "4 coloris naturels :",
+      "rampes": "Rampes d'accès et accessibilité",
+      "zoneAttente": "Zone d'attente sécurisée intégrée",
+      "accessiblePMR": "100% accessible aux personnes à mobilité réduite",
+      "options": "Options et accessoires",
+      "optionsList": {
+        "antisalissure": "Béton traité antisalissure S.O.",
+        "mobilier": "Réservations pour mobilier urbain et garde-corps",
+        "pmr": "Modules d'accès PMR pour gares routières",
+        "ile": "Modules pour quais centraux (configuration île)",
+        "terrasse": "Éléments sur mesure pour extension de terrasse commerciale provisoire (gamme URBATERRA)"
+      }
+    }
+  },
+  "installation": {
+    "step1": {
+      "titre": "Préparation du support",
+      "description": "Nettoyage de la surface existante (enrobé, béton ou asphalte). Aucun terrassement, aucun décroûtage. Le support doit simplement être plan et stable. Repérage des emplacements de chevilles."
+    },
+    "step2": {
+      "titre": "Livraison et manutention",
+      "description": "Les modules URBAQUAI arrivent sur site prêts à poser. Mise en place par élingues (capacité 1 800 kg). Module central M 1.18 : ~1 400 kg, modules latéraux : ~700 kg."
+    },
+    "step3": {
+      "titre": "Positionnement et fixation",
+      "description": "Alignement des modules grâce aux taquets d'écartement montés en usine. Fixation par chevilles Ø12 mm à 15 cm de profondeur dans le support existant. Assemblage des modules entre eux."
+    },
+    "step4": {
+      "titre": "Rampes et finitions",
+      "description": "Pose des rampes d'accès PMR (béton D-009a ou acier galvanisé avec réglage automatique en hauteur et visserie anti-effraction). Vérification de la bande de guidage tactile. Le quai est immédiatement praticable."
+    }
+  },
+  "contact": {
+    "metaTitle": "Contact — Demandez un devis URBAQUAI",
+    "metaDescription": "Contactez URBAMAT Environnement pour votre projet de quai bus modulaire URBAQUAI. Devis gratuit sous 24h, accompagnement technique personnalisé.",
+    "titre": "Parlons de votre projet",
+    "sousTitre": "Décrivez-nous votre besoin en accessibilité. Notre équipe vous répond sous 24h avec une proposition technique et un chiffrage adaptés.",
+    "formulaire": "Formulaire de contact",
+    "coordonnees": "Coordonnées",
+    "telephone": "Téléphone",
+    "emailLabel": "Email",
+    "adresse": "Adresse",
+    "horaires": "Horaires",
+    "horairesValue": "Lun — Ven : 8h00 — 17h30",
+    "prescripteur": "Vous êtes prescripteur ?",
+    "prescripteurTexte": "Nous fournissons gratuitement les extraits CCTP/BPU types intégrables dans vos marchés, ainsi que les plans DWG pour vos projets CAO.",
+    "accesTelechargements": "Accéder aux téléchargements"
+  },
+  "telechargements": {
+    "titre": "Téléchargements",
+    "sousTitre": "Accédez à toute la documentation technique URBAQUAI : fiches produit, guides de pose, CCTP types et plans CAO.",
+    "documentsDisponibles": "Documents disponibles",
+    "accesDebloque": "Accès débloqué !",
+    "cliquezTelecharger": "Cliquez sur l'icône de téléchargement à côté de chaque document pour le récupérer.",
+    "accesDocuments": "Accédez aux documents",
+    "remplissezFormulaire": "Remplissez le formulaire ci-dessous pour débloquer l'accès à tous les documents techniques URBAQUAI.",
+    "documents": {
+      "fiche": {
+        "titre": "Fiche technique URBAQUAI",
+        "description": "Dimensions, résistances, matériaux, coloris. Le document essentiel pour vos CCTP."
+      },
+      "guide": {
+        "titre": "Guide de pose et d'assemblage",
+        "description": "Instructions détaillées de mise en œuvre, schémas d'assemblage, outillage requis."
+      },
+      "cctp": {
+        "titre": "Extrait CCTP / BPU type",
+        "description": "Clauses techniques types intégrables directement dans vos marchés publics."
+      },
+      "plan": {
+        "titre": "Plans DWG / AutoCAD",
+        "description": "Plans 2D des 4 configurations pour intégration dans vos projets CAO."
+      }
+    },
+    "types": {
+      "fiche": "Fiche technique",
+      "guide": "Guide de pose",
+      "cctp": "Extrait CCTP / BPU",
+      "plan": "Plan DWG"
+    }
+  },
+  "realisations": {
+    "metaTitle": "Réalisations — Nos chantiers URBAQUAI en France",
+    "metaDescription": "Découvrez nos réalisations URBAQUAI à travers la France : fiches détaillées de nos quais bus modulaires, stations et longueurs déployées.",
+    "titre": "Nos réalisations",
+    "sousTitre": "Quais modulaires URBAQUAI déployés à travers la France. Chaque projet est une réponse sur-mesure aux enjeux locaux d'accessibilité.",
+    "projets": "projets",
+    "stations": "stations",
+    "quaisPoses": "de quais posés"
+  },
+  "reglementation": {
+    "metaTitle": "Réglementation — Normes accessibilité arrêts de bus",
+    "metaDescription": "Cadre réglementaire de l'accessibilité des arrêts de bus en France : loi du 11 février 2005, guide CEREMA 2018, normes NF. URBAQUAI conforme à toutes les exigences.",
+    "titre": "Cadre réglementaire",
+    "sousTitre": "L'accessibilité des arrêts de bus est encadrée par un ensemble de textes législatifs et normatifs. URBAQUAI est conforme à chacun d'entre eux.",
+    "conformiteUrbaquai": "Conformité URBAQUAI",
+    "ressources": "Ressources complémentaires",
+    "ctaTitre": "Un doute sur la conformité ?",
+    "ctaSousTitre": "Notre équipe technique vous accompagne pour vérifier la conformité de votre projet aux normes en vigueur.",
+    "nousConsulter": "Nous consulter",
+    "loi2005": {
+      "titre": "Loi du 11 février 2005",
+      "sousTitre": "Égalité des droits et des chances",
+      "contenu": [
+        "La loi n° 2005-102 du 11 février 2005 pose le principe de l'accessibilité généralisée de la chaîne du déplacement.",
+        "Elle impose que tous les points d'arrêt de transport collectif soient rendus accessibles aux personnes à mobilité réduite.",
+        "Les Schémas Directeurs d'Accessibilité – Agendas d'Accessibilité Programmée (SDA-Ad'AP) fixent les échéances de mise en conformité pour chaque autorité organisatrice."
+      ],
+      "conformite": [
+        "Hauteur de quai normalisée (18-21 cm) pour accès de plain-pied",
+        "Bandes d'éveil de vigilance (BEV) conformes",
+        "Pentes d'accès inférieures à 5%",
+        "Surfaces antidérapantes et contrastées"
+      ]
+    },
+    "cerema": {
+      "titre": "Guide CEREMA 2018",
+      "sousTitre": "Aménagement des arrêts de bus accessibles",
+      "contenu": [
+        "Le guide du CEREMA « Arrêts de bus et de car accessibles à tous » (2018) constitue la référence technique pour les maîtres d'ouvrage et maîtres d'œuvre.",
+        "Il détaille les prescriptions géométriques, les dispositifs d'aide à l'accostage, et les aménagements complémentaires pour chaque type de configuration.",
+        "URBAQUAI a été conçu en stricte conformité avec l'ensemble des recommandations de ce guide."
+      ],
+      "conformite": [
+        "Géométrie de quai conforme aux gabarits CEREMA",
+        "Zone d'embarquement de 2m × 1,40m respectée",
+        "Dispositifs d'aide à l'accostage intégrables",
+        "Continuité du cheminement accessible garantie"
+      ]
+    },
+    "normeNF": {
+      "titre": "Normes NF P 98-352",
+      "sousTitre": "Bordures et éléments de quai",
+      "contenu": [
+        "La norme NF P 98-352 définit les exigences de résistance mécanique, de durabilité et de dimensionnement des bordures préfabriquées en béton.",
+        "Elle spécifie les essais de résistance à la flexion, à l'abrasion, au gel/dégel et aux agressions chimiques (sels de déverglaçage).",
+        "Le béton haute performance URBAQUAI dépasse les seuils minimaux de la norme sur chaque critère."
+      ],
+      "conformite": [
+        "Résistance flexion ≥ 5 MPa (seuil NF : 3,5 MPa)",
+        "Certification gel/dégel F2 (environnement sévère)",
+        "Résistance abrasion Classe 4 (trafic intense)",
+        "Résistance charge roulante Classe T (60t)"
+      ]
+    },
+    "ressourcesList": {
+      "sdaAdap": {
+        "titre": "SDA-Ad'AP : obligations et calendrier",
+        "description": "Comprendre les Schémas Directeurs d'Accessibilité et les Agendas d'Accessibilité Programmée."
+      },
+      "subventions": {
+        "titre": "Subventions et financements",
+        "description": "Les aides financières disponibles pour la mise en accessibilité des arrêts de transport (DSIL, DETR, fonds verts)."
+      },
+      "visaSncf": {
+        "titre": "Visa SNCF Réseau",
+        "description": "URBAQUAI dispose du visa SNCF Réseau, permettant l'installation à proximité des voies ferroviaires."
+      }
+    }
+  },
+  "configurationsPage": {
+    "metaTitle": "Configurations — 4 solutions pour chaque arrêt de bus",
+    "metaDescription": "Découvrez les 4 configurations URBAQUAI : avancée de trottoir, avancée avec piste cyclable, île centrale et île avec piste cyclable. Solution modulaire pour chaque situation.",
+    "titre": "Configurations URBAQUAI",
+    "sousTitre": "4 configurations modulaires pour répondre à chaque situation d'arrêt de bus. Choisissez la solution adaptée à votre projet.",
+    "configuration": "Configuration {num}/4",
+    "vueSchematique": "Vue schématique en plan —",
+    "avantages": "Avantages",
+    "casUsage": "Cas d'usage",
+    "besoinAide": "Besoin d'aide pour choisir ?",
+    "besoinAideSousTitre": "Notre équipe vous accompagne dans le choix de la configuration optimale pour votre projet.",
+    "nousContacter": "Nous contacter",
+    "voirExemples": "Voir des exemples"
+  },
+  "urbaterra": {
+    "metaTitle": "URBATERRA — Extension de terrasse commerciale modulaire",
+    "metaDescription": "URBATERRA : extension de terrasse commerciale provisoire en béton modulaire. Gagnez 9 à 18 m² en 48h, pose directe sur enrobé, 100% accessible PMR.",
+    "badge": "Nouveau — Gamme URBATERRA",
+    "titre": "Gagnez 9 à 18 m² de terrasse. En 48h.",
+    "description": "URBATERRA® est une extension de terrasse commerciale modulaire en béton haute performance. Posée directement sur l'enrobé existant, sans travaux lourds, elle offre un espace supplémentaire immédiatement praticable et 100% accessible PMR.",
+    "simuler": "Simuler ma terrasse",
+    "ficheTechnique": "Fiche technique",
+    "features": {
+      "surface": "Surface",
+      "beton": "Béton",
+      "usage": "Usage",
+      "coloris": "Coloris",
+      "pose": "Pose",
+      "capacite": "Capacité"
+    },
+    "featureValues": {
+      "surface": "9 à 18 m²",
+      "usage": "Commercial",
+      "coloris": "4 naturels",
+      "pose": "48h",
+      "capacite": "Jusqu'à 36 couverts"
+    },
+    "pourQui": "Pour qui ?",
+    "pourQuiSousTitre": "URBATERRA s'adresse à tous les professionnels qui ont besoin d'espace supplémentaire, rapidement et sans contrainte.",
+    "cibles": {
+      "restaurateurs": {
+        "titre": "Restaurateurs",
+        "description": "Agrandissez votre terrasse de 9 à 18 m² pour accueillir jusqu'à 36 couverts supplémentaires. Praticabilité immédiate."
+      },
+      "mairies": {
+        "titre": "Mairies & collectivités",
+        "description": "Aménagez des espaces publics temporaires ou permanents : marchés, événements, zones piétonnes accessibles."
+      },
+      "gestionnaires": {
+        "titre": "Gestionnaires d'espaces",
+        "description": "Créez des plateformes modulaires réemployables pour tout usage : commerce, attente, événementiel."
+      }
+    },
+    "configsTitre": "2 configurations prêtes à poser",
+    "configsSousTitre": "Choisissez la surface adaptée à votre besoin. Chaque configuration est extensible par ajout de modules.",
+    "config9": {
+      "titre": "Configuration 9 m²",
+      "modules": "1 central + 2 latéraux",
+      "optimise": "6 à 9 tables de 2 (12-18 couverts)",
+      "confortable": "4 tables de 2 ou 3 tables de 4 (8-10 couverts)"
+    },
+    "config18": {
+      "titre": "Configuration 18 m²",
+      "modules": "2 centraux + 2 latéraux",
+      "optimise": "12 à 18 tables de 2 (24-36 couverts)",
+      "confortable": "8 tables de 2 ou 5-6 tables de 4 (16-24 couverts)"
+    },
+    "optimise": "Optimisé (style bistro)",
+    "confortable": "Confortable (espace standard)",
+    "specsTitre": "Caractéristiques techniques",
+    "ctaTitre": "Prêt à agrandir votre terrasse ?",
+    "ctaSousTitre": "Contactez-nous pour une étude gratuite. Nous vous proposons la configuration adaptée à votre espace et à votre activité.",
+    "voirUrbaquai": "Voir le système URBAQUAI"
+  },
+  "configurateur": {
+    "titre": "Configurateur URBAQUAI",
+    "sousTitre": "Construisez votre quai module par module — cliquez, placez, visualisez.",
+    "ajouterRang": "+ Ajouter un rang",
+    "retirerRang": "− Retirer rang {rang}",
+    "chargerExemple": "Charger un exemple",
+    "reinitialiser": "Réinitialiser",
+    "vue3D": "Vue 3D",
+    "planQuai": "Plan du quai",
+    "retirerModule": "Cliquez sur un module posé pour le retirer",
+    "chargement3D": "Chargement de la vue 3D...",
+    "orbiter": "Clic gauche + glisser pour orbiter · Molette pour zoomer",
+    "masquerLabels": "Masquer les labels",
+    "afficherLabels": "Afficher les labels",
+    "masquerAbribus": "Masquer l'abribus",
+    "afficherAbribus": "Afficher l'abribus",
+    "commentCaMarche": "Comment ça marche ?",
+    "instructions": {
+      "step1": "Sélectionnez une rangée dans la palette",
+      "step2": "Cliquez sur un module pour le sélectionner",
+      "step3": "Cliquez sur + dans le plan pour le placer",
+      "step4": "Cliquez sur un module posé pour le retirer"
+    },
+    "chargerExemple19m": "Ou charger un exemple de quai 19 m",
+    "nomenclature": "Nomenclature",
+    "recevoirPlan": "Recevez votre plan",
+    "nomenclatureEmail": "Nomenclature + chiffrage personnalisé par email.",
+    "configPrete": "Configuration prête ?",
+    "recevoirNomenclature": "Recevez la nomenclature et un chiffrage.",
+    "recevoirDevis": "Recevoir le devis",
+    "nousContacter": "Nous contacter",
+    "environnement": "Environnement",
+    "trottoir": "Trottoir",
+    "parking": "Parking",
+    "pisteCyclable": "Piste cyclable",
+    "voieCirculation": "Voie circulation"
+  },
+  "notFound": {
+    "titre": "Page introuvable",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "retour": "Retour à l'accueil",
+    "contact": "Nous contacter"
+  },
+  "metadata": {
+    "defaultTitle": "{name} — Quai bus modulaire accessible | {company}",
+    "defaultDescription": "URBAQUAI : système de quai bus modulaire en béton haute performance. Accessibilité PMR, pose en 48h, provisoire ou définitif. Conforme CEREMA 2018 et loi accessibilité 2005."
+  },
+  "languageSwitcher": {
+    "fr": "FR",
+    "en": "EN",
+    "de": "DE"
+  }
+}

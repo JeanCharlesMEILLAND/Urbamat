@@ -1,13 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card, CardContent } from "@/components/ui/Card";
-import { CONFIGURATIONS } from "@/lib/constants";
 import { useInView } from "@/hooks/useInView";
 import { cn } from "@/lib/utils";
+
+const CONFIG_IDS = ["avancee", "avancee_velo", "ile", "ile_velo"] as const;
 
 const CONFIG_COLORS: Record<string, string> = {
   avancee: "from-primary/10 to-primary/5",
@@ -25,38 +27,40 @@ const CONFIG_ICONS: Record<string, string> = {
 
 export function ConfigurationsGrid() {
   const { ref, isInView } = useInView<HTMLDivElement>();
+  const tGrid = useTranslations("configurationsGrid");
+  const tConfig = useTranslations("configurations");
 
   return (
     <section className="py-20 lg:py-28 bg-neutral-light" ref={ref}>
       <Container>
         <SectionHeader
-          titre="4 configurations, toutes les situations"
-          sousTitre="Chaque arrêt de bus est unique. URBAQUAI s'adapte avec 4 configurations modulaires pour répondre à tous les cas de figure."
+          titre={tGrid("titre")}
+          sousTitre={tGrid("sousTitre")}
         />
 
         <div className={cn(
           "grid grid-cols-1 md:grid-cols-2 gap-6 mt-12 transition-all duration-700",
           isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         )}>
-          {CONFIGURATIONS.map((config) => (
-            <Link key={config.id} href={`/configurations#${config.id}`}>
+          {CONFIG_IDS.map((id) => (
+            <Link key={id} href={`/configurations#${id}`}>
               <Card variant="feature" className="h-full group cursor-pointer">
                 <CardContent className="p-6 lg:p-8">
                   <div
-                    className={`w-full h-32 rounded-lg bg-gradient-to-br ${CONFIG_COLORS[config.id]} flex items-center justify-center mb-6 group-hover:scale-[1.02] transition-transform`}
+                    className={`w-full h-32 rounded-lg bg-gradient-to-br ${CONFIG_COLORS[id]} flex items-center justify-center mb-6 group-hover:scale-[1.02] transition-transform`}
                   >
                     <span className="font-mono text-2xl text-primary/60 tracking-widest">
-                      {CONFIG_ICONS[config.id]}
+                      {CONFIG_ICONS[id]}
                     </span>
                   </div>
 
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="text-lg font-bold text-neutral-dark group-hover:text-primary transition-colors">
-                        {config.titre}
+                        {tConfig(`${id}.titre`)}
                       </h3>
                       <p className="text-sm text-gray-500 font-mono mt-1">
-                        {config.sousTitre}
+                        {tConfig(`${id}.sousTitre`)}
                       </p>
                     </div>
                     <ArrowRight
@@ -66,16 +70,16 @@ export function ConfigurationsGrid() {
                   </div>
 
                   <p className="mt-4 text-sm text-gray-600 leading-relaxed">
-                    {config.description}
+                    {tConfig(`${id}.description`)}
                   </p>
 
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {config.casUsage.slice(0, 2).map((cas) => (
+                    {[0, 1].map((i) => (
                       <span
-                        key={cas}
+                        key={i}
                         className="text-xs px-2 py-1 bg-white/80 text-gray-600 rounded border border-gray-200"
                       >
-                        {cas}
+                        {tConfig(`${id}.casUsage.${i}`)}
                       </span>
                     ))}
                   </div>
@@ -90,7 +94,7 @@ export function ConfigurationsGrid() {
             href="/configurations"
             className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-600 transition-colors"
           >
-            Voir toutes les configurations en détail
+            {tGrid("voirTout")}
             <ArrowRight size={16} />
           </Link>
         </div>

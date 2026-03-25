@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { MapPin, Calendar, ArrowRight, Ruler } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
@@ -47,13 +48,14 @@ const FEATURED = [
 
 export function FeaturedRealisations() {
   const { ref, isInView } = useInView<HTMLDivElement>();
+  const t = useTranslations("featuredRealisations");
 
   return (
     <section className="py-20 lg:py-28 bg-neutral-light" ref={ref}>
       <Container>
         <SectionHeader
-          titre="Ils nous font confiance"
-          sousTitre="Découvrez nos réalisations à travers la France. Chaque projet est une réponse sur-mesure aux enjeux locaux d'accessibilité."
+          titre={t("titre")}
+          sousTitre={t("sousTitre")}
         />
 
         <div className={cn(
@@ -76,10 +78,10 @@ export function FeaturedRealisations() {
                   <p className="mt-3 text-sm text-gray-600 leading-relaxed line-clamp-2">{real.contexte}</p>
                   <div className="flex items-center gap-3 mt-3 text-xs text-gray-500">
                     <span className="flex items-center gap-1"><Ruler size={12} />{real.longueurMl} ml</span>
-                    <span>{real.nbStations} stations</span>
+                    <span>{real.nbStations} {t("stations")}</span>
                   </div>
                   <span className="inline-flex items-center gap-1 mt-4 text-sm font-medium text-primary group-hover:gap-2 transition-all">
-                    Voir le projet <ArrowRight size={14} />
+                    {t("voirProjet")} <ArrowRight size={14} />
                   </span>
                 </div>
               </Card>
@@ -89,7 +91,7 @@ export function FeaturedRealisations() {
 
         <div className="text-center mt-10">
           <Link href="/realisations" className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-600 transition-colors">
-            Toutes nos réalisations <ArrowRight size={16} />
+            {t("toutesRealisations")} <ArrowRight size={16} />
           </Link>
         </div>
       </Container>

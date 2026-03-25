@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRight, Download, Ruler, Weight, Palette, Truck, UtensilsCrossed, Store } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -8,18 +9,11 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { TechnicalAccordion } from "@/components/produit/TechnicalAccordion";
 import { PRODUCT_SPECS } from "@/lib/constants";
 
-export const metadata: Metadata = {
-  title: "URBATERRA — Extension de terrasse commerciale modulaire",
-  description:
-    "URBATERRA : extension de terrasse commerciale provisoire en béton modulaire. Gagnez 9 à 18 m² en 48h, pose directe sur enrobé, 100% accessible PMR. Idéal restaurants et commerces.",
-  keywords: [
-    "extension terrasse commerciale",
-    "terrasse provisoire restaurant",
-    "terrasse modulaire béton",
-    "agrandissement terrasse",
-    "URBATERRA",
-  ],
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "urbaterra" });
+  return { title: t("metaTitle"), description: t("metaDescription") };
+}
 
 const FEATURES = [
   { icon: Ruler, label: "Surface", value: "9 à 18 m²" },
@@ -105,31 +99,33 @@ const ACCORDION_ITEMS = [
   },
 ];
 
-export default function UrbaterraPage() {
+export default async function UrbaterraPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("urbaterra");
+
   return (
     <div>
       {/* Hero */}
       <section className="bg-neutral-light py-16 lg:py-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="warning" className="mb-4">Nouveau — Gamme URBATERRA</Badge>
+            <Badge variant="warning" className="mb-4">{t("badge")}</Badge>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-dark leading-tight">
-              Gagnez 9 à 18 m² de terrasse.{" "}
+              {t("titre")}{" "}
               <span className="text-accent">En 48h.</span>
             </h1>
             <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-              URBATERRA® est une extension de terrasse commerciale modulaire en béton haute performance.
-              Posée directement sur l'enrobé existant, sans travaux lourds, elle offre un espace
-              supplémentaire immédiatement praticable et 100% accessible PMR.
+              {t("description")}
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-8">
               <Button href="/contact" size="lg">
-                Simuler ma terrasse
+                {t("simuler")}
                 <ArrowRight size={18} className="ml-2" />
               </Button>
               <Button href="/telechargements" variant="outline" size="lg">
                 <Download size={16} className="mr-2" />
-                Fiche technique
+                {t("ficheTechnique")}
               </Button>
             </div>
           </div>
@@ -155,8 +151,8 @@ export default function UrbaterraPage() {
       <section className="py-16 lg:py-24 bg-white">
         <Container>
           <SectionHeader
-            titre="Pour qui ?"
-            sousTitre="URBATERRA s'adresse à tous les professionnels qui ont besoin d'espace supplémentaire, rapidement et sans contrainte."
+            titre={t("pourQui")}
+            sousTitre={t("pourQuiSousTitre")}
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
             {[
@@ -180,8 +176,8 @@ export default function UrbaterraPage() {
       <section className="py-16 lg:py-24 bg-neutral-light">
         <Container>
           <SectionHeader
-            titre="2 configurations prêtes à poser"
-            sousTitre="Choisissez la surface adaptée à votre besoin. Chaque configuration est extensible par ajout de modules."
+            titre={t("configsTitre")}
+            sousTitre={t("configsSousTitre")}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
             {CONFIGS.map((config) => (
@@ -219,7 +215,7 @@ export default function UrbaterraPage() {
       {/* Specs */}
       <section className="py-16 lg:py-24 bg-white">
         <Container>
-          <SectionHeader titre="Caractéristiques techniques" />
+          <SectionHeader titre={t("specsTitre")} />
           <div className="max-w-3xl mx-auto mt-10">
             <TechnicalAccordion items={ACCORDION_ITEMS} />
           </div>
@@ -231,19 +227,18 @@ export default function UrbaterraPage() {
         <Container>
           <div className="text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-white">
-              Prêt à agrandir votre terrasse ?
+              {t("ctaTitre")}
             </h2>
             <p className="mt-4 text-primary-100 max-w-xl mx-auto">
-              Contactez-nous pour une étude gratuite. Nous vous proposons la configuration
-              adaptée à votre espace et à votre activité.
+              {t("ctaSousTitre")}
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button href="/contact" variant="secondary" size="lg">
-                Simuler ma terrasse
+                {t("simuler")}
                 <ArrowRight size={18} className="ml-2" />
               </Button>
               <Button href="/produit" variant="ghost" size="lg" className="text-white hover:bg-white/10">
-                Voir le système URBAQUAI
+                {t("voirUrbaquai")}
               </Button>
             </div>
           </div>

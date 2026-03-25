@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ArrowRight, Download, Ruler, Weight, Shield, Droplets, Palette, Truck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -10,11 +11,11 @@ import { InstallationSteps } from "@/components/produit/InstallationSteps";
 // JSON-LD moved to metadata to avoid hydration issues
 import { PRODUCT_SPECS } from "@/lib/constants";
 
-export const metadata: Metadata = {
-  title: "URBAQUAI 140+50 — Quai bus modulaire béton C40/50",
-  description:
-    "Système URBAQUAI 140+50 : quai bus modulaire préfabriqué en béton C40/50, pose directe sur enrobé, accessibilité PMR. Modules 3000×1500 mm, tests CERIB EN 1339.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "produit" });
+  return { title: t("metaTitle"), description: t("metaDescription") };
+}
 
 const GALLERY_IMAGES = [
   { src: "/images/produit-hero.webp", alt: "Vue d'ensemble URBAQUAI 140+50" },
@@ -140,7 +141,11 @@ const ACCORDION_ITEMS = [
   },
 ];
 
-export default function ProduitPage() {
+export default async function ProduitPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations("produit");
+
   return (
     <div>
       {/* Hero produit */}
@@ -148,12 +153,12 @@ export default function ProduitPage() {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge variant="info" className="mb-4">Système breveté</Badge>
+              <Badge variant="info" className="mb-4">{t("systemeBrevete")}</Badge>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-dark leading-tight">
                 URBAQUAI<span className="text-lg font-mono text-gray-400 ml-3">140+50</span>
               </h1>
               <p className="mt-2 text-lg text-gray-500">
-                Quai préfabriqué modulaire bus &amp; cars — Pose directe sur enrobé
+                {t("sousTitre")}
               </p>
               <p className="mt-6 text-gray-600 leading-relaxed">
                 Les modules préfabriqués URBAQUAI® permettent de construire rapidement des points d'arrêt
@@ -180,10 +185,10 @@ export default function ProduitPage() {
               <div className="flex flex-wrap gap-3 mt-8">
                 <Button href="/telechargements">
                   <Download size={16} className="mr-2" />
-                  Fiche technique PDF
+                  {t("ficheTechniquePdf")}
                 </Button>
                 <Button href="/contact" variant="outline">
-                  Demander un devis
+                  {t("demanderDevis")}
                 </Button>
               </div>
             </div>
@@ -197,8 +202,8 @@ export default function ProduitPage() {
       <section className="py-16 lg:py-24 bg-white">
         <Container>
           <SectionHeader
-            titre="Caractéristiques techniques"
-            sousTitre="Béton C40/50, tests CERIB EN 1339, ciment NF bas carbone. Chaque détail est pensé pour la durabilité et la conformité."
+            titre={t("specsTitre")}
+            sousTitre={t("specsSousTitre")}
           />
           <div className="max-w-3xl mx-auto mt-10">
             <TechnicalAccordion items={ACCORDION_ITEMS} />
@@ -210,8 +215,8 @@ export default function ProduitPage() {
       <section className="py-16 lg:py-24 bg-neutral-light">
         <Container>
           <SectionHeader
-            titre="Mise en œuvre"
-            sousTitre="Pose directe sur enrobé existant. Élingues, chevilles Ø12 mm, praticabilité immédiate."
+            titre={t("miseEnOeuvre")}
+            sousTitre={t("miseEnOeuvreSousTitre")}
           />
           <div className="max-w-2xl mx-auto mt-10">
             <InstallationSteps />
@@ -224,14 +229,14 @@ export default function ProduitPage() {
         <Container>
           <div className="text-center">
             <h2 className="text-2xl md:text-3xl font-bold text-white">
-              Quelle configuration pour votre projet ?
+              {t("ctaTitre")}
             </h2>
             <p className="mt-4 text-primary-100 max-w-xl mx-auto">
-              Avancée de trottoir, île centrale, avec piste cyclable... Découvrez les 4 configurations URBAQUAI.
+              {t("ctaSousTitre")}
             </p>
             <div className="mt-8">
               <Button href="/configurations" variant="secondary" size="lg">
-                Voir les configurations
+                {t("voirConfigurations")}
                 <ArrowRight size={18} className="ml-2" />
               </Button>
             </div>

@@ -1,6 +1,20 @@
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import "../globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Admin — URBAQUAI",
@@ -19,11 +33,15 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminSidebar />
-      <main className="flex-1 overflow-auto">
-        <div className="p-6 lg:p-8">{children}</div>
-      </main>
-    </div>
+    <html lang="fr" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
+      <body className="font-sans antialiased" suppressHydrationWarning>
+        <div className="flex min-h-screen bg-gray-50">
+          <AdminSidebar />
+          <main className="flex-1 overflow-auto">
+            <div className="p-6 lg:p-8">{children}</div>
+          </main>
+        </div>
+      </body>
+    </html>
   );
 }
