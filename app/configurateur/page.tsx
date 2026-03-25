@@ -15,6 +15,7 @@ import {
   type ModuleRef,
   type ModuleRow,
   type NbRangees,
+  type RoadConfig,
 } from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,7 @@ export default function ConfigurateurPage() {
   const [view3D, setView3D] = useState(false);
   const [showShelter, setShowShelter] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
+  const [roadConfig, setRoadConfig] = useState<RoadConfig>("simple");
 
   const allModules = [...modulesByRow[1], ...modulesByRow[2], ...modulesByRow[3], ...modulesByRow[4]];
 
@@ -206,6 +208,34 @@ export default function ConfigurateurPage() {
 
                 {/* Coloris */}
                 <StepOptions coloris={coloris} onColorisChange={setColoris} />
+
+                {/* Configuration route */}
+                <div className="space-y-2">
+                  <h3 className="text-sm font-bold text-neutral-dark uppercase tracking-wider">
+                    Voirie
+                  </h3>
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {([
+                      { id: "simple" as RoadConfig, label: "Route simple", desc: "Voie de circulation" },
+                      { id: "parking" as RoadConfig, label: "Parking + Route", desc: "Stationnement puis voie" },
+                      { id: "cyclable" as RoadConfig, label: "Piste cyclable + Route", desc: "Bande cyclable puis voie" },
+                    ]).map((opt) => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setRoadConfig(opt.id)}
+                        className={cn(
+                          "p-2.5 rounded-lg border-2 text-left transition-all text-xs",
+                          roadConfig === opt.id
+                            ? "border-primary bg-primary/5 text-primary"
+                            : "border-gray-200 text-gray-500 hover:border-gray-300"
+                        )}
+                      >
+                        <div className="font-medium">{opt.label}</div>
+                        <div className="text-[10px] text-gray-400 mt-0.5">{opt.desc}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -266,6 +296,7 @@ export default function ConfigurateurPage() {
                       coloris={coloris}
                       showShelter={showShelter}
                       showLabels={showLabels}
+                      roadConfig={roadConfig}
                     />
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-xs text-gray-400">

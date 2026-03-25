@@ -22,6 +22,7 @@ export type ModuleRef =
 export type ModuleRow = 1 | 2 | 3 | 4;
 export type NbRangees = 1 | 2 | 3 | 4;
 export type RampeType = "laterale" | "arriere";
+export type RoadConfig = "simple" | "parking" | "cyclable";
 export type ModuleRole = "rampe" | "lateral" | "central" | "jonction" | "fin" | "vide";
 
 export interface ModuleSpec {
