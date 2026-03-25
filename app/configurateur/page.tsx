@@ -297,6 +297,7 @@ export default function ConfigurateurPage() {
                       showShelter={showShelter}
                       showLabels={showLabels}
                       roadConfig={roadConfig}
+                      onRoadConfigChange={setRoadConfig}
                     />
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-xs text-gray-400">

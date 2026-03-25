@@ -12,6 +12,7 @@ interface QuaiView3DProps {
   showShelter?: boolean;
   showLabels?: boolean;
   roadConfig?: RoadConfig;
+  onRoadConfigChange?: (config: RoadConfig) => void;
 }
 
 const S = 1 / 1000; // mm -> m
@@ -58,7 +59,7 @@ const getRowZ = (row: number): number => {
   return (row - 1) * (ROW_DEPTH + GAP);
 };
 
-export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, roadConfig = "simple" }: QuaiView3DProps) {
+export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, roadConfig = "simple", onRoadConfigChange }: QuaiView3DProps) {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -215,24 +216,28 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
             scene.add(riveLine);
           }
         } else if (roadConfig === "cyclable") {
-          // Piste cyclable entre le quai et la voie de circulation
-          const cycleGeo = new THREE.PlaneGeometry(maxLen + 4, CYCLE_DEPTH);
-          const cycleMesh = new THREE.Mesh(cycleGeo, new THREE.MeshStandardMaterial({ color: "#2D8B4E", roughness: 0.8 }));
-          cycleMesh.rotation.x = -Math.PI / 2;
-          cycleMesh.position.set(cx, -0.003, QUAI_FRONT + CYCLE_DEPTH / 2);
-          scene.add(cycleMesh);
-          // Marquage vélo (pointillés blancs longitudinaux)
+          // Piste cyclable SOUS le quai — bande verte visible avant/après le quai
+          const cycleMat = new THREE.MeshStandardMaterial({ color: "#2D8B4E", roughness: 0.8 });
           const cycleDashMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.5 });
-          for (let i = 0; i < Math.floor((maxLen + 2) / 1.4); i++) {
-            const cd = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.06), cycleDashMat);
-            cd.rotation.x = -Math.PI / 2;
-            cd.position.set(i * 1.4 - 0.5, 0.001, QUAI_FRONT + CYCLE_DEPTH / 2);
-            scene.add(cd);
+          // Bandes vertes avant et après le quai
+          for (const xOff of [-4, maxLen + 0.5]) {
+            const cycleGeo = new THREE.PlaneGeometry(4, QUAI_DEPTH + 0.5);
+            const cycleMesh = new THREE.Mesh(cycleGeo, cycleMat);
+            cycleMesh.rotation.x = -Math.PI / 2;
+            cycleMesh.position.set(xOff + 2, -0.003, (getRowZ(1) + getRowZ(nbRangees)) / 2);
+            scene.add(cycleMesh);
+            // Pointillés vélo
+            for (let i = 0; i < 3; i++) {
+              const cd = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.06), cycleDashMat);
+              cd.rotation.x = -Math.PI / 2;
+              cd.position.set(xOff + i * 1.4 + 0.5, 0.001, (getRowZ(1) + getRowZ(nbRangees)) / 2);
+              scene.add(cd);
+            }
           }
         }
 
         // Marquage route (pointillés centrés sur la voie de circulation)
-        const laneStartZ = roadConfig === "cyclable" ? QUAI_FRONT + CYCLE_DEPTH : QUAI_FRONT;
+        const laneStartZ = QUAI_FRONT; // la voie commence toujours après le quai
         const ROAD_CENTER_Z = laneStartZ + LANE_WIDTH / 2 + 1;
         const dashGeo = new THREE.PlaneGeometry(0.7, 0.07);
         const dashMat = new THREE.MeshBasicMaterial({ color: "#E8E4D0", transparent: true, opacity: 0.5 });
@@ -693,7 +698,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
 
         // --- Labels route (après createLabel) ----
         if (showLabels && roadConfig === "cyclable") {
-          createLabel("VÉLO", new THREE.Vector3(cx, 0.05, QUAI_FRONT + CYCLE_DEPTH / 2));
+          createLabel("VÉLO", new THREE.Vector3(-2, 0.05, (getRowZ(1) + getRowZ(nbRangees)) / 2));
         }
 
         // --- Cotation longueur ----
@@ -870,6 +875,29 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
           {isFullscreen ? <Minimize2 className="w-4 h-4 text-gray-600" /> : <Maximize2 className="w-4 h-4 text-gray-600" />}
         </button>
       </div>
+      {/* Sélecteur route — overlay en bas à droite */}
+      {onRoadConfigChange && (
+        <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1 bg-black/40 rounded-lg p-1">
+          {([
+            { id: "simple" as RoadConfig, label: "Route" },
+            { id: "parking" as RoadConfig, label: "Parking" },
+            { id: "cyclable" as RoadConfig, label: "Vélo" },
+          ]).map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => onRoadConfigChange(opt.id)}
+              className={`px-2.5 py-1 text-[10px] font-medium rounded-md transition-colors ${
+                roadConfig === opt.id
+                  ? "bg-white text-gray-800"
+                  : "text-white/70 hover:text-white hover:bg-white/20"
+              }`}
+              type="button"
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
       {/* Info contrôles */}
       <div className="absolute bottom-2 left-2 z-10 text-[10px] text-white/60 bg-black/30 rounded px-2 py-1">
         Clic gauche : orbiter · Clic droit / Shift+clic : déplacer · Molette : zoomer
