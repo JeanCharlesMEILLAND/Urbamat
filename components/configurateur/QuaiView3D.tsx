@@ -141,9 +141,10 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         // LAYOUT (Z axis, from back to front):
         //   TROTTOIR (surélevé 150mm) → BORDURE → CANIVEAU (espace eau) → RAMPES ARRIERE → RANG 1 → RANG 2 → ... → ROUTE
         //
-        const TROT_HEIGHT = 0.15;       // trottoir surélevé 150mm
+        const TROT_HEIGHT = 0.14;       // trottoir surélevé 140mm
         const CANIVEAU_GAP = 0.6;       // espace caniveau entre trottoir et rampes (600mm)
         const RAMPE_DEPTH = 0.51;       // profondeur rampe arrière (510mm)
+        const RAMPE_THICKNESS = 0.04;   // épaisseur dalle rampe 40mm
 
         const QUAI_DEPTH = nbRangees * ROW_DEPTH + (nbRangees - 1) * GAP;
 
@@ -474,10 +475,10 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           }
         }
 
-        // --- Rampes arrière : s'appuient sur la bordure trottoir, pente vers le module ----
-        // Côté trottoir = haut (appui sur bordure, ~150mm)
-        // Côté module = haut aussi (180mm, collé au module)
-        // L'eau s'écoule DESSOUS la rampe dans le caniveau
+        // --- Rampes arrière : dalle fine fixée en haut du module, pente douce vers trottoir ----
+        // Côté module : dessus à 180mm (fixée au sommet du module)
+        // Côté trottoir : dessus à 140mm (posée sur la bordure trottoir)
+        // Épaisseur : 40mm — vide en dessous pour l'eau
         // Seulement derrière central et jonction (pas rampe, latéral, fin — biseautés)
         const FLAT_ROLES = new Set(["central", "jonction"]);
         const row1Modules = modulesByRow[1 as ModuleRow] ?? [];
@@ -487,34 +488,40 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           if (!FLAT_ROLES.has(m.spec.role)) continue;
 
           const mw = m.spec.longueur * S;
-          const mh = m.spec.hauteur * S; // 0.18m
+          const mh = m.spec.hauteur * S; // 0.18m = 180mm
           const startX = m.x * S + 0.01;
           const rw = mw - 0.02;
 
-          // La rampe enjambe le caniveau :
-          // - Côté module (Z=0) : hauteur = mh (180mm), collée au module
-          // - Côté trottoir (Z=-totalSpan) : hauteur = TROT_HEIGHT (150mm), posée sur la bordure
-          // - Dessous : vide pour l'écoulement de l'eau
-          const totalSpan = CANIVEAU_GAP + RAMPE_DEPTH; // distance totale entre module et bordure
+          // Dalle en pont : 40mm d'épaisseur
+          // Dessus côté module = mh (180mm), dessus côté trottoir = TROT_HEIGHT (140mm)
+          // Dessous côté module = mh - RAMPE_THICKNESS, dessous côté trottoir = TROT_HEIGHT - RAMPE_THICKNESS
+          const totalSpan = CANIVEAU_GAP + RAMPE_DEPTH;
+          const topModule = mh;
+          const topTrot = TROT_HEIGHT;
+          const botModule = mh - RAMPE_THICKNESS;
+          const botTrot = TROT_HEIGHT - RAMPE_THICKNESS;
+
           const rearGroup = new THREE.Group();
 
           const positions = new Float32Array([
-            // Face avant (collée au module, pleine hauteur mh)
-            0,  0,  0,    rw, 0,  0,    rw, mh, 0,
-            0,  0,  0,    rw, mh, 0,    0,  mh, 0,
-            // Face arrière (appui sur bordure trottoir, hauteur TROT_HEIGHT)
-            0,  0,  -totalSpan,    rw, TROT_HEIGHT, -totalSpan,    rw, 0, -totalSpan,
-            0,  0,  -totalSpan,    0,  TROT_HEIGHT, -totalSpan,    rw, TROT_HEIGHT, -totalSpan,
-            // Face du dessus (pente douce de mh à TROT_HEIGHT)
-            0,  mh, 0,    rw, mh, 0,    rw, TROT_HEIGHT, -totalSpan,
-            0,  mh, 0,    rw, TROT_HEIGHT, -totalSpan,    0, TROT_HEIGHT, -totalSpan,
-            // PAS de face du dessous — vide pour l'eau !
+            // Face du dessus (pente douce 180mm → 140mm)
+            0,  topModule, 0,    rw, topModule, 0,    rw, topTrot, -totalSpan,
+            0,  topModule, 0,    rw, topTrot, -totalSpan,    0, topTrot, -totalSpan,
+            // Face du dessous (parallèle, 40mm plus bas)
+            0,  botModule, 0,    rw, botTrot, -totalSpan,    rw, botModule, 0,
+            0,  botModule, 0,    0,  botTrot, -totalSpan,    rw, botTrot, -totalSpan,
+            // Face avant (côté module, 40mm d'épaisseur)
+            0,  botModule, 0,    rw, botModule, 0,    rw, topModule, 0,
+            0,  botModule, 0,    rw, topModule, 0,    0,  topModule, 0,
+            // Face arrière (côté trottoir, 40mm d'épaisseur)
+            0,  botTrot, -totalSpan,    rw, topTrot, -totalSpan,    rw, botTrot, -totalSpan,
+            0,  botTrot, -totalSpan,    0,  topTrot, -totalSpan,    rw, topTrot, -totalSpan,
             // Face gauche
-            0,  0,  0,    0,  mh, 0,    0,  TROT_HEIGHT, -totalSpan,
-            0,  0,  0,    0,  TROT_HEIGHT, -totalSpan,    0, 0, -totalSpan,
+            0,  botModule, 0,    0,  topModule, 0,    0,  topTrot, -totalSpan,
+            0,  botModule, 0,    0,  topTrot, -totalSpan,    0, botTrot, -totalSpan,
             // Face droite
-            rw, 0,  0,    rw, TROT_HEIGHT, -totalSpan,    rw, mh, 0,
-            rw, 0,  0,    rw, 0,  -totalSpan,    rw, TROT_HEIGHT, -totalSpan,
+            rw, botModule, 0,    rw, topTrot, -totalSpan,    rw, topModule, 0,
+            rw, botModule, 0,    rw, botTrot, -totalSpan,    rw, topTrot, -totalSpan,
           ]);
           const rearGeo = new THREE.BufferGeometry();
           rearGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
