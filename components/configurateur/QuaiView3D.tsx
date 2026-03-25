@@ -15,7 +15,7 @@ interface QuaiView3DProps {
 
 const S = 1 / 1000; // mm -> m
 const ROW_DEPTH = 1.5; // 1500mm
-const GAP = 0.15;
+const GAP = 0.005; // quasi-nul, les rangées sont collées (modules emboîtés)
 
 // Couleurs par role -- identiques au 2D
 const ROLE_COLORS: Record<string, string> = {
