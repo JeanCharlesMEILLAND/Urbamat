@@ -138,79 +138,90 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
 
         // --- Layout Z -- all rows on road (chaussee), extending from curb outward ----
         //
-        //   Row 1 (Voirie) = closest to sidewalk, center at Z = 0
-        //   Row N = farthest from sidewalk, toward bus/road
-        //   Trottoir is behind row 1 (negative Z)
-        //   Route is in front of row N (positive Z)
+        // LAYOUT (Z axis, from back to front):
+        //   TROTTOIR (surélevé 150mm) → BORDURE → CANIVEAU (espace eau) → RAMPES ARRIERE → RANG 1 → RANG 2 → ... → ROUTE
         //
+        const TROT_HEIGHT = 0.15;       // trottoir surélevé 150mm
+        const CANIVEAU_GAP = 0.6;       // espace caniveau entre trottoir et rampes (600mm)
+        const RAMPE_DEPTH = 0.51;       // profondeur rampe arrière (510mm)
+
         const QUAI_DEPTH = nbRangees * ROW_DEPTH + (nbRangees - 1) * GAP;
 
-        // Back edge of quai (row 1 back, toward trottoir)
-        const QUAI_BACK = -ROW_DEPTH / 2;
-        // Front edge of quai (last row front, toward bus/road)
-        const QUAI_FRONT = QUAI_BACK + QUAI_DEPTH;
+        // Z positions: rang 1 center est à Z = 0
+        // Derrière le rang 1 : rampes arrière, caniveau, bordure, trottoir
+        const QUAI_BACK = -ROW_DEPTH / 2;                    // bord arrière rang 1
+        const RAMPE_BACK = QUAI_BACK - RAMPE_DEPTH;           // bord arrière des rampes
+        const CANIVEAU_BACK = RAMPE_BACK - CANIVEAU_GAP;       // bord arrière caniveau
+        const CURB_Z = CANIVEAU_BACK;                          // bordure trottoir
+        const QUAI_FRONT = QUAI_BACK + QUAI_DEPTH;            // bord avant dernier rang
 
-        // Curb sits behind the quai (between trottoir and row 1)
-        const CURB_Z = QUAI_BACK;
-
-        // Route starts at the curb — quai modules sit ON the road
+        // Route commence à la bordure (quai sur la route)
         const ROUTE_START = CURB_Z;
 
-        // --- Trottoir (sidewalk, behind the curb) ----
+        // --- Trottoir surélevé (150mm) ----
         const TROT_WIDTH = 3;
         const trot = new THREE.Mesh(
-          new THREE.PlaneGeometry(maxLen + 4, TROT_WIDTH),
+          new THREE.BoxGeometry(maxLen + 4, TROT_HEIGHT, TROT_WIDTH),
           new THREE.MeshStandardMaterial({ color: "#CBC7BB", roughness: 0.85 })
         );
-        trot.rotation.x = -Math.PI / 2;
-        trot.position.set(cx, -0.004, CURB_Z - TROT_WIDTH / 2);
+        trot.position.set(cx, TROT_HEIGHT / 2, CURB_Z - TROT_WIDTH / 2);
         trot.receiveShadow = true;
         scene.add(trot);
 
-        // Bordure trottoir (curb between sidewalk and road)
+        // Bordure trottoir
         const bordure = new THREE.Mesh(
-          new THREE.BoxGeometry(maxLen + 4, 0.15, 0.1),
+          new THREE.BoxGeometry(maxLen + 4, TROT_HEIGHT + 0.02, 0.1),
           new THREE.MeshStandardMaterial({ color: "#A0A0A0", roughness: 0.7 })
         );
-        bordure.position.set(cx, 0.075, CURB_Z - 0.05);
+        bordure.position.set(cx, (TROT_HEIGHT + 0.02) / 2, CURB_Z + 0.05);
         scene.add(bordure);
 
-        // --- Route (road, extends in front of row 1) ----
-        const ROUTE_WIDTH = 7;
+        // Caniveau (espace vide entre bordure et rampes — sol visible)
+        const caniveauSol = new THREE.Mesh(
+          new THREE.PlaneGeometry(maxLen + 4, CANIVEAU_GAP + RAMPE_DEPTH),
+          new THREE.MeshStandardMaterial({ color: "#555555", roughness: 0.95 })
+        );
+        caniveauSol.rotation.x = -Math.PI / 2;
+        caniveauSol.position.set(cx, -0.003, CURB_Z + (CANIVEAU_GAP + RAMPE_DEPTH) / 2);
+        scene.add(caniveauSol);
+
+        // --- Route (chaussée, sous le quai et devant) ----
+        const ROUTE_WIDTH = 7 + QUAI_DEPTH + CANIVEAU_GAP + RAMPE_DEPTH;
         const ground = new THREE.Mesh(
           new THREE.PlaneGeometry(maxLen + 8, ROUTE_WIDTH),
           new THREE.MeshStandardMaterial({ color: "#3a3a3a", roughness: 0.95 })
         );
         ground.rotation.x = -Math.PI / 2;
-        ground.position.set(cx, -0.005, ROUTE_START + ROUTE_WIDTH / 2);
+        ground.position.set(cx, -0.005, CURB_Z + ROUTE_WIDTH / 2);
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // --- Road markings (far side of road) ----
+        // --- Marquage route (loin du quai) ----
+        const ROAD_FAR = QUAI_FRONT + 3.5;
         const dashGeo = new THREE.PlaneGeometry(0.7, 0.07);
         const dashMat = new THREE.MeshBasicMaterial({ color: "#E8E4D0", transparent: true, opacity: 0.5 });
         for (let i = 0; i < Math.floor((maxLen + 2) / 1.4); i++) {
           const d = new THREE.Mesh(dashGeo, dashMat);
           d.rotation.x = -Math.PI / 2;
-          d.position.set(i * 1.4 - 0.5, 0.001, ROUTE_START + ROUTE_WIDTH / 2);
+          d.position.set(i * 1.4 - 0.5, 0.001, ROAD_FAR);
           scene.add(d);
         }
 
-        // --- Trottoir oppose ----
+        // --- Trottoir opposé ----
         const trotOpp = new THREE.Mesh(
           new THREE.PlaneGeometry(maxLen + 4, 2.5),
           new THREE.MeshStandardMaterial({ color: "#CBC7BB", roughness: 0.85 })
         );
         trotOpp.rotation.x = -Math.PI / 2;
-        trotOpp.position.set(cx, -0.004, ROUTE_START + ROUTE_WIDTH + 1.25);
+        trotOpp.position.set(cx, -0.004, ROAD_FAR + 2);
         scene.add(trotOpp);
 
-        // Bordure trottoir oppose
+        // Bordure trottoir opposé
         const bordure2 = new THREE.Mesh(
           new THREE.BoxGeometry(maxLen + 4, 0.15, 0.1),
           new THREE.MeshStandardMaterial({ color: "#A0A0A0", roughness: 0.7 })
         );
-        bordure2.position.set(cx, 0.075, ROUTE_START + ROUTE_WIDTH + 0.05);
+        bordure2.position.set(cx, 0.075, ROAD_FAR + 0.75);
         scene.add(bordure2);
 
         // --- Label helper ----
@@ -463,44 +474,69 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           }
         }
 
-        // --- Auto-generated rear rampes collées aux modules du rang 1 ----
-        // Rampes au bord arrière des modules (côté trottoir), pente vers le bas
-        const FLAT_ROLES = new Set(["central", "jonction", "fin"]);
+        // --- Rampes arrière : s'appuient sur la bordure trottoir, pente vers le module ----
+        // Côté trottoir = haut (appui sur bordure, ~150mm)
+        // Côté module = haut aussi (180mm, collé au module)
+        // L'eau s'écoule DESSOUS la rampe dans le caniveau
+        // Seulement derrière central et jonction (pas rampe, latéral, fin — biseautés)
+        const FLAT_ROLES = new Set(["central", "jonction"]);
         const row1Modules = modulesByRow[1 as ModuleRow] ?? [];
-        const row1Z = getRowZ(1); // center Z of row 1
-        const rearEdgeZ = row1Z - ROW_DEPTH / 2; // bord arrière du rang 1
-        const REAR_DEPTH = 0.51; // 510mm = profondeur rampe (collée au module)
-        const REAR_LIP = 0.04;
-        const REAR_CANIVEAU_L = 0.45; // volet caniveau
-        const REAR_CANIVEAU_H = 0.04;
+        const row1BackZ = getRowZ(1) - ROW_DEPTH / 2; // bord arrière rang 1
 
         for (const m of row1Modules) {
           if (!FLAT_ROLES.has(m.spec.role)) continue;
 
-          const mw = m.spec.longueur * S; // module width along X
-          const mh = m.spec.hauteur * S;  // quai height
+          const mw = m.spec.longueur * S;
+          const mh = m.spec.hauteur * S; // 0.18m
           const startX = m.x * S + 0.01;
           const rw = mw - 0.02;
 
-          // Rampe arrière — bloc rouge collé au bord arrière du module
+          // La rampe enjambe le caniveau :
+          // - Côté module (Z=0) : hauteur = mh (180mm), collée au module
+          // - Côté trottoir (Z=-totalSpan) : hauteur = TROT_HEIGHT (150mm), posée sur la bordure
+          // - Dessous : vide pour l'écoulement de l'eau
+          const totalSpan = CANIVEAU_GAP + RAMPE_DEPTH; // distance totale entre module et bordure
           const rearGroup = new THREE.Group();
 
-          const canGeo = new THREE.BoxGeometry(rw, REAR_CANIVEAU_H, REAR_DEPTH);
-          const canMesh = new THREE.Mesh(canGeo, new THREE.MeshStandardMaterial({ color: "#CC2222", roughness: 0.5 }));
-          canMesh.position.set(rw / 2, REAR_CANIVEAU_H / 2, -REAR_DEPTH / 2);
-          canMesh.castShadow = true;
-          rearGroup.add(canMesh);
-          rearGroup.add(new THREE.LineSegments(
-            new THREE.EdgesGeometry(canGeo),
-            new THREE.LineBasicMaterial({ color: "#991111" })
-          ).translateX(rw / 2).translateY(REAR_CANIVEAU_H / 2).translateZ(-REAR_DEPTH / 2));
+          const positions = new Float32Array([
+            // Face avant (collée au module, pleine hauteur mh)
+            0,  0,  0,    rw, 0,  0,    rw, mh, 0,
+            0,  0,  0,    rw, mh, 0,    0,  mh, 0,
+            // Face arrière (appui sur bordure trottoir, hauteur TROT_HEIGHT)
+            0,  0,  -totalSpan,    rw, TROT_HEIGHT, -totalSpan,    rw, 0, -totalSpan,
+            0,  0,  -totalSpan,    0,  TROT_HEIGHT, -totalSpan,    rw, TROT_HEIGHT, -totalSpan,
+            // Face du dessus (pente douce de mh à TROT_HEIGHT)
+            0,  mh, 0,    rw, mh, 0,    rw, TROT_HEIGHT, -totalSpan,
+            0,  mh, 0,    rw, TROT_HEIGHT, -totalSpan,    0, TROT_HEIGHT, -totalSpan,
+            // PAS de face du dessous — vide pour l'eau !
+            // Face gauche
+            0,  0,  0,    0,  mh, 0,    0,  TROT_HEIGHT, -totalSpan,
+            0,  0,  0,    0,  TROT_HEIGHT, -totalSpan,    0, 0, -totalSpan,
+            // Face droite
+            rw, 0,  0,    rw, TROT_HEIGHT, -totalSpan,    rw, mh, 0,
+            rw, 0,  0,    rw, 0,  -totalSpan,    rw, TROT_HEIGHT, -totalSpan,
+          ]);
+          const rearGeo = new THREE.BufferGeometry();
+          rearGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+          rearGeo.computeVertexNormals();
 
-          // Position the group: X = module position, Z = back edge of row 1
-          rearGroup.position.set(startX, 0, rearEdgeZ);
+          const rearMesh = new THREE.Mesh(rearGeo, new THREE.MeshStandardMaterial({
+            color: "#CC2222", roughness: 0.5, side: THREE.DoubleSide,
+          }));
+          rearMesh.castShadow = true;
+          rearGroup.add(rearMesh);
+
+          rearGroup.add(new THREE.LineSegments(
+            new THREE.EdgesGeometry(rearGeo),
+            new THREE.LineBasicMaterial({ color: "#991111" })
+          ));
+
+          // Position : collé au bord arrière du rang 1
+          rearGroup.position.set(startX, 0, row1BackZ);
           scene.add(rearGroup);
 
           if (showLabels) {
-            createLabel("D-009a", new THREE.Vector3(startX + rw / 2, mh + 0.1, rearEdgeZ - REAR_DEPTH / 2));
+            createLabel("D-009a", new THREE.Vector3(startX + rw / 2, mh + 0.1, row1BackZ - totalSpan / 2));
           }
         }
 
@@ -616,7 +652,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
 
         // Placer l'abribus cote trottoir, derriere le quai
         if (maxLen > 4 && showShelter) {
-          buildBusShelter(cx, QUAI_BACK - 1.2);
+          buildBusShelter(cx, CURB_Z - 1.5);
         }
 
         // --- Row labels ----

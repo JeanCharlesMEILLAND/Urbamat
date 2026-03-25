@@ -73,7 +73,7 @@ function DropZone({
 
 // ─── Tuile de module placé (draggable) ──────────────────────────
 
-const ROLES_WITH_REAR_RAMPE = new Set(["central", "jonction", "fin"]);
+const ROLES_WITH_REAR_RAMPE = new Set(["central", "jonction"]);
 
 function ModuleTile({
   module,
