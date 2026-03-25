@@ -343,16 +343,49 @@ export function QuaiCanvas({
     }
   }
 
+  // Noms des rangées : rang 1 = Voirie (près trottoir), les autres = Rang N
+  const rowLabel = (row: ModuleRow) => row === 1 ? "Voirie" : `Rang ${row}`;
+
+  // Trouver les rampes arrière (D-009a) dans le rang 1 pour les visualiser au-dessus
+  const rampesArriere = (modulesByRow[1] ?? []).filter(
+    (m) => m.spec.rampeType === "arriere"
+  );
+
   return (
     <div className="space-y-3">
+      {/* Rampes arrière (trottoir → quai) au-dessus du rang 1 */}
+      {rampesArriere.length > 0 && (
+        <div>
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-xs font-semibold text-amber-500 uppercase tracking-wider w-20">
+              Trottoir
+            </span>
+            <span className="text-xs text-gray-400">
+              ↕ Rampes arrière PMR
+            </span>
+          </div>
+          <div className="flex items-center gap-1 p-2 bg-amber-50 rounded-lg border border-amber-200 min-h-[40px]">
+            {rampesArriere.map((m, i) => (
+              <div
+                key={`rampe-arr-${i}`}
+                className="px-3 py-1.5 bg-amber-100 border border-amber-300 rounded text-[10px] font-mono text-amber-700"
+              >
+                {m.ref} — {m.spec.longueur}mm
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Rang 1 (Voirie) toujours en haut, puis rang 2, 3 en dessous */}
       {Array.from({ length: nbRangees }, (_, i) => {
-        const row = (nbRangees - i) as ModuleRow; // reverse order: highest row number at top
+        const row = (i + 1) as ModuleRow; // rang 1 en haut, 2 en dessous, etc.
         const modules = modulesByRow[row] ?? [];
         const longueur = modules.reduce((s, m) => s + m.spec.longueur, 0);
         return (
           <RowCanvas
             key={row}
-            label={`Rang ${row}`}
+            label={rowLabel(row)}
             row={row}
             modules={modules}
             longueur={longueur}

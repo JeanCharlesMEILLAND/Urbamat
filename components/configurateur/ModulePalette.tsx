@@ -40,7 +40,7 @@ const ROLE_COLORS_SELECTED: Record<string, string> = {
 
 /** Row tabs to display (always 1..nbRangees). */
 const ROW_TABS: { row: ModuleRow; label: string }[] = [
-  { row: 1, label: "Rang 1" },
+  { row: 1, label: "Voirie" },
   { row: 2, label: "Rang 2" },
   { row: 3, label: "Rang 3" },
 ];

@@ -158,23 +158,28 @@ export default function ConfigurateurPage() {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              {/* Nb rangées selector */}
-              <div className="flex bg-white rounded-lg border border-gray-200 p-0.5">
-                {([2, 3] as const).map((n) => (
-                  <button
-                    key={n}
-                    onClick={() => setNbRangees(n)}
-                    className={cn(
-                      "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
-                      nbRangees === n
-                        ? "bg-primary text-white"
-                        : "text-gray-500 hover:text-gray-700",
-                    )}
-                  >
-                    {n} rangées
-                  </button>
-                ))}
-              </div>
+              {/* Ajouter / retirer un rang */}
+              {nbRangees < 3 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setNbRangees((nbRangees + 1) as NbRangees)}
+                >
+                  + Ajouter un rang
+                </Button>
+              )}
+              {nbRangees > 2 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setModulesByRow((prev) => ({ ...prev, 3: [] }));
+                    setNbRangees(2);
+                  }}
+                >
+                  − Retirer rang 3
+                </Button>
+              )}
               <Button variant="ghost" size="sm" onClick={handleLoadTemplate}>
                 Charger un exemple
               </Button>
