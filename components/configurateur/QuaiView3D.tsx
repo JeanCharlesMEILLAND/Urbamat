@@ -219,36 +219,90 @@ export function QuaiView3D({ modulesHaut, modulesBas, coloris, showShelter = tru
             const moduleCenter = m.x * S + w / 2;
             const isLeftRampe = moduleCenter < rowLen / 2;
 
-            // Rampe biseautée avec gap — inversée si à droite
+            // Dimensions réelles rampe URBAQUAI
+            const LIP = 0.04;          // lèvre basse 40mm
+            const CANIVEAU_L = 0.51;   // extension caniveau 510mm
+            const CANIVEAU_H = 0.04;   // épaisseur volet caniveau 40mm
             const rw = w - MODULE_GAP;
             const rd = d - MODULE_GAP;
+            const rampeMat = new THREE.MeshStandardMaterial({ color: base, roughness: 0.6 });
+            const rampeEdgeMat = new THREE.LineBasicMaterial({ color: edge });
+            const startX = m.x * S + MODULE_GAP / 2;
+
+            // ─── Corps principal rampe (biseau) ───
             const shape = new THREE.Shape();
             if (isLeftRampe) {
-              // Pente montante : bas à gauche, haut à droite
+              // Pente montante : lèvre 40mm à gauche → 180mm à droite
               shape.moveTo(0, 0);
               shape.lineTo(rw, 0);
               shape.lineTo(rw, h);
-              shape.lineTo(0, h * 0.1);
+              shape.lineTo(0, LIP);
             } else {
-              // Pente descendante : haut à gauche, bas à droite
+              // Pente descendante : 180mm à gauche → lèvre 40mm à droite
               shape.moveTo(0, 0);
               shape.lineTo(rw, 0);
-              shape.lineTo(rw, h * 0.1);
+              shape.lineTo(rw, LIP);
               shape.lineTo(0, h);
             }
             shape.closePath();
             const geo = new THREE.ExtrudeGeometry(shape, { depth: rd, bevelEnabled: false });
-            const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: base, roughness: 0.6 }));
-            mesh.position.set(m.x * S + MODULE_GAP / 2, 0, zOff - rd / 2);
+            const mesh = new THREE.Mesh(geo, rampeMat);
+            mesh.position.set(startX, 0, zOff - rd / 2);
             mesh.castShadow = true;
             scene.add(mesh);
             scene.add(new THREE.LineSegments(
-              new THREE.EdgesGeometry(geo),
-              new THREE.LineBasicMaterial({ color: edge })
-            ).translateX(m.x * S + MODULE_GAP / 2).translateZ(zOff - rd / 2));
+              new THREE.EdgesGeometry(geo), rampeEdgeMat
+            ).translateX(startX).translateZ(zOff - rd / 2));
+
+            // ─── Volet caniveau (articulé, à plat devant la lèvre) ───
+            const caniveauGeo = new THREE.BoxGeometry(CANIVEAU_L, CANIVEAU_H, rd);
+            const caniveauMat = new THREE.MeshStandardMaterial({
+              color: "#8B8B85", roughness: 0.7, metalness: 0.1,
+            });
+            const caniveauMesh = new THREE.Mesh(caniveauGeo, caniveauMat);
+            // Positionner le volet au sol, accolé au côté bas de la rampe
+            if (isLeftRampe) {
+              caniveauMesh.position.set(
+                startX - CANIVEAU_L / 2,
+                CANIVEAU_H / 2,
+                zOff
+              );
+            } else {
+              caniveauMesh.position.set(
+                startX + rw + CANIVEAU_L / 2,
+                CANIVEAU_H / 2,
+                zOff
+              );
+            }
+            caniveauMesh.castShadow = true;
+            scene.add(caniveauMesh);
+            scene.add(new THREE.LineSegments(
+              new THREE.EdgesGeometry(caniveauGeo),
+              new THREE.LineBasicMaterial({ color: "#666" })
+            ).translateX(caniveauMesh.position.x).translateY(caniveauMesh.position.y).translateZ(caniveauMesh.position.z));
+
+            // ─── Rainures antidérapantes sur la surface de la rampe ───
+            const grooveMat = new THREE.MeshBasicMaterial({ color: edge, transparent: true, opacity: 0.3 });
+            const grooveCount = Math.floor(rw / 0.12);
+            for (let gi = 1; gi < grooveCount; gi++) {
+              const gx = gi * (rw / grooveCount);
+              const grooveGeo = new THREE.PlaneGeometry(0.008, rd - 0.06);
+              const groove = new THREE.Mesh(grooveGeo, grooveMat);
+              groove.rotation.x = -Math.PI / 2;
+              // Hauteur de la rainure sur la pente
+              const t = gx / rw;
+              let grooveY: number;
+              if (isLeftRampe) {
+                grooveY = LIP + t * (h - LIP);
+              } else {
+                grooveY = h - t * (h - LIP);
+              }
+              groove.position.set(startX + gx, grooveY + 0.001, zOff);
+              scene.add(groove);
+            }
 
             // Label
-            createLabel(m.ref, new THREE.Vector3(m.x * S + w / 2, h + 0.1, zOff));
+            createLabel(m.ref, new THREE.Vector3(m.x * S + w / 2, h + 0.12, zOff));
           } else {
             const geo = new THREE.BoxGeometry(w - MODULE_GAP, h, d - MODULE_GAP);
             const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: base, roughness: 0.55, metalness: 0.03 }));

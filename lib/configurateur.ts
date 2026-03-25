@@ -45,7 +45,7 @@ export const MODULE_CATALOG: Record<ModuleRef, ModuleSpec> = {
     poids: 700,
     rang: "haut",
     role: "rampe",
-    description: "Rampe de transition côté voirie, bord biseauté",
+    description: "Rampe biseau 40→180mm, caniveau 510mm, côté voirie",
   },
   "D-004e": {
     ref: "D-004e",
@@ -113,7 +113,7 @@ export const MODULE_CATALOG: Record<ModuleRef, ModuleSpec> = {
     poids: 700,
     rang: "bas",
     role: "rampe",
-    description: "Rampe PMR béton, pente intégrée 7.9%",
+    description: "Rampe PMR biseau 40→180mm, caniveau 510mm, côté trottoir",
   },
   "D-012": {
     ref: "D-012",
