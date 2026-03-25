@@ -482,54 +482,18 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           const startX = m.x * S + 0.01;
           const rw = mw - 0.02;
 
-          // Use a Group to avoid rotation/translation issues
+          // Rampe arrière — bloc rouge collé au bord arrière du module
           const rearGroup = new THREE.Group();
 
-          // Rampe body: slope from mh (front, adjacent to row 1) to LIP (back, toward trottoir)
-          // Built as a box-like shape along Z axis using BufferGeometry
-          const positions = new Float32Array([
-            // Front face (full height, at Z=0, adjacent to row 1)
-            0,  0,  0,    rw, 0,  0,    rw, mh, 0,
-            0,  0,  0,    rw, mh, 0,    0,  mh, 0,
-            // Back face (lip height, at Z=-REAR_DEPTH)
-            0,  0,  -REAR_DEPTH,    rw, REAR_LIP, -REAR_DEPTH,    rw, 0, -REAR_DEPTH,
-            0,  0,  -REAR_DEPTH,    0,  REAR_LIP, -REAR_DEPTH,    rw, REAR_LIP, -REAR_DEPTH,
-            // Top face (slope)
-            0,  mh, 0,    rw, mh, 0,    rw, REAR_LIP, -REAR_DEPTH,
-            0,  mh, 0,    rw, REAR_LIP, -REAR_DEPTH,    0, REAR_LIP, -REAR_DEPTH,
-            // Bottom face
-            0,  0,  0,    rw, 0,  -REAR_DEPTH,    rw, 0,  0,
-            0,  0,  0,    0,  0,  -REAR_DEPTH,    rw, 0,  -REAR_DEPTH,
-            // Left face
-            0,  0,  0,    0,  mh, 0,    0,  REAR_LIP, -REAR_DEPTH,
-            0,  0,  0,    0,  REAR_LIP, -REAR_DEPTH,    0, 0, -REAR_DEPTH,
-            // Right face
-            rw, 0,  0,    rw, REAR_LIP, -REAR_DEPTH,    rw, mh, 0,
-            rw, 0,  0,    rw, 0,  -REAR_DEPTH,    rw, REAR_LIP, -REAR_DEPTH,
-          ]);
-          const rearGeo = new THREE.BufferGeometry();
-          rearGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-          rearGeo.computeVertexNormals();
-          const rearMesh = new THREE.Mesh(rearGeo, new THREE.MeshStandardMaterial({ color: "#F5D4A0", roughness: 0.6 }));
-          rearMesh.castShadow = true;
-          rearGroup.add(rearMesh);
-
-          // Edges
-          rearGroup.add(new THREE.LineSegments(
-            new THREE.EdgesGeometry(rearGeo),
-            new THREE.LineBasicMaterial({ color: "#D97706" })
-          ));
-
-          // Caniveau flap (flat, extending further toward trottoir)
-          const canGeo = new THREE.BoxGeometry(rw, REAR_CANIVEAU_H, REAR_CANIVEAU_L);
-          const canMesh = new THREE.Mesh(canGeo, new THREE.MeshStandardMaterial({ color: "#8B8B85", roughness: 0.7, metalness: 0.1 }));
-          canMesh.position.set(rw / 2, REAR_CANIVEAU_H / 2, -REAR_DEPTH - REAR_CANIVEAU_L / 2);
+          const canGeo = new THREE.BoxGeometry(rw, REAR_CANIVEAU_H, REAR_DEPTH);
+          const canMesh = new THREE.Mesh(canGeo, new THREE.MeshStandardMaterial({ color: "#CC2222", roughness: 0.5 }));
+          canMesh.position.set(rw / 2, REAR_CANIVEAU_H / 2, -REAR_DEPTH / 2);
           canMesh.castShadow = true;
           rearGroup.add(canMesh);
           rearGroup.add(new THREE.LineSegments(
             new THREE.EdgesGeometry(canGeo),
-            new THREE.LineBasicMaterial({ color: "#666" })
-          ).translateX(rw / 2).translateY(REAR_CANIVEAU_H / 2).translateZ(-REAR_DEPTH - REAR_CANIVEAU_L / 2));
+            new THREE.LineBasicMaterial({ color: "#991111" })
+          ).translateX(rw / 2).translateY(REAR_CANIVEAU_H / 2).translateZ(-REAR_DEPTH / 2));
 
           // Position the group: X = module position, Z = back edge of row 1
           rearGroup.position.set(startX, 0, rearEdgeZ);
