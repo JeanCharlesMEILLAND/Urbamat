@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { Plus, X, GripVertical } from "lucide-react";
-import { MODULE_CATALOG, COLORIS, type PlacedModule, type ModuleRef, type ModuleRow } from "@/lib/configurateur";
+import { MODULE_CATALOG, COLORIS, type PlacedModule, type ModuleRef, type ModuleRow, type NbRangees } from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
 interface QuaiCanvasProps {
-  modulesHaut: PlacedModule[];
-  modulesBas: PlacedModule[];
+  modulesByRow: Record<ModuleRow, PlacedModule[]>;
+  nbRangees: NbRangees;
   coloris: string;
   selectedModule: ModuleRef | null;
   onAddModule: (row: ModuleRow) => void;
@@ -308,8 +308,8 @@ function RowCanvas({
 // ─── Canvas principal ───────────────────────────────────────────
 
 export function QuaiCanvas({
-  modulesHaut,
-  modulesBas,
+  modulesByRow,
+  nbRangees,
   coloris,
   selectedModule,
   onAddModule,
@@ -317,23 +317,22 @@ export function QuaiCanvas({
   onInsertModule,
   onMoveModule,
 }: QuaiCanvasProps) {
-  const longueurHaut = modulesHaut.reduce((s, m) => s + m.spec.longueur, 0);
-  const longueurBas = modulesBas.reduce((s, m) => s + m.spec.longueur, 0);
-  const longueurMax = Math.max(longueurHaut, longueurBas, 1);
+  // Compute max longueur across all active rows
+  const longueurMax = Array.from({ length: nbRangees }, (_, i) => {
+    const row = (i + 1) as ModuleRow;
+    return (modulesByRow[row] ?? []).reduce((s, m) => s + m.spec.longueur, 0);
+  }).reduce((a, b) => Math.max(a, b), 0);
 
   function handleDrop(row: ModuleRow, dropIndex: number, data: string) {
     try {
       const parsed = JSON.parse(data);
 
       if (parsed.type === "new") {
-        const spec = MODULE_CATALOG[parsed.ref as ModuleRef];
-        // Toujours placer dans la rangée correcte du module
-        const targetRow = spec.rang;
-        const modules = targetRow === "haut" ? modulesHaut : modulesBas;
-        const idx = (dropIndex === -1 || targetRow !== row) ? modules.length : dropIndex;
-        onInsertModule(targetRow, idx, parsed.ref);
+        const modules = modulesByRow[row] ?? [];
+        const idx = dropIndex === -1 ? modules.length : dropIndex;
+        onInsertModule(row, idx, parsed.ref);
       } else if (parsed.type === "reorder" && parsed.row === row) {
-        const modules = row === "haut" ? modulesHaut : modulesBas;
+        const modules = modulesByRow[row] ?? [];
         const idx = dropIndex === -1 ? modules.length : dropIndex;
         if (parsed.index !== idx && parsed.index !== idx - 1) {
           onMoveModule(row, parsed.index, idx);
@@ -346,28 +345,25 @@ export function QuaiCanvas({
 
   return (
     <div className="space-y-3">
-      <RowCanvas
-        label="Trottoir"
-        row="bas"
-        modules={modulesBas}
-        longueur={longueurBas}
-        coloris={coloris}
-        selectedModule={selectedModule}
-        onAddModule={onAddModule}
-        onRemoveModule={onRemoveModule}
-        onDrop={handleDrop}
-      />
-      <RowCanvas
-        label="Voirie"
-        row="haut"
-        modules={modulesHaut}
-        longueur={longueurHaut}
-        coloris={coloris}
-        selectedModule={selectedModule}
-        onAddModule={onAddModule}
-        onRemoveModule={onRemoveModule}
-        onDrop={handleDrop}
-      />
+      {Array.from({ length: nbRangees }, (_, i) => {
+        const row = (nbRangees - i) as ModuleRow; // reverse order: highest row number at top
+        const modules = modulesByRow[row] ?? [];
+        const longueur = modules.reduce((s, m) => s + m.spec.longueur, 0);
+        return (
+          <RowCanvas
+            key={row}
+            label={`Rang ${row}`}
+            row={row}
+            modules={modules}
+            longueur={longueur}
+            coloris={coloris}
+            selectedModule={selectedModule}
+            onAddModule={onAddModule}
+            onRemoveModule={onRemoveModule}
+            onDrop={handleDrop}
+          />
+        );
+      })}
 
       {/* Cotation */}
       {longueurMax > 0 && (
@@ -376,7 +372,7 @@ export function QuaiCanvas({
             {(longueurMax / 1000).toFixed(1)} m
           </span>
           <span className="text-xs text-gray-400 ml-2">
-            ({longueurMax} mm) × 3 000 mm
+            ({longueurMax} mm) × {nbRangees} × 1 500 mm
           </span>
         </div>
       )}

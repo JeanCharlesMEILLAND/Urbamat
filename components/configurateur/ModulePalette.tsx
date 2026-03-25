@@ -1,6 +1,6 @@
 "use client";
 
-import { MODULE_CATALOG, type ModuleRef, type ModuleRow } from "@/lib/configurateur";
+import { MODULE_CATALOG, type ModuleRef, type ModuleRow, type NbRangees } from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
 interface ModulePaletteProps {
@@ -8,10 +8,17 @@ interface ModulePaletteProps {
   onSelect: (ref: ModuleRef) => void;
   activeRow: ModuleRow;
   onRowChange: (row: ModuleRow) => void;
+  nbRangees: NbRangees;
 }
 
-const MODULES_HAUT: ModuleRef[] = ["D-009", "D-004e", "D-005", "D-006", "D-007e", "D-003e", "VIDE-H"];
-const MODULES_BAS: ModuleRef[] = ["D-009a", "D-012", "D-002", "D-037", "D-003", "VIDE-B"];
+/** All available modules -- row-agnostic, any module can go on any row. */
+const ALL_MODULES: ModuleRef[] = [
+  "D-009", "D-009a", "D-004e", "D-012",
+  "D-005", "D-002", "D-006",
+  "D-007e", "D-037",
+  "D-003e", "D-003",
+  "VIDE",
+];
 
 const ROLE_COLORS: Record<string, string> = {
   rampe: "border-amber-400 bg-amber-50",
@@ -31,8 +38,21 @@ const ROLE_COLORS_SELECTED: Record<string, string> = {
   vide: "border-dashed border-gray-500 bg-gray-100 ring-2 ring-gray-400",
 };
 
-export function ModulePalette({ selectedModule, onSelect, activeRow, onRowChange }: ModulePaletteProps) {
-  const modules = activeRow === "haut" ? MODULES_HAUT : MODULES_BAS;
+/** Row tabs to display (always 1..nbRangees). */
+const ROW_TABS: { row: ModuleRow; label: string }[] = [
+  { row: 1, label: "Rang 1" },
+  { row: 2, label: "Rang 2" },
+  { row: 3, label: "Rang 3" },
+];
+
+export function ModulePalette({
+  selectedModule,
+  onSelect,
+  activeRow,
+  onRowChange,
+  nbRangees,
+}: ModulePaletteProps) {
+  const visibleTabs = ROW_TABS.filter((t) => t.row <= nbRangees);
 
   return (
     <div className="space-y-4">
@@ -41,29 +61,25 @@ export function ModulePalette({ selectedModule, onSelect, activeRow, onRowChange
           Modules
         </h3>
         <div className="flex bg-gray-100 rounded-lg p-0.5">
-          <button
-            onClick={() => onRowChange("haut")}
-            className={cn(
-              "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
-              activeRow === "haut" ? "bg-white text-primary shadow-sm" : "text-gray-500"
-            )}
-          >
-            Rang voirie
-          </button>
-          <button
-            onClick={() => onRowChange("bas")}
-            className={cn(
-              "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
-              activeRow === "bas" ? "bg-white text-primary shadow-sm" : "text-gray-500"
-            )}
-          >
-            Rang trottoir
-          </button>
+          {visibleTabs.map((tab) => (
+            <button
+              key={tab.row}
+              onClick={() => onRowChange(tab.row)}
+              className={cn(
+                "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
+                activeRow === tab.row
+                  ? "bg-white text-primary shadow-sm"
+                  : "text-gray-500"
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        {modules.map((ref) => {
+        {ALL_MODULES.map((ref) => {
           const spec = MODULE_CATALOG[ref];
           const isSelected = selectedModule === ref;
           const colorClass = isSelected
@@ -78,7 +94,7 @@ export function ModulePalette({ selectedModule, onSelect, activeRow, onRowChange
               onDragStart={(e) => {
                 e.dataTransfer.setData(
                   "text/plain",
-                  JSON.stringify({ type: "new", ref })
+                  JSON.stringify({ type: "new", ref, row: activeRow })
                 );
                 e.dataTransfer.effectAllowed = "all";
                 onSelect(ref);
@@ -110,10 +126,10 @@ export function ModulePalette({ selectedModule, onSelect, activeRow, onRowChange
       {selectedModule && (
         <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg text-center">
           <p className="text-xs text-primary font-medium">
-            Module <span className="font-mono font-bold">{selectedModule}</span> sélectionné
+            Module <span className="font-mono font-bold">{selectedModule}</span> selectionne
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            Cliquez sur <strong>+</strong> dans la rangée pour le placer
+            Cliquez sur <strong>+</strong> dans la rangee pour le placer
           </p>
         </div>
       )}

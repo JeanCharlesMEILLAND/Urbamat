@@ -34,6 +34,10 @@ yarn-error.log*
 /URBAQUAI/
 /image*.png
 /logo*.png
+/*.Pdf
+/*.stp
+/caniveau*.png
+/caniveau*.PNG
 
 # vercel
 .vercel

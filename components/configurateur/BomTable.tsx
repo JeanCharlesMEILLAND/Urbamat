@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText, Weight, Box, Ruler } from "lucide-react";
-import type { PlacedModule, BomLine, ModuleRef } from "@/lib/configurateur";
+import type { PlacedModule, BomLine, ModuleRef, ModuleRow } from "@/lib/configurateur";
 
 interface BomTableProps {
   modules: PlacedModule[];
@@ -33,9 +33,11 @@ function computeBom(modules: PlacedModule[]) {
 export function BomTable({ modules }: BomTableProps) {
   const bom = computeBom(modules);
   const poidsTotal = modules.reduce((s, m) => s + m.spec.poids, 0);
-  const longueurHaut = modules.filter(m => m.rang === "haut").reduce((s, m) => s + m.spec.longueur, 0);
-  const longueurBas = modules.filter(m => m.rang === "bas").reduce((s, m) => s + m.spec.longueur, 0);
-  const longueurMax = Math.max(longueurHaut, longueurBas);
+  const rowNumbers: ModuleRow[] = [1, 2, 3];
+  const longueurParRangee = rowNumbers.map(
+    (row) => modules.filter((m) => m.rang === row).reduce((s, m) => s + m.spec.longueur, 0),
+  );
+  const longueurMax = Math.max(...longueurParRangee, 0);
 
   if (modules.length === 0) {
     return (

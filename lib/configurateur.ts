@@ -1,25 +1,27 @@
 // ─── Catalogue des modules URBAQUAI 140+50 ──────────────────────
 //
-// Basé sur le plan technique réel : 2 rangées de 1500mm = quai 3000mm
-// Rangée haute = côté voirie (bus)
-// Rangée basse = côté trottoir
+// Tous les modules sont côté chaussée (voirie).
+// Les rangées sont numérotées (1, 2, 3) et tout module peut être
+// placé sur n'importe quelle rangée. Le nombre de rangées (2 ou 3)
+// détermine la profondeur totale du quai.
 
 export type ModuleRef =
-  | "D-009"   // Rampe haute gauche
-  | "D-009a"  // Rampe PMR basse gauche
-  | "D-004e"  // Latéral gauche haut
-  | "D-012"   // Latéral gauche bas
-  | "D-005"   // Central standard haut (3000mm)
-  | "D-002"   // Central standard bas (3000mm)
-  | "D-006"   // Central haut (3000mm, variante)
-  | "D-007e"  // Jonction étroit haut (1000mm)
-  | "D-037"   // Jonction étroit bas (1000mm)
-  | "D-003e"  // Fin de quai droit haut
-  | "D-003"   // Fin de quai droit bas
-  | "VIDE-H"  // Espaceur haut 1500mm
-  | "VIDE-B"; // Espaceur bas 1500mm
+  | "D-009"   // Rampe latérale (pente le long de X, en extrémité)
+  | "D-009a"  // Rampe arrière (pente le long de Z, quai vers trottoir)
+  | "D-004e"  // Latéral gauche
+  | "D-012"   // Latéral gauche (variante)
+  | "D-005"   // Central standard (3000mm)
+  | "D-002"   // Central standard (variante, 3000mm)
+  | "D-006"   // Central (variante, 3000mm)
+  | "D-007e"  // Jonction (1000mm)
+  | "D-037"   // Jonction (variante, 1000mm)
+  | "D-003e"  // Fin de quai droit
+  | "D-003"   // Fin de quai droit (variante)
+  | "VIDE";   // Espaceur 1500mm
 
-export type ModuleRow = "haut" | "bas";
+export type ModuleRow = 1 | 2 | 3;
+export type NbRangees = 2 | 3;
+export type RampeType = "laterale" | "arriere";
 export type ModuleRole = "rampe" | "lateral" | "central" | "jonction" | "fin" | "vide";
 
 export interface ModuleSpec {
@@ -29,159 +31,157 @@ export interface ModuleSpec {
   largeur: number;    // mm (toujours 1500)
   hauteur: number;    // mm
   poids: number;      // kg estimé
-  rang: ModuleRow;
+  rang: ModuleRow;    // rangée par défaut (tout module peut aller sur n'importe quelle rangée)
   role: ModuleRole;
   description: string;
+  rampeType?: RampeType;
 }
 
 export const MODULE_CATALOG: Record<ModuleRef, ModuleSpec> = {
-  // ─── Rangée haute (côté voirie) ─────────────
+  // ─── Rampes ────────────────────────────────────
   "D-009": {
     ref: "D-009",
-    nom: "Rampe d'accès haute",
+    nom: "Rampe latérale",
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
     poids: 700,
-    rang: "haut",
+    rang: 1,
     role: "rampe",
-    description: "Rampe biseau 40→180mm, caniveau 510mm, côté voirie",
+    rampeType: "laterale",
+    description: "Rampe latérale biseau 40→180mm, pente le long de X, placée en extrémité",
   },
-  "D-004e": {
-    ref: "D-004e",
-    nom: "Latéral gauche haut",
-    longueur: 1500,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 700,
-    rang: "haut",
-    role: "lateral",
-    description: "Module latéral gauche, rangée haute",
-  },
-  "D-005": {
-    ref: "D-005",
-    nom: "Central standard haut",
-    longueur: 3000,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 1400,
-    rang: "haut",
-    role: "central",
-    description: "Module central standard 3m, rangée haute",
-  },
-  "D-006": {
-    ref: "D-006",
-    nom: "Central haut (variante)",
-    longueur: 3000,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 1400,
-    rang: "haut",
-    role: "central",
-    description: "Module central 3m variante, rangée haute",
-  },
-  "D-007e": {
-    ref: "D-007e",
-    nom: "Jonction haute",
-    longueur: 1000,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 470,
-    rang: "haut",
-    role: "jonction",
-    description: "Module de jonction étroit 1m, rangée haute",
-  },
-  "D-003e": {
-    ref: "D-003e",
-    nom: "Fin de quai droit haut",
-    longueur: 1500,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 700,
-    rang: "haut",
-    role: "fin",
-    description: "Module de terminaison droite, rangée haute",
-  },
-
-  // ─── Rangée basse (côté trottoir) ───────────
   "D-009a": {
     ref: "D-009a",
-    nom: "Rampe PMR béton",
+    nom: "Rampe arrière",
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
     poids: 700,
-    rang: "bas",
+    rang: 1,
     role: "rampe",
-    description: "Rampe PMR biseau 40→180mm, caniveau 510mm, côté trottoir",
+    rampeType: "arriere",
+    description: "Rampe arrière biseau, pente le long de Z, transition quai vers trottoir",
+  },
+
+  // ─── Latéraux gauches ──────────────────────────
+  "D-004e": {
+    ref: "D-004e",
+    nom: "Latéral gauche",
+    longueur: 1500,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 700,
+    rang: 1,
+    role: "lateral",
+    description: "Module latéral gauche",
   },
   "D-012": {
     ref: "D-012",
-    nom: "Latéral gauche bas",
+    nom: "Latéral gauche (variante)",
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
     poids: 700,
-    rang: "bas",
+    rang: 1,
     role: "lateral",
-    description: "Module latéral gauche, rangée basse",
+    description: "Module latéral gauche, variante",
   },
-  "D-002": {
-    ref: "D-002",
-    nom: "Central standard bas",
+
+  // ─── Centraux (3000mm) ─────────────────────────
+  "D-005": {
+    ref: "D-005",
+    nom: "Central standard",
     longueur: 3000,
     largeur: 1500,
     hauteur: 180,
     poids: 1400,
-    rang: "bas",
+    rang: 1,
     role: "central",
-    description: "Module central standard 3m, rangée basse",
+    description: "Module central standard 3m",
   },
-  "D-037": {
-    ref: "D-037",
-    nom: "Jonction basse",
+  "D-002": {
+    ref: "D-002",
+    nom: "Central standard (variante)",
+    longueur: 3000,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 1400,
+    rang: 1,
+    role: "central",
+    description: "Module central standard 3m, variante",
+  },
+  "D-006": {
+    ref: "D-006",
+    nom: "Central (variante)",
+    longueur: 3000,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 1400,
+    rang: 1,
+    role: "central",
+    description: "Module central 3m, variante",
+  },
+
+  // ─── Jonctions (1000mm) ────────────────────────
+  "D-007e": {
+    ref: "D-007e",
+    nom: "Jonction",
     longueur: 1000,
     largeur: 1500,
     hauteur: 180,
     poids: 470,
-    rang: "bas",
+    rang: 1,
     role: "jonction",
-    description: "Module de jonction étroit 1m, rangée basse",
+    description: "Module de jonction 1m",
   },
-  "D-003": {
-    ref: "D-003",
-    nom: "Fin de quai droit bas",
+  "D-037": {
+    ref: "D-037",
+    nom: "Jonction (variante)",
+    longueur: 1000,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 470,
+    rang: 1,
+    role: "jonction",
+    description: "Module de jonction 1m, variante",
+  },
+
+  // ─── Fin de quai droit ─────────────────────────
+  "D-003e": {
+    ref: "D-003e",
+    nom: "Fin de quai droit",
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
     poids: 700,
-    rang: "bas",
+    rang: 1,
     role: "fin",
-    description: "Module de terminaison droite, rangée basse",
+    description: "Module de terminaison droite",
+  },
+  "D-003": {
+    ref: "D-003",
+    nom: "Fin de quai droit (variante)",
+    longueur: 1500,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 700,
+    rang: 1,
+    role: "fin",
+    description: "Module de terminaison droite, variante",
   },
 
-  // ─── Espaceurs (modules vides) ──────────
-  "VIDE-H": {
-    ref: "VIDE-H",
-    nom: "Vide (espaceur haut)",
+  // ─── Espaceur (module vide) ────────────────────
+  "VIDE": {
+    ref: "VIDE",
+    nom: "Vide (espaceur)",
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
     poids: 0,
-    rang: "haut",
+    rang: 1,
     role: "vide",
-    description: "Espace vide 1.5m pour décaler les modules, rangée haute",
-  },
-  "VIDE-B": {
-    ref: "VIDE-B",
-    nom: "Vide (espaceur bas)",
-    longueur: 1500,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 0,
-    rang: "bas",
-    role: "vide",
-    description: "Espace vide 1.5m pour décaler les modules, rangée basse",
+    description: "Espace vide 1.5m pour décaler les modules",
   },
 };
 
@@ -191,14 +191,16 @@ export interface PlacedModule {
   ref: ModuleRef;
   spec: ModuleSpec;
   x: number;       // position X en mm depuis la gauche
-  rang: ModuleRow;
+  rang: ModuleRow;  // numéro de rangée (1, 2 ou 3)
 }
 
 export interface QuaiConfig {
   longueurDemandee: number; // mm
   longueurReelle: number;   // mm (calculée)
+  nbRangees: NbRangees;
   rampeGauche: boolean;
   rampeDroite: boolean;
+  rampeArriere: boolean;
   coloris: string;
   modules: PlacedModule[];
   bom: BomLine[];
@@ -219,8 +221,10 @@ export interface BomLine {
 
 export interface ConfigOptions {
   longueurMm: number;
+  nbRangees: NbRangees;
   rampeGauche: boolean;
   rampeDroite: boolean;
+  rampeArriere: boolean;
   coloris: string;
 }
 
@@ -229,114 +233,107 @@ export interface ConfigOptions {
 /**
  * Construit un quai URBAQUAI à partir d'une longueur cible.
  *
- * Structure fixe :
- * - Extrémité gauche : rampe (D-009 + D-009a) + latéral (D-004e + D-012)
- * - Extrémité droite : fin (D-003e + D-003)
- * - Zone centrale : remplie par modules de 3000mm (D-005/D-002)
- * - Ajustement : jonction de 1000mm (D-007e/D-037) si nécessaire
+ * Le quai est composé de N rangées identiques (2 ou 3), chacune côté chaussée.
+ * Chaque rangée suit la même structure :
+ *   - Extrémité gauche : rampe latérale (D-009) + latéral (D-004e ou D-012)
+ *   - Zone centrale : modules de 3000mm (D-005, D-002, D-006)
+ *   - Ajustement : jonction de 1000mm (D-007e ou D-037) si nécessaire
+ *   - Extrémité droite : fin de quai (D-003e ou D-003)
+ *
+ * Si rampeArriere est activée, des rampes D-009a sont ajoutées sur la
+ * dernière rangée pour la transition quai vers trottoir.
  */
 export function buildQuai(options: ConfigOptions): QuaiConfig {
-  const { longueurMm, rampeGauche, rampeDroite, coloris } = options;
+  const { longueurMm, nbRangees, rampeGauche, rampeDroite, rampeArriere, coloris } = options;
   const modules: PlacedModule[] = [];
 
-  // ─── Éléments fixes gauche ──────────
-  const fixeGaucheHaut: ModuleRef[] = rampeGauche ? ["D-009", "D-004e"] : ["D-004e"];
-  const fixeGaucheBas: ModuleRef[] = rampeGauche ? ["D-009a", "D-012"] : ["D-012"];
+  // ─── Séquence de modules pour une rangée ──────
 
-  // ─── Éléments fixes droite ──────────
-  const fixeDroiteHaut: ModuleRef[] = rampeDroite ? ["D-003e", "D-009"] : ["D-003e"];
-  const fixeDroiteBas: ModuleRef[] = rampeDroite ? ["D-003", "D-009a"] : ["D-003"];
+  /**
+   * Construit la liste de refs pour une rangée donnée.
+   * Chaque rangée possède la même structure linéaire :
+   * [rampe?] [latéral] [centraux...] [jonction?] [fin] [rampe?]
+   *
+   * On alterne les variantes entre rangées pour le réalisme visuel.
+   */
+  function buildRowRefs(row: ModuleRow): ModuleRef[] {
+    const refs: ModuleRef[] = [];
+    const isVariante = row % 2 === 0; // rangées paires utilisent les variantes
 
-  // Calculer longueur occupée par les fixes
-  const longueurFixeGauche = fixeGaucheHaut.reduce(
-    (sum, ref) => sum + MODULE_CATALOG[ref].longueur, 0
-  );
-  const longueurFixeDroite = fixeDroiteHaut.reduce(
-    (sum, ref) => sum + MODULE_CATALOG[ref].longueur, 0
-  );
+    // Extrémité gauche
+    if (rampeGauche) refs.push("D-009");
+    refs.push(isVariante ? "D-012" : "D-004e");
 
-  // Espace central à remplir
-  const espaceDisponible = longueurMm - longueurFixeGauche - longueurFixeDroite;
+    // Calculer l'espace occupé par les extrémités
+    const fixeGauche = refs.reduce((sum, r) => sum + MODULE_CATALOG[r].longueur, 0);
 
-  // Remplir avec des modules de 3000mm + ajustement 1000mm
-  let restant = Math.max(espaceDisponible, 0);
-  const nbModules3m = Math.floor(restant / 3000);
-  restant -= nbModules3m * 3000;
+    const fixeDroiteRefs: ModuleRef[] = [];
+    fixeDroiteRefs.push(isVariante ? "D-003" : "D-003e");
+    if (rampeDroite) fixeDroiteRefs.push("D-009");
+    const fixeDroite = fixeDroiteRefs.reduce((sum, r) => sum + MODULE_CATALOG[r].longueur, 0);
 
-  // Si le reste est >= 500mm, ajouter une jonction de 1000mm
-  const besoinJonction = restant >= 500;
-  if (besoinJonction) {
-    restant -= 1000;
+    // Espace central à remplir
+    const espaceDisponible = longueurMm - fixeGauche - fixeDroite;
+    let restant = Math.max(espaceDisponible, 0);
+
+    const nbModules3m = Math.floor(restant / 3000);
+    restant -= nbModules3m * 3000;
+
+    // Si le reste est >= 500mm, ajouter une jonction de 1000mm
+    const besoinJonction = restant >= 500;
+
+    // Modules centraux
+    for (let i = 0; i < nbModules3m; i++) {
+      // Alterner les variantes centrales
+      if (isVariante) {
+        refs.push("D-002");
+      } else {
+        refs.push(i === 0 ? "D-006" : "D-005");
+      }
+    }
+
+    // Jonction si nécessaire
+    if (besoinJonction) {
+      refs.push(isVariante ? "D-037" : "D-007e");
+    }
+
+    // Extrémité droite
+    refs.push(...fixeDroiteRefs);
+
+    return refs;
   }
 
-  // ─── Placer les modules — rangée haute ──────
-  let xHaut = 0;
+  // ─── Construire chaque rangée ──────────────────
 
-  // Gauche haut
-  for (const ref of fixeGaucheHaut) {
-    const spec = MODULE_CATALOG[ref];
-    modules.push({ ref, spec, x: xHaut, rang: "haut" });
-    xHaut += spec.longueur;
+  let longueurReelle = 0;
+
+  for (let row = 1; row <= nbRangees; row++) {
+    const rowNum = row as ModuleRow;
+    const rowRefs = buildRowRefs(rowNum);
+
+    let x = 0;
+    for (const ref of rowRefs) {
+      const spec = MODULE_CATALOG[ref];
+      modules.push({ ref, spec, x, rang: rowNum });
+      x += spec.longueur;
+    }
+
+    // Ajouter les rampes arrière sur la dernière rangée si demandé
+    if (rampeArriere && row === nbRangees) {
+      // Les rampes arrière sont placées le long de la rangée arrière
+      // pour la transition vers le trottoir
+      const spec = MODULE_CATALOG["D-009a"];
+      modules.push({ ref: "D-009a", spec, x: 0, rang: rowNum });
+    }
+
+    // La longueur réelle est le maximum de toutes les rangées
+    if (x > longueurReelle) {
+      longueurReelle = x;
+    }
   }
-
-  // Centraux haut
-  for (let i = 0; i < nbModules3m; i++) {
-    // Alterner D-005 et D-006 pour le réalisme
-    const ref: ModuleRef = i === 0 ? "D-006" : "D-005";
-    const spec = MODULE_CATALOG[ref];
-    modules.push({ ref, spec, x: xHaut, rang: "haut" });
-    xHaut += spec.longueur;
-  }
-
-  // Jonction haut si nécessaire
-  if (besoinJonction) {
-    const spec = MODULE_CATALOG["D-007e"];
-    modules.push({ ref: "D-007e", spec, x: xHaut, rang: "haut" });
-    xHaut += spec.longueur;
-  }
-
-  // Droite haut
-  for (const ref of fixeDroiteHaut) {
-    const spec = MODULE_CATALOG[ref];
-    modules.push({ ref, spec, x: xHaut, rang: "haut" });
-    xHaut += spec.longueur;
-  }
-
-  // ─── Placer les modules — rangée basse ──────
-  let xBas = 0;
-
-  // Gauche bas
-  for (const ref of fixeGaucheBas) {
-    const spec = MODULE_CATALOG[ref];
-    modules.push({ ref, spec, x: xBas, rang: "bas" });
-    xBas += spec.longueur;
-  }
-
-  // Centraux bas
-  for (let i = 0; i < nbModules3m; i++) {
-    const spec = MODULE_CATALOG["D-002"];
-    modules.push({ ref: "D-002", spec, x: xBas, rang: "bas" });
-    xBas += spec.longueur;
-  }
-
-  // Jonction bas si nécessaire
-  if (besoinJonction) {
-    const spec = MODULE_CATALOG["D-037"];
-    modules.push({ ref: "D-037", spec, x: xBas, rang: "bas" });
-    xBas += spec.longueur;
-  }
-
-  // Droite bas
-  for (const ref of fixeDroiteBas) {
-    const spec = MODULE_CATALOG[ref];
-    modules.push({ ref, spec, x: xBas, rang: "bas" });
-    xBas += spec.longueur;
-  }
-
-  // ─── Calculer la longueur réelle ────────────
-  const longueurReelle = Math.max(xHaut, xBas);
 
   // ─── Générer le BOM ─────────────────────────
+
   const bomMap = new Map<ModuleRef, BomLine>();
   for (const m of modules) {
     const existing = bomMap.get(m.ref);
@@ -361,8 +358,10 @@ export function buildQuai(options: ConfigOptions): QuaiConfig {
   return {
     longueurDemandee: longueurMm,
     longueurReelle,
+    nbRangees,
     rampeGauche,
     rampeDroite,
+    rampeArriere,
     coloris,
     modules,
     bom,

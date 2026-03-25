@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, lazy, Suspense } from "react";
-import { RotateCcw, Send, Download, Box, Layout } from "lucide-react";
+import { RotateCcw, Send, Download, Box, Layout, Tag, EyeOff } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ModulePalette } from "@/components/configurateur/ModulePalette";
@@ -9,135 +9,138 @@ import { QuaiCanvas } from "@/components/configurateur/QuaiCanvas";
 import { BomTable } from "@/components/configurateur/BomTable";
 import { StepOptions } from "@/components/configurateur/StepOptions";
 import { LeadForm } from "@/components/LeadForm";
-import { MODULE_CATALOG, type PlacedModule, type ModuleRef, type ModuleRow } from "@/lib/configurateur";
+import {
+  MODULE_CATALOG,
+  type PlacedModule,
+  type ModuleRef,
+  type ModuleRow,
+  type NbRangees,
+} from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
 const QuaiView3D = lazy(() => import("@/components/configurateur/QuaiView3D").then((m) => ({ default: m.QuaiView3D })));
 
 export default function ConfigurateurPage() {
-  const [modulesHaut, setModulesHaut] = useState<PlacedModule[]>([]);
-  const [modulesBas, setModulesBas] = useState<PlacedModule[]>([]);
+  const [nbRangees, setNbRangees] = useState<NbRangees>(2);
+  const [modulesByRow, setModulesByRow] = useState<Record<ModuleRow, PlacedModule[]>>({ 1: [], 2: [], 3: [] });
   const [selectedModule, setSelectedModule] = useState<ModuleRef | null>(null);
-  const [activeRow, setActiveRow] = useState<ModuleRow>("haut");
+  const [activeRow, setActiveRow] = useState<ModuleRow>(1);
   const [coloris, setColoris] = useState("granit-gris");
   const [showForm, setShowForm] = useState(false);
   const [view3D, setView3D] = useState(false);
   const [showShelter, setShowShelter] = useState(true);
+  const [showLabels, setShowLabels] = useState(true);
 
-  const allModules = [...modulesHaut, ...modulesBas];
+  const allModules = [...modulesByRow[1], ...modulesByRow[2], ...modulesByRow[3]];
 
-  const handleAddModule = useCallback((row: ModuleRow) => {
-    if (!selectedModule) return;
+  // ─── Generic row updater ───────────────────────────────────────
+  const updateRow = useCallback(
+    (row: ModuleRow, updater: (prev: PlacedModule[]) => PlacedModule[]) => {
+      setModulesByRow((prev) => ({ ...prev, [row]: updater(prev[row]) }));
+    },
+    [],
+  );
 
-    const spec = MODULE_CATALOG[selectedModule];
-    // Vérifier que le module est compatible avec la rangée
-    if (spec.rang !== row) {
-      alert(`Le module ${selectedModule} est pour la rangée ${spec.rang === "haut" ? "voirie" : "trottoir"}`);
-      return;
-    }
-
-    const currentModules = row === "haut" ? modulesHaut : modulesBas;
-    const x = currentModules.reduce((sum, m) => sum + m.spec.longueur, 0);
-
-    const newModule: PlacedModule = { ref: selectedModule, spec, x, rang: row };
-
-    if (row === "haut") {
-      setModulesHaut((prev) => [...prev, newModule]);
-    } else {
-      setModulesBas((prev) => [...prev, newModule]);
-    }
-  }, [selectedModule, modulesHaut, modulesBas]);
-
-  const handleRemoveModule = useCallback((row: ModuleRow, index: number) => {
-    const setter = row === "haut" ? setModulesHaut : setModulesBas;
-    setter((prev) => {
-      const next = prev.filter((_, i) => i !== index);
-      let x = 0;
-      return next.map((m) => {
-        const updated = { ...m, x };
-        x += m.spec.longueur;
-        return updated;
-      });
+  // ─── Recalculate x positions after any mutation ────────────────
+  function recalcX(modules: PlacedModule[]): PlacedModule[] {
+    let x = 0;
+    return modules.map((m) => {
+      const updated = { ...m, x };
+      x += m.spec.longueur;
+      return updated;
     });
-  }, []);
+  }
 
-  const handleInsertModule = useCallback((row: ModuleRow, index: number, ref: ModuleRef) => {
-    const spec = MODULE_CATALOG[ref];
-    const setter = row === "haut" ? setModulesHaut : setModulesBas;
-    setter((prev) => {
-      const next = [...prev];
-      next.splice(index, 0, { ref, spec, x: 0, rang: row });
-      let x = 0;
-      return next.map((m) => {
-        const updated = { ...m, x };
-        x += m.spec.longueur;
-        return updated;
-      });
-    });
-  }, []);
+  // ─── Handlers ──────────────────────────────────────────────────
 
-  const handleMoveModule = useCallback((row: ModuleRow, fromIndex: number, toIndex: number) => {
-    const setter = row === "haut" ? setModulesHaut : setModulesBas;
-    setter((prev) => {
-      const next = [...prev];
-      const [moved] = next.splice(fromIndex, 1);
-      const adjustedTo = fromIndex < toIndex ? toIndex - 1 : toIndex;
-      next.splice(adjustedTo, 0, moved);
-      let x = 0;
-      return next.map((m) => {
-        const updated = { ...m, x };
-        x += m.spec.longueur;
-        return updated;
+  const handleAddModule = useCallback(
+    (row: ModuleRow) => {
+      if (!selectedModule) return;
+
+      const spec = MODULE_CATALOG[selectedModule];
+
+      updateRow(row, (prev) => {
+        const x = prev.reduce((sum, m) => sum + m.spec.longueur, 0);
+        const newModule: PlacedModule = { ref: selectedModule, spec, x, rang: row };
+        return [...prev, newModule];
       });
-    });
-  }, []);
+    },
+    [selectedModule, updateRow],
+  );
+
+  const handleRemoveModule = useCallback(
+    (row: ModuleRow, index: number) => {
+      updateRow(row, (prev) => {
+        const next = prev.filter((_, i) => i !== index);
+        return recalcX(next);
+      });
+    },
+    [updateRow],
+  );
+
+  const handleInsertModule = useCallback(
+    (row: ModuleRow, index: number, ref: ModuleRef) => {
+      const spec = MODULE_CATALOG[ref];
+      updateRow(row, (prev) => {
+        const next = [...prev];
+        next.splice(index, 0, { ref, spec, x: 0, rang: row });
+        return recalcX(next);
+      });
+    },
+    [updateRow],
+  );
+
+  const handleMoveModule = useCallback(
+    (row: ModuleRow, fromIndex: number, toIndex: number) => {
+      updateRow(row, (prev) => {
+        const next = [...prev];
+        const [moved] = next.splice(fromIndex, 1);
+        const adjustedTo = fromIndex < toIndex ? toIndex - 1 : toIndex;
+        next.splice(adjustedTo, 0, moved);
+        return recalcX(next);
+      });
+    },
+    [updateRow],
+  );
 
   function handleReset() {
-    setModulesHaut([]);
-    setModulesBas([]);
+    setModulesByRow({ 1: [], 2: [], 3: [] });
     setSelectedModule(null);
   }
 
-  // Template : charger le plan de l'image de référence (19m)
+  // ─── Template : plan de référence 19 m ─────────────────────────
   function handleLoadTemplate() {
     const template: { ref: ModuleRef; rang: ModuleRow }[] = [
-      // Rangée haute
-      { ref: "D-009", rang: "haut" },
-      { ref: "D-004e", rang: "haut" },
-      { ref: "D-005", rang: "haut" },
-      { ref: "D-006", rang: "haut" },
-      { ref: "D-007e", rang: "haut" },
-      { ref: "D-005", rang: "haut" },
-      { ref: "D-005", rang: "haut" },
-      { ref: "D-003e", rang: "haut" },
-      // Rangée basse
-      { ref: "D-009a", rang: "bas" },
-      { ref: "D-012", rang: "bas" },
-      { ref: "D-002", rang: "bas" },
-      { ref: "D-002", rang: "bas" },
-      { ref: "D-037", rang: "bas" },
-      { ref: "D-002", rang: "bas" },
-      { ref: "D-002", rang: "bas" },
-      { ref: "D-003", rang: "bas" },
+      // Rang 1
+      { ref: "D-009", rang: 1 },
+      { ref: "D-004e", rang: 1 },
+      { ref: "D-005", rang: 1 },
+      { ref: "D-006", rang: 1 },
+      { ref: "D-007e", rang: 1 },
+      { ref: "D-005", rang: 1 },
+      { ref: "D-005", rang: 1 },
+      { ref: "D-003e", rang: 1 },
+      // Rang 2
+      { ref: "D-009", rang: 2 },
+      { ref: "D-012", rang: 2 },
+      { ref: "D-002", rang: 2 },
+      { ref: "D-002", rang: 2 },
+      { ref: "D-037", rang: 2 },
+      { ref: "D-002", rang: 2 },
+      { ref: "D-002", rang: 2 },
+      { ref: "D-003", rang: 2 },
     ];
 
-    const haut: PlacedModule[] = [];
-    const bas: PlacedModule[] = [];
-    let xH = 0, xB = 0;
+    const rows: Record<ModuleRow, PlacedModule[]> = { 1: [], 2: [], 3: [] };
+    const xByRow: Record<ModuleRow, number> = { 1: 0, 2: 0, 3: 0 };
 
     for (const t of template) {
       const spec = MODULE_CATALOG[t.ref];
-      if (t.rang === "haut") {
-        haut.push({ ref: t.ref, spec, x: xH, rang: "haut" });
-        xH += spec.longueur;
-      } else {
-        bas.push({ ref: t.ref, spec, x: xB, rang: "bas" });
-        xB += spec.longueur;
-      }
+      rows[t.rang].push({ ref: t.ref, spec, x: xByRow[t.rang], rang: t.rang });
+      xByRow[t.rang] += spec.longueur;
     }
 
-    setModulesHaut(haut);
-    setModulesBas(bas);
+    setModulesByRow(rows);
   }
 
   return (
@@ -155,6 +158,23 @@ export default function ConfigurateurPage() {
               </p>
             </div>
             <div className="flex items-center gap-2">
+              {/* Nb rangées selector */}
+              <div className="flex bg-white rounded-lg border border-gray-200 p-0.5">
+                {([2, 3] as const).map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => setNbRangees(n)}
+                    className={cn(
+                      "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
+                      nbRangees === n
+                        ? "bg-primary text-white"
+                        : "text-gray-500 hover:text-gray-700",
+                    )}
+                  >
+                    {n} rangées
+                  </button>
+                ))}
+              </div>
               <Button variant="ghost" size="sm" onClick={handleLoadTemplate}>
                 Charger un exemple
               </Button>
@@ -171,7 +191,7 @@ export default function ConfigurateurPage() {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-            {/* ─── Palette modules (gauche) ─── */}
+            {/* --- Palette modules (gauche) --- */}
             <div className="lg:col-span-3 order-2 lg:order-1">
               <div className="lg:sticky lg:top-24 space-y-6">
                 <ModulePalette
@@ -179,6 +199,7 @@ export default function ConfigurateurPage() {
                   onSelect={setSelectedModule}
                   activeRow={activeRow}
                   onRowChange={setActiveRow}
+                  nbRangees={nbRangees}
                 />
 
                 {/* Coloris */}
@@ -186,7 +207,7 @@ export default function ConfigurateurPage() {
               </div>
             </div>
 
-            {/* ─── Canvas + BOM (centre + droite) ─── */}
+            {/* --- Canvas + BOM (centre + droite) --- */}
             <div className="lg:col-span-9 order-1 lg:order-2 space-y-6">
 
               {/* Canvas / 3D toggle */}
@@ -238,32 +259,47 @@ export default function ConfigurateurPage() {
                     }
                   >
                     <QuaiView3D
-                      modulesHaut={modulesHaut}
-                      modulesBas={modulesBas}
+                      modulesByRow={modulesByRow}
+                      nbRangees={nbRangees}
                       coloris={coloris}
                       showShelter={showShelter}
+                      showLabels={showLabels}
                     />
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-xs text-gray-400">
                         Clic gauche + glisser pour orbiter · Molette pour zoomer
                       </p>
-                      <button
-                        onClick={() => setShowShelter(!showShelter)}
-                        className={cn(
-                          "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
-                          showShelter
-                            ? "bg-primary/10 border-primary/30 text-primary"
-                            : "bg-gray-100 border-gray-200 text-gray-500"
-                        )}
-                      >
-                        {showShelter ? "Masquer l'abribus" : "Afficher l'abribus"}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setShowLabels(!showLabels)}
+                          className={cn(
+                            "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
+                            showLabels
+                              ? "bg-primary/10 border-primary/30 text-primary"
+                              : "bg-gray-100 border-gray-200 text-gray-500"
+                          )}
+                        >
+                          {showLabels ? <Tag size={12} /> : <EyeOff size={12} />}
+                          {showLabels ? "Masquer les labels" : "Afficher les labels"}
+                        </button>
+                        <button
+                          onClick={() => setShowShelter(!showShelter)}
+                          className={cn(
+                            "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
+                            showShelter
+                              ? "bg-primary/10 border-primary/30 text-primary"
+                              : "bg-gray-100 border-gray-200 text-gray-500"
+                          )}
+                        >
+                          {showShelter ? "Masquer l'abribus" : "Afficher l'abribus"}
+                        </button>
+                      </div>
                     </div>
                   </Suspense>
                 ) : (
                   <QuaiCanvas
-                    modulesHaut={modulesHaut}
-                    modulesBas={modulesBas}
+                    modulesByRow={modulesByRow}
+                    nbRangees={nbRangees}
                     coloris={coloris}
                     selectedModule={selectedModule}
                     onAddModule={handleAddModule}
@@ -277,10 +313,10 @@ export default function ConfigurateurPage() {
               {/* Mode d'emploi si vide */}
               {allModules.length === 0 && (
                 <div className="text-center py-8 text-gray-400">
-                  <div className="text-4xl mb-3">🧱</div>
+                  <div className="text-4xl mb-3">&#x1f9f1;</div>
                   <p className="text-sm font-medium">Comment ça marche ?</p>
                   <ol className="text-xs mt-2 space-y-1 text-gray-400">
-                    <li><strong>1.</strong> Sélectionnez une rangée (voirie ou trottoir) dans la palette</li>
+                    <li><strong>1.</strong> Sélectionnez une rangée dans la palette</li>
                     <li><strong>2.</strong> Cliquez sur un module pour le sélectionner</li>
                     <li><strong>3.</strong> Cliquez sur <strong>+</strong> dans le plan pour le placer</li>
                     <li><strong>4.</strong> Cliquez sur un module posé pour le retirer</li>
