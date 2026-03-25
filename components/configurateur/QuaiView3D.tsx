@@ -219,7 +219,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         }
 
         // Chaussée (du trottoir jusqu'à env.voie après le quai)
-        const ROUTE_END_Z = QUAI_FRONT + env.voie + 1;
+        const ROUTE_END_Z = QUAI_FRONT + env.voie + 0.3;
         const ROUTE_TOTAL = ROUTE_END_Z - ROUTE_START_Z;
         const ground = new THREE.Mesh(
           new THREE.PlaneGeometry(maxLen + 8, ROUTE_TOTAL),
@@ -231,14 +231,17 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         scene.add(ground);
 
         // Marquage route (pointillés centrés sur la voie devant le quai)
-        const ROAD_CENTER_Z = QUAI_FRONT + env.voie / 2;
-        const dashGeo = new THREE.PlaneGeometry(0.7, 0.07);
-        const dashMat = new THREE.MeshBasicMaterial({ color: "#E8E4D0", transparent: true, opacity: 0.5 });
-        for (let i = 0; i < Math.floor((maxLen + 2) / 1.4); i++) {
-          const d = new THREE.Mesh(dashGeo, dashMat);
-          d.rotation.x = -Math.PI / 2;
-          d.position.set(i * 1.4 - 0.5, 0.001, ROAD_CENTER_Z);
-          scene.add(d);
+        if (env.voie > 0) {
+          const ROAD_CENTER_Z = QUAI_FRONT + env.voie / 2;
+          const dashGeo = new THREE.PlaneGeometry(1.0, 0.1);
+          const dashMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.6 });
+          const totalDashes = Math.floor((maxLen + 4) / 2);
+          for (let i = 0; i < totalDashes; i++) {
+            const d = new THREE.Mesh(dashGeo, dashMat);
+            d.rotation.x = -Math.PI / 2;
+            d.position.set(i * 2 - 1, 0.002, ROAD_CENTER_Z);
+            scene.add(d);
+          }
         }
 
         // --- Label helper ----
