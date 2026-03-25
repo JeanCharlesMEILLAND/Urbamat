@@ -346,14 +346,15 @@ export function QuaiCanvas({
   // Noms des rangées : rang 1 = Voirie (près trottoir), les autres = Rang N
   const rowLabel = (row: ModuleRow) => row === 1 ? "Voirie" : `Rang ${row}`;
 
-  // Trouver les rampes arrière (D-009a) dans le rang 1 pour les visualiser au-dessus
-  const rampesArriere = (modulesByRow[1] ?? []).filter(
-    (m) => m.spec.rampeType === "arriere"
-  );
+  // Auto-générer les rampes arrière : une derrière chaque module plat du rang 1
+  // (pas derrière les rampes latérales ni les latéraux car biseautés)
+  const ROLES_WITH_REAR_RAMPE = new Set(["central", "jonction", "fin"]);
+  const rang1 = modulesByRow[1] ?? [];
+  const rampesArriere = rang1.filter((m) => ROLES_WITH_REAR_RAMPE.has(m.spec.role));
 
   return (
     <div className="space-y-3">
-      {/* Rampes arrière (trottoir → quai) au-dessus du rang 1 */}
+      {/* Rampes arrière PMR (auto-générées, trottoir → quai) au-dessus du rang 1 */}
       {rampesArriere.length > 0 && (
         <div>
           <div className="flex items-center gap-2 mb-1.5">
@@ -361,18 +362,32 @@ export function QuaiCanvas({
               Trottoir
             </span>
             <span className="text-xs text-gray-400">
-              ↕ Rampes arrière PMR
+              ↕ Rampes arrière PMR (auto)
             </span>
           </div>
-          <div className="flex items-center gap-1 p-2 bg-amber-50 rounded-lg border border-amber-200 min-h-[40px]">
-            {rampesArriere.map((m, i) => (
-              <div
-                key={`rampe-arr-${i}`}
-                className="px-3 py-1.5 bg-amber-100 border border-amber-300 rounded text-[10px] font-mono text-amber-700"
-              >
-                {m.ref} — {m.spec.longueur}mm
-              </div>
-            ))}
+          <div className="flex items-center gap-0.5 p-2 bg-amber-50 rounded-lg border border-amber-200 min-h-[40px] overflow-x-auto">
+            {rang1.map((m, i) => {
+              const widthRatio = m.spec.longueur / 3000;
+              const hasRampe = ROLES_WITH_REAR_RAMPE.has(m.spec.role);
+              return (
+                <div
+                  key={`rampe-arr-${i}`}
+                  className={cn(
+                    "flex-shrink-0 rounded text-[9px] font-mono flex items-center justify-center",
+                    hasRampe
+                      ? "bg-amber-100 border border-amber-300 text-amber-700"
+                      : "bg-transparent border border-dashed border-gray-300 text-gray-300"
+                  )}
+                  style={{
+                    width: `${Math.max(widthRatio * 180, 40)}px`,
+                    height: "32px",
+                  }}
+                  title={hasRampe ? `Rampe arrière D-009a (${m.spec.longueur}mm)` : `Pas de rampe (${m.ref} biseauté)`}
+                >
+                  {hasRampe ? "↕" : ""}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

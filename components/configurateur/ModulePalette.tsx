@@ -12,8 +12,9 @@ interface ModulePaletteProps {
 }
 
 /** All available modules -- row-agnostic, any module can go on any row. */
+/** Modules manuels (D-009a est auto-généré derrière les modules plats du rang 1) */
 const ALL_MODULES: ModuleRef[] = [
-  "D-009", "D-009a", "D-004e", "D-012",
+  "D-009", "D-004e", "D-012",
   "D-005", "D-002", "D-006",
   "D-007e", "D-037",
   "D-003e", "D-003",
