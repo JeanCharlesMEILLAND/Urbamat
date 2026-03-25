@@ -1,17 +1,13 @@
 "use client";
 
-import { MODULE_CATALOG, type ModuleRef, type ModuleRow, type NbRangees } from "@/lib/configurateur";
+import { MODULE_CATALOG, type ModuleRef } from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
 interface ModulePaletteProps {
   selectedModule: ModuleRef | null;
   onSelect: (ref: ModuleRef) => void;
-  activeRow: ModuleRow;
-  onRowChange: (row: ModuleRow) => void;
-  nbRangees: NbRangees;
 }
 
-/** All available modules -- row-agnostic, any module can go on any row. */
 /** Modules manuels (D-009a est auto-généré derrière les modules plats du rang 1) */
 const ALL_MODULES: ModuleRef[] = [
   "D-009", "D-004e", "D-012",
@@ -39,46 +35,12 @@ const ROLE_COLORS_SELECTED: Record<string, string> = {
   vide: "border-dashed border-gray-500 bg-gray-100 ring-2 ring-gray-400",
 };
 
-/** Row tabs to display (always 1..nbRangees). */
-const ROW_TABS: { row: ModuleRow; label: string }[] = [
-  { row: 1, label: "Voirie" },
-  { row: 2, label: "Rang 2" },
-  { row: 3, label: "Rang 3" },
-  { row: 4, label: "Rang 4" },
-];
-
-export function ModulePalette({
-  selectedModule,
-  onSelect,
-  activeRow,
-  onRowChange,
-  nbRangees,
-}: ModulePaletteProps) {
-  const visibleTabs = ROW_TABS.filter((t) => t.row <= nbRangees);
-
+export function ModulePalette({ selectedModule, onSelect }: ModulePaletteProps) {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-neutral-dark uppercase tracking-wider">
-          Modules
-        </h3>
-        <div className="flex bg-gray-100 rounded-lg p-0.5">
-          {visibleTabs.map((tab) => (
-            <button
-              key={tab.row}
-              onClick={() => onRowChange(tab.row)}
-              className={cn(
-                "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
-                activeRow === tab.row
-                  ? "bg-white text-primary shadow-sm"
-                  : "text-gray-500"
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <h3 className="text-sm font-bold text-neutral-dark uppercase tracking-wider">
+        Modules
+      </h3>
 
       <div className="grid grid-cols-2 gap-2">
         {ALL_MODULES.map((ref) => {
@@ -96,7 +58,7 @@ export function ModulePalette({
               onDragStart={(e) => {
                 e.dataTransfer.setData(
                   "text/plain",
-                  JSON.stringify({ type: "new", ref, row: activeRow })
+                  JSON.stringify({ type: "new", ref })
                 );
                 e.dataTransfer.effectAllowed = "all";
                 onSelect(ref);
@@ -113,7 +75,6 @@ export function ModulePalette({
                 <span>·</span>
                 <span className="font-mono">{spec.poids} kg</span>
               </div>
-              {/* Miniature visuelle proportionnelle */}
               <div className="mt-2 h-3 bg-white/60 rounded border border-current/20 relative overflow-hidden">
                 <div
                   className="h-full bg-current/20 rounded"
@@ -128,10 +89,10 @@ export function ModulePalette({
       {selectedModule && (
         <div className="p-3 bg-primary/5 border border-primary/20 rounded-lg text-center">
           <p className="text-xs text-primary font-medium">
-            Module <span className="font-mono font-bold">{selectedModule}</span> selectionne
+            Module <span className="font-mono font-bold">{selectedModule}</span> sélectionné
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            Cliquez sur <strong>+</strong> dans la rangee pour le placer
+            Glissez ou cliquez <strong>+</strong> sur le rang voulu
           </p>
         </div>
       )}

@@ -24,7 +24,6 @@ export default function ConfigurateurPage() {
   const [nbRangees, setNbRangees] = useState<NbRangees>(1);
   const [modulesByRow, setModulesByRow] = useState<Record<ModuleRow, PlacedModule[]>>({ 1: [], 2: [], 3: [], 4: [] });
   const [selectedModule, setSelectedModule] = useState<ModuleRef | null>(null);
-  const [activeRow, setActiveRow] = useState<ModuleRow>(1);
   const [coloris, setColoris] = useState("granit-gris");
   const [showForm, setShowForm] = useState(false);
   const [view3D, setView3D] = useState(false);
@@ -203,9 +202,6 @@ export default function ConfigurateurPage() {
                 <ModulePalette
                   selectedModule={selectedModule}
                   onSelect={setSelectedModule}
-                  activeRow={activeRow}
-                  onRowChange={setActiveRow}
-                  nbRangees={nbRangees}
                 />
 
                 {/* Coloris */}
