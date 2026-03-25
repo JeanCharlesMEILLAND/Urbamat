@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import type { PlacedModule, ModuleRow, NbRangees, EnvironmentConfig } from "@/lib/configurateur";
 import { COLORIS } from "@/lib/configurateur";
-import { Maximize2, Minimize2, FlipHorizontal2, Eye, EyeOff, Home } from "lucide-react";
+import { Maximize2, Minimize2, FlipHorizontal2, Eye, EyeOff, Home, Camera } from "lucide-react";
 
 interface QuaiView3DProps {
   modulesByRow: Record<ModuleRow, PlacedModule[]>;
@@ -124,7 +124,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 200);
 
         // --- Renderer ----
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
         renderer.setSize(width, height);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.shadowMap.enabled = true;
@@ -861,6 +861,21 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
           type="button"
         >
           <Home className="w-4 h-4 text-gray-600" />
+        </button>
+        <button
+          onClick={() => {
+            const canvas = canvasWrapperRef.current?.querySelector("canvas");
+            if (!canvas) return;
+            const link = document.createElement("a");
+            link.download = `urbaquai-3d-${Date.now()}.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+          }}
+          className="p-2 rounded-md bg-white/80 hover:bg-white border border-gray-300 shadow-sm transition-colors"
+          title="Capture d'écran"
+          type="button"
+        >
+          <Camera className="w-4 h-4 text-gray-600" />
         </button>
         <button
           onClick={toggleFullscreen}
