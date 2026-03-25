@@ -141,6 +141,7 @@ export default function ConfigurateurPage() {
     }
 
     setModulesByRow(rows);
+    setNbRangees(2);
   }
 
   return (
