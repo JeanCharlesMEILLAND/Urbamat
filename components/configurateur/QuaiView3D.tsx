@@ -452,7 +452,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         // Côté trottoir : dessus à 140mm (posée sur la bordure trottoir)
         // Épaisseur : 40mm — vide en dessous pour l'eau
         // Seulement derrière central et jonction (pas rampe, latéral, fin — biseautés)
-        const FLAT_ROLES = new Set(["central", "jonction"]);
+        const FLAT_ROLES = new Set(["central", "jonction", "lateral", "fin"]);
         const row1Modules = modulesByRow[1 as ModuleRow] ?? [];
         const row1BackZ = getRowZ(1) - ROW_DEPTH / 2; // bord arrière rang 1
 
