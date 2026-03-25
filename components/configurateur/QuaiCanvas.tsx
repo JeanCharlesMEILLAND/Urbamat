@@ -209,6 +209,7 @@ function AddButton({
       onDragLeave={() => setOver(false)}
       onDrop={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         setOver(false);
         const data = e.dataTransfer.getData("text/plain");
         if (data) onDrop(row, -1, data); // -1 = append at end
