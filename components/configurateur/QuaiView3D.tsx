@@ -143,15 +143,15 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         //   La rampe s'appuie sur la bordure trottoir, quasi collée (50mm de jeu pour l'eau)
         //
         const TROT_HEIGHT = 0.14;       // trottoir surélevé 140mm
-        const CANIVEAU_GAP = 0.05;      // 50mm jeu entre bordure et rampe (eau dessous)
-        const RAMPE_DEPTH = 0.51;       // profondeur rampe arrière (510mm)
+        const CANIVEAU_WIDTH = 0.25;    // 250mm entre module et bordure trottoir
+        const RAMPE_DEPTH = 0.51;       // 510mm largeur rampe (enjambe caniveau + 260mm sur trottoir)
         const RAMPE_THICKNESS = 0.04;   // épaisseur dalle rampe 40mm
 
         const QUAI_DEPTH = nbRangees * ROW_DEPTH + (nbRangees - 1) * GAP;
 
         // Z positions: rang 1 center est à Z = 0
         const QUAI_BACK = -ROW_DEPTH / 2;                            // bord arrière rang 1
-        const CURB_Z = QUAI_BACK - RAMPE_DEPTH - CANIVEAU_GAP;       // bordure trottoir
+        const CURB_Z = QUAI_BACK - CANIVEAU_WIDTH;                   // bordure trottoir (250mm derrière le module)
         const QUAI_FRONT = QUAI_BACK + QUAI_DEPTH;                   // bord avant dernier rang
 
         // --- Trottoir surélevé (140mm) ----
@@ -464,10 +464,10 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           const startX = m.x * S + 0.01;
           const rw = mw - 0.02;
 
-          // Dalle en pont : 40mm d'épaisseur
-          // Dessus côté module = mh (180mm), dessus côté trottoir = TROT_HEIGHT (140mm)
-          // Dessous côté module = mh - RAMPE_THICKNESS, dessous côté trottoir = TROT_HEIGHT - RAMPE_THICKNESS
-          const totalSpan = CANIVEAU_GAP + RAMPE_DEPTH;
+          // Dalle en pont 510mm : 40mm d'épaisseur
+          // Fixée au module (180mm), descend vers le trottoir (140mm)
+          // Enjambe 250mm de caniveau + 260mm sur le trottoir
+          const totalSpan = RAMPE_DEPTH; // 510mm total
           const topModule = mh;
           const topTrot = TROT_HEIGHT;
           const botModule = mh - RAMPE_THICKNESS;
