@@ -196,10 +196,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
             slotLine.position.set(i * 2.4 + 0.5, 0.001, QUAI_FRONT + PARKING_DEPTH / 2);
             scene.add(slotLine);
           }
-          // Symbole P
-          if (showLabels) {
-            createLabel("P", new THREE.Vector3(cx, 0.05, QUAI_FRONT + PARKING_DEPTH / 2));
-          }
+          // Label P sera ajouté après createLabel (plus bas)
           laneStartZ = QUAI_FRONT + PARKING_DEPTH;
         } else if (roadConfig === "cyclable") {
           // Piste cyclable (verte)
@@ -216,9 +213,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
             cd.position.set(i * 1.4 - 0.5, 0.001, QUAI_FRONT + CYCLE_DEPTH / 2);
             scene.add(cd);
           }
-          if (showLabels) {
-            createLabel("VÉLO", new THREE.Vector3(cx, 0.05, QUAI_FRONT + CYCLE_DEPTH / 2));
-          }
+          // Label VÉLO sera ajouté après createLabel (plus bas)
           laneStartZ = QUAI_FRONT + CYCLE_DEPTH;
         }
 
@@ -690,6 +685,15 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
               const zOff = getRowZ(r);
               createLabel(`RANG ${r}`, new THREE.Vector3(-0.6, 0.15, zOff));
             }
+          }
+        }
+
+        // --- Labels route (après createLabel) ----
+        if (showLabels) {
+          if (roadConfig === "parking") {
+            createLabel("P", new THREE.Vector3(cx, 0.05, QUAI_FRONT + PARKING_DEPTH / 2));
+          } else if (roadConfig === "cyclable") {
+            createLabel("VÉLO", new THREE.Vector3(cx, 0.05, QUAI_FRONT + CYCLE_DEPTH / 2));
           }
         }
 
