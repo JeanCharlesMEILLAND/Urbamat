@@ -216,23 +216,24 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
             scene.add(riveLine);
           }
         } else if (roadConfig === "cyclable") {
-          // Piste cyclable SOUS le quai — bande verte visible avant/après le quai
+          // Piste cyclable SOUS le quai (1.5m de large) — bande verte visible avant/après
+          const CYCLE_W = 1.5; // largeur réelle piste cyclable
           const cycleMat = new THREE.MeshStandardMaterial({ color: "#2D8B4E", roughness: 0.8 });
           const cycleDashMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.5 });
-          // Bandes vertes avant et après le quai
-          for (const xOff of [-4, maxLen + 0.5]) {
-            const cycleGeo = new THREE.PlaneGeometry(4, QUAI_DEPTH + 0.5);
-            const cycleMesh = new THREE.Mesh(cycleGeo, cycleMat);
-            cycleMesh.rotation.x = -Math.PI / 2;
-            cycleMesh.position.set(xOff + 2, -0.003, (getRowZ(1) + getRowZ(nbRangees)) / 2);
-            scene.add(cycleMesh);
-            // Pointillés vélo
-            for (let i = 0; i < 3; i++) {
-              const cd = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.06), cycleDashMat);
-              cd.rotation.x = -Math.PI / 2;
-              cd.position.set(xOff + i * 1.4 + 0.5, 0.001, (getRowZ(1) + getRowZ(nbRangees)) / 2);
-              scene.add(cd);
-            }
+          // Bande verte le long du quai (sous les modules) + extensions avant/après
+          const cycleZ = QUAI_FRONT - CYCLE_W / 2; // côté route du quai
+          const cycleTotalLen = maxLen + 8;
+          const cycleGeo = new THREE.PlaneGeometry(cycleTotalLen, CYCLE_W);
+          const cycleMesh = new THREE.Mesh(cycleGeo, cycleMat);
+          cycleMesh.rotation.x = -Math.PI / 2;
+          cycleMesh.position.set(cx, -0.003, cycleZ);
+          scene.add(cycleMesh);
+          // Pointillés blancs le long de la piste
+          for (let i = 0; i < Math.floor(cycleTotalLen / 1.4); i++) {
+            const cd = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.06), cycleDashMat);
+            cd.rotation.x = -Math.PI / 2;
+            cd.position.set(i * 1.4 - 2, 0.001, cycleZ);
+            scene.add(cd);
           }
         }
 
