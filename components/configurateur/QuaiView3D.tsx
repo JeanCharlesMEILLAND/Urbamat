@@ -50,11 +50,11 @@ function getModuleColor(colorisId: string, role: string): { base: string; edge: 
   return { base: ROLE_COLORS[role] ?? "#D1D5DB", edge: ROLE_EDGE[role] ?? "#6B7280" };
 }
 
-// Row 1 = outermost (closest to bus/road center)
-// Row N = innermost (closest to sidewalk curb)
-const getRowZ = (row: number, nbRangees: number): number => {
-  // Row N (closest to curb) is at Z=0, row 1 is farthest out
-  return (nbRangees - row) * (ROW_DEPTH + GAP);
+// Row 1 (Voirie) = closest to sidewalk curb
+// Row N = farthest from curb (toward bus/road)
+const getRowZ = (row: number): number => {
+  // Row 1 at Z=0 (near trottoir), row 2 at Z=ROW_DEPTH+GAP, etc.
+  return (row - 1) * (ROW_DEPTH + GAP);
 };
 
 export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = true, showLabels = true }: QuaiView3DProps) {
@@ -138,22 +138,23 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
 
         // --- Layout Z -- all rows on road (chaussee), extending from curb outward ----
         //
-        //   Row N (innermost, closest to sidewalk curb) is at Z=0
-        //   Row 1 (outermost, closest to bus/road center) is farthest out (+Z)
+        //   Row 1 (Voirie) = closest to sidewalk, center at Z = 0
+        //   Row N = farthest from sidewalk, toward bus/road
+        //   Trottoir is behind row 1 (negative Z)
+        //   Route is in front of row N (positive Z)
         //
-        // Total quai depth
         const QUAI_DEPTH = nbRangees * ROW_DEPTH + (nbRangees - 1) * GAP;
 
-        // Row N center is at Z=0, so the back of the quai (closest to curb) is at Z = -ROW_DEPTH/2
+        // Back edge of quai (row 1 back, toward trottoir)
         const QUAI_BACK = -ROW_DEPTH / 2;
-        // Front of quai (road side of row 1)
+        // Front edge of quai (last row front, toward bus/road)
         const QUAI_FRONT = QUAI_BACK + QUAI_DEPTH;
 
-        // The curb sits at the back edge of the quai
+        // Curb sits behind the quai (between trottoir and row 1)
         const CURB_Z = QUAI_BACK;
 
-        // Route starts at the curb (quai modules are ON the road)
-        const ROUTE_START = CURB_Z;
+        // Route starts at the front of the quai
+        const ROUTE_START = QUAI_FRONT;
 
         // --- Trottoir (sidewalk, behind the curb) ----
         const TROT_WIDTH = 3;
@@ -455,7 +456,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           const row = r as ModuleRow;
           const rowModules = modulesByRow[row] ?? [];
           const rowLen = rowModules.reduce((s, m) => s + m.spec.longueur, 0) * S;
-          const zOff = getRowZ(r, nbRangees);
+          const zOff = getRowZ(r);
           for (const m of rowModules) {
             if (m.spec.role === "vide") continue;
             addBlock(m, zOff, rowLen);
@@ -582,7 +583,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           for (let r = 1; r <= nbRangees; r++) {
             const rowModules = modulesByRow[r as ModuleRow] ?? [];
             if (rowModules.length > 0) {
-              const zOff = getRowZ(r, nbRangees);
+              const zOff = getRowZ(r);
               createLabel(`RANG ${r}`, new THREE.Vector3(-0.6, 0.15, zOff));
             }
           }
@@ -604,7 +605,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         let isDragging = false;
         let prevX = 0, prevY = 0;
         let theta = -0.5, phi = 0.55, radius = dist;
-        const quaiCenterZ = (getRowZ(1, nbRangees) + getRowZ(nbRangees, nbRangees)) / 2;
+        const quaiCenterZ = (getRowZ(1) + getRowZ(nbRangees)) / 2;
         const target = new THREE.Vector3(cx, 0.1, quaiCenterZ);
 
         const updateCam = () => {
