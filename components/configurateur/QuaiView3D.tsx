@@ -12,6 +12,7 @@ interface QuaiView3DProps {
   showShelter?: boolean;
   showLabels?: boolean;
   envConfig?: EnvironmentConfig;
+  onEnvConfigChange?: (config: EnvironmentConfig) => void;
 }
 
 const S = 1 / 1000; // mm -> m
@@ -60,7 +61,7 @@ const getRowZ = (row: number): number => {
 
 const DEFAULT_ENV: EnvironmentConfig = { trottoir: 3, parking: 0, cyclable: 0, voie: 3.5 };
 
-export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, envConfig = DEFAULT_ENV }: QuaiView3DProps) {
+export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, envConfig = DEFAULT_ENV, onEnvConfigChange }: QuaiView3DProps) {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -217,20 +218,20 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
           }
         }
 
-        // Chaussée (voie de circulation)
-        const ROUTE_END_Z = zCursor + env.voie + 3;
-        const ROUTE_WIDTH = ROUTE_END_Z - ROUTE_START_Z;
+        // Chaussée (du trottoir jusqu'à env.voie après le quai)
+        const ROUTE_END_Z = QUAI_FRONT + env.voie + 1;
+        const ROUTE_TOTAL = ROUTE_END_Z - ROUTE_START_Z;
         const ground = new THREE.Mesh(
-          new THREE.PlaneGeometry(maxLen + 8, ROUTE_WIDTH),
+          new THREE.PlaneGeometry(maxLen + 8, ROUTE_TOTAL),
           new THREE.MeshStandardMaterial({ color: "#3a3a3a", roughness: 0.95 })
         );
         ground.rotation.x = -Math.PI / 2;
-        ground.position.set(cx, -0.005, ROUTE_START_Z + ROUTE_WIDTH / 2);
+        ground.position.set(cx, -0.005, ROUTE_START_Z + ROUTE_TOTAL / 2);
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // Marquage route (pointillés centrés sur la voie)
-        const ROAD_CENTER_Z = zCursor + env.voie / 2 + 1;
+        // Marquage route (pointillés centrés sur la voie devant le quai)
+        const ROAD_CENTER_Z = QUAI_FRONT + env.voie / 2;
         const dashGeo = new THREE.PlaneGeometry(0.7, 0.07);
         const dashMat = new THREE.MeshBasicMaterial({ color: "#E8E4D0", transparent: true, opacity: 0.5 });
         for (let i = 0; i < Math.floor((maxLen + 2) / 1.4); i++) {
@@ -867,9 +868,34 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
           {isFullscreen ? <Minimize2 className="w-4 h-4 text-gray-600" /> : <Maximize2 className="w-4 h-4 text-gray-600" />}
         </button>
       </div>
+      {/* Panneau environnement — overlay bas droite */}
+      {onEnvConfigChange && (
+        <div className="absolute bottom-2 right-2 z-10 bg-black/50 backdrop-blur-sm rounded-lg p-2 space-y-1">
+          {([
+            { key: "trottoir" as const, label: "Trottoir", color: "text-amber-300" },
+            { key: "parking" as const, label: "Parking", color: "text-blue-300" },
+            { key: "cyclable" as const, label: "Vélo", color: "text-green-300" },
+            { key: "voie" as const, label: "Voie", color: "text-white" },
+          ]).map((f) => (
+            <div key={f.key} className="flex items-center gap-1.5">
+              <span className={`text-[10px] w-14 ${f.color}`}>{f.label}</span>
+              <input
+                type="number"
+                min="0"
+                max="10"
+                step="0.5"
+                value={envConfig[f.key]}
+                onChange={(e) => onEnvConfigChange({ ...envConfig, [f.key]: parseFloat(e.target.value) || 0 })}
+                className="w-12 px-1 py-0.5 text-[10px] font-mono bg-white/10 border border-white/20 rounded text-white text-center"
+              />
+              <span className="text-[9px] text-white/40">m</span>
+            </div>
+          ))}
+        </div>
+      )}
       {/* Info contrôles */}
       <div className="absolute bottom-2 left-2 z-10 text-[10px] text-white/60 bg-black/30 rounded px-2 py-1">
-        Clic gauche : orbiter · Clic droit / Shift+clic : déplacer · Molette : zoomer
+        Orbiter · Shift : déplacer · Molette : zoomer
       </div>
     </div>
   );
