@@ -20,7 +20,7 @@ export type ModuleRef =
   | "VIDE";   // Espaceur 1500mm
 
 export type ModuleRow = 1 | 2 | 3;
-export type NbRangees = 2 | 3;
+export type NbRangees = 1 | 2 | 3;
 export type RampeType = "laterale" | "arriere";
 export type ModuleRole = "rampe" | "lateral" | "central" | "jonction" | "fin" | "vide";
 

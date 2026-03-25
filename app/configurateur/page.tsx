@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 const QuaiView3D = lazy(() => import("@/components/configurateur/QuaiView3D").then((m) => ({ default: m.QuaiView3D })));
 
 export default function ConfigurateurPage() {
-  const [nbRangees, setNbRangees] = useState<NbRangees>(2);
+  const [nbRangees, setNbRangees] = useState<NbRangees>(1);
   const [modulesByRow, setModulesByRow] = useState<Record<ModuleRow, PlacedModule[]>>({ 1: [], 2: [], 3: [] });
   const [selectedModule, setSelectedModule] = useState<ModuleRef | null>(null);
   const [activeRow, setActiveRow] = useState<ModuleRow>(1);
@@ -168,16 +168,16 @@ export default function ConfigurateurPage() {
                   + Ajouter un rang
                 </Button>
               )}
-              {nbRangees > 2 && (
+              {nbRangees > 1 && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    setModulesByRow((prev) => ({ ...prev, 3: [] }));
-                    setNbRangees(2);
+                    setModulesByRow((prev) => ({ ...prev, [nbRangees]: [] }));
+                    setNbRangees((nbRangees - 1) as NbRangees);
                   }}
                 >
-                  − Retirer rang 3
+                  − Retirer rang {nbRangees}
                 </Button>
               )}
               <Button variant="ghost" size="sm" onClick={handleLoadTemplate}>
