@@ -230,9 +230,9 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // Marquage route (pointillés centrés sur la voie devant le quai)
+        // Marquage route (pointillés au centre de la route, du trottoir au bout)
         if (env.voie > 0) {
-          const ROAD_CENTER_Z = QUAI_FRONT + env.voie / 2;
+          const ROAD_CENTER_Z = (ROUTE_START_Z + ROUTE_END_Z) / 2;
           const dashGeo = new THREE.PlaneGeometry(1.0, 0.1);
           const dashMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.6 });
           const totalDashes = Math.floor((maxLen + 4) / 2);
