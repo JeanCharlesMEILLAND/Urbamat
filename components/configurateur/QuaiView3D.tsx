@@ -153,8 +153,8 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         // Curb sits behind the quai (between trottoir and row 1)
         const CURB_Z = QUAI_BACK;
 
-        // Route starts at the front of the quai
-        const ROUTE_START = QUAI_FRONT;
+        // Route starts at the curb — quai modules sit ON the road
+        const ROUTE_START = CURB_Z;
 
         // --- Trottoir (sidewalk, behind the curb) ----
         const TROT_WIDTH = 3;
