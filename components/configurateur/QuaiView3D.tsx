@@ -197,33 +197,16 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // --- Marquage route (loin du quai) ----
-        const ROAD_FAR = QUAI_FRONT + 3.5;
+        // --- Marquage route (centré sur la chaussée) ----
+        const ROAD_CENTER_Z = (QUAI_FRONT + QUAI_FRONT + 7) / 2; // milieu de la route
         const dashGeo = new THREE.PlaneGeometry(0.7, 0.07);
         const dashMat = new THREE.MeshBasicMaterial({ color: "#E8E4D0", transparent: true, opacity: 0.5 });
         for (let i = 0; i < Math.floor((maxLen + 2) / 1.4); i++) {
           const d = new THREE.Mesh(dashGeo, dashMat);
           d.rotation.x = -Math.PI / 2;
-          d.position.set(i * 1.4 - 0.5, 0.001, ROAD_FAR);
+          d.position.set(i * 1.4 - 0.5, 0.001, ROAD_CENTER_Z);
           scene.add(d);
         }
-
-        // --- Trottoir opposé ----
-        const trotOpp = new THREE.Mesh(
-          new THREE.PlaneGeometry(maxLen + 4, 2.5),
-          new THREE.MeshStandardMaterial({ color: "#CBC7BB", roughness: 0.85 })
-        );
-        trotOpp.rotation.x = -Math.PI / 2;
-        trotOpp.position.set(cx, -0.004, ROAD_FAR + 2);
-        scene.add(trotOpp);
-
-        // Bordure trottoir opposé
-        const bordure2 = new THREE.Mesh(
-          new THREE.BoxGeometry(maxLen + 4, 0.15, 0.1),
-          new THREE.MeshStandardMaterial({ color: "#A0A0A0", roughness: 0.7 })
-        );
-        bordure2.position.set(cx, 0.075, ROAD_FAR + 0.75);
-        scene.add(bordure2);
 
         // --- Label helper ----
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
