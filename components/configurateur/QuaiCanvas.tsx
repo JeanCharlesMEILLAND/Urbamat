@@ -73,44 +73,63 @@ function DropZone({
 
 // ─── Tuile de module placé (draggable) ──────────────────────────
 
+const ROLES_WITH_REAR_RAMPE = new Set(["central", "jonction", "fin"]);
+
 function ModuleTile({
   module,
   index,
   row,
   coloris,
   onRemove,
+  showRearRampe,
 }: {
   module: PlacedModule;
   index: number;
   row: ModuleRow;
   coloris: string;
   onRemove: () => void;
+  showRearRampe?: boolean;
 }) {
   const spec = module.spec;
   const isRampe = spec.role === "rampe";
   const widthRatio = spec.longueur / 3000;
+  const tileWidth = Math.max(widthRatio * 180, 50);
 
   return (
-    <div
-      draggable
-      onDragStart={(e) => {
-        e.dataTransfer.setData(
-          "text/plain",
-          JSON.stringify({ type: "reorder", row, index })
-        );
-        e.dataTransfer.effectAllowed = "all";
-      }}
-      className={cn(
-        "relative group flex-shrink-0 border-2 rounded-md flex flex-col items-center justify-center cursor-grab active:cursor-grabbing transition-all hover:shadow-lg hover:-translate-y-0.5",
-        ROLE_BORDER[spec.role]
+    <div className="flex flex-col items-center flex-shrink-0" style={{ width: `${tileWidth}px` }}>
+      {/* Rampe arrière au-dessus du module */}
+      {showRearRampe && (
+        <div
+          className={cn(
+            "w-full rounded-t-sm text-[8px] font-mono text-center leading-none mb-0.5",
+            ROLES_WITH_REAR_RAMPE.has(spec.role)
+              ? "bg-amber-200 border border-amber-400 text-amber-700 py-1"
+              : "h-[18px]" // espace vide pour aligner
+          )}
+          title={ROLES_WITH_REAR_RAMPE.has(spec.role) ? "Rampe arrière D-009a (auto)" : "Pas de rampe (biseauté)"}
+        >
+          {ROLES_WITH_REAR_RAMPE.has(spec.role) ? "↕ D-009a" : ""}
+        </div>
       )}
-      style={{
-        width: `${Math.max(widthRatio * 180, 50)}px`,
-        height: "80px",
-        backgroundColor: isRampe ? "#D4D0C8" : getColorBg(coloris),
-      }}
-      title={`${spec.ref} — ${spec.nom}\n${spec.longueur}mm × ${spec.largeur}mm\n${spec.poids} kg\n\nGlissez pour réordonner · Cliquez ✕ pour retirer`}
-    >
+      <div
+        draggable
+        onDragStart={(e) => {
+          e.dataTransfer.setData(
+            "text/plain",
+            JSON.stringify({ type: "reorder", row, index })
+          );
+          e.dataTransfer.effectAllowed = "all";
+        }}
+        className={cn(
+          "relative group w-full border-2 rounded-md flex flex-col items-center justify-center cursor-grab active:cursor-grabbing transition-all hover:shadow-lg hover:-translate-y-0.5",
+          ROLE_BORDER[spec.role]
+        )}
+        style={{
+          height: "80px",
+          backgroundColor: isRampe ? "#D4D0C8" : getColorBg(coloris),
+        }}
+        title={`${spec.ref} — ${spec.nom}\n${spec.longueur}mm × ${spec.largeur}mm\n${spec.poids} kg\n\nGlissez pour réordonner · Cliquez ✕ pour retirer`}
+      >
       {/* Grip icon */}
       <div className="absolute top-1 left-1 text-gray-400/50 group-hover:text-gray-500">
         <GripVertical size={10} />
@@ -154,6 +173,7 @@ function ModuleTile({
           <div className="w-1 h-1 rounded-full bg-gray-600" />
         </div>
       )}
+      </div>
     </div>
   );
 }
@@ -289,6 +309,7 @@ function RowCanvas({
               row={row}
               coloris={coloris}
               onRemove={() => onRemoveModule(row, i)}
+              showRearRampe={row === 1}
             />
           </div>
         ))}
@@ -346,53 +367,9 @@ export function QuaiCanvas({
   // Noms des rangées : rang 1 = Voirie (près trottoir), les autres = Rang N
   const rowLabel = (row: ModuleRow) => row === 1 ? "Voirie" : `Rang ${row}`;
 
-  // Auto-générer les rampes arrière : une derrière chaque module plat du rang 1
-  // (pas derrière les rampes latérales ni les latéraux car biseautés)
-  const ROLES_WITH_REAR_RAMPE = new Set(["central", "jonction", "fin"]);
-  const rang1 = modulesByRow[1] ?? [];
-  const rampesArriere = rang1.filter((m) => ROLES_WITH_REAR_RAMPE.has(m.spec.role));
-
   return (
     <div className="space-y-3">
-      {/* Rampes arrière PMR (auto-générées, trottoir → quai) au-dessus du rang 1 */}
-      {rampesArriere.length > 0 && (
-        <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-xs font-semibold text-amber-500 uppercase tracking-wider w-20">
-              Trottoir
-            </span>
-            <span className="text-xs text-gray-400">
-              ↕ Rampes arrière PMR (auto)
-            </span>
-          </div>
-          <div className="flex items-center gap-0.5 p-2 bg-amber-50 rounded-lg border border-amber-200 min-h-[40px] overflow-x-auto">
-            {rang1.map((m, i) => {
-              const widthRatio = m.spec.longueur / 3000;
-              const hasRampe = ROLES_WITH_REAR_RAMPE.has(m.spec.role);
-              return (
-                <div
-                  key={`rampe-arr-${i}`}
-                  className={cn(
-                    "flex-shrink-0 rounded text-[9px] font-mono flex items-center justify-center",
-                    hasRampe
-                      ? "bg-amber-100 border border-amber-300 text-amber-700"
-                      : "bg-transparent border border-dashed border-gray-300 text-gray-300"
-                  )}
-                  style={{
-                    width: `${Math.max(widthRatio * 180, 40)}px`,
-                    height: "32px",
-                  }}
-                  title={hasRampe ? `Rampe arrière D-009a (${m.spec.longueur}mm)` : `Pas de rampe (${m.ref} biseauté)`}
-                >
-                  {hasRampe ? "↕" : ""}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Rang 1 (Voirie) toujours en haut, puis rang 2, 3 en dessous */}
+      {/* Rang 1 (Voirie) toujours en haut avec rampes arrière intégrées, puis rang 2, 3, 4 en dessous */}
       {Array.from({ length: nbRangees }, (_, i) => {
         const row = (i + 1) as ModuleRow; // rang 1 en haut, 2 en dessous, etc.
         const modules = modulesByRow[row] ?? [];
