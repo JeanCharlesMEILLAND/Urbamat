@@ -301,6 +301,8 @@ export default function ConfigurateurPage() {
                       showLabels={showLabels}
                       envConfig={envConfig}
                       onEnvConfigChange={setEnvConfig}
+                      onToggleLabels={() => setShowLabels((v) => !v)}
+                      onToggleShelter={() => setShowShelter((v) => !v)}
                     />
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-xs text-gray-400">

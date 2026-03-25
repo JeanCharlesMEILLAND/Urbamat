@@ -13,6 +13,8 @@ interface QuaiView3DProps {
   showLabels?: boolean;
   envConfig?: EnvironmentConfig;
   onEnvConfigChange?: (config: EnvironmentConfig) => void;
+  onToggleLabels?: () => void;
+  onToggleShelter?: () => void;
 }
 
 const S = 1 / 1000; // mm -> m
@@ -61,7 +63,7 @@ const getRowZ = (row: number): number => {
 
 const DEFAULT_ENV: EnvironmentConfig = { trottoir: 3, parking: 0, cyclable: 0, voie: 3.5 };
 
-export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, envConfig = DEFAULT_ENV, onEnvConfigChange }: QuaiView3DProps) {
+export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, envConfig = DEFAULT_ENV, onEnvConfigChange, onToggleLabels, onToggleShelter }: QuaiView3DProps) {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -839,6 +841,28 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         </div>
       )}
       {/* Toolbar overlay — visible en fullscreen aussi */}
+      <div className="absolute top-2 left-2 z-10 flex items-center gap-1">
+        {onToggleLabels && (
+          <button
+            onClick={onToggleLabels}
+            className={`p-2 rounded-md border shadow-sm transition-colors ${showLabels ? "bg-primary/90 border-primary text-white" : "bg-white/80 hover:bg-white border-gray-300"}`}
+            title={showLabels ? "Masquer les labels" : "Afficher les labels"}
+            type="button"
+          >
+            {showLabels ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4 text-gray-600" />}
+          </button>
+        )}
+        {onToggleShelter && (
+          <button
+            onClick={onToggleShelter}
+            className={`p-2 rounded-md border shadow-sm transition-colors ${showShelter ? "bg-primary/90 border-primary text-white" : "bg-white/80 hover:bg-white border-gray-300"}`}
+            title={showShelter ? "Masquer l'abribus" : "Afficher l'abribus"}
+            type="button"
+          >
+            <Home className={`w-4 h-4 ${showShelter ? "" : "text-gray-600"}`} />
+          </button>
+        )}
+      </div>
       <div className="absolute top-2 right-2 z-10 flex items-center gap-1">
         <button
           onClick={() => {
