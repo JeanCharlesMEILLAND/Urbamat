@@ -463,15 +463,15 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           }
         }
 
-        // --- Auto-generated rear rampes behind flat modules of row 1 ----
-        // Rampes slope from quai height (180mm) down toward trottoir, with caniveau flap
+        // --- Auto-generated rear rampes collées aux modules du rang 1 ----
+        // Rampes au bord arrière des modules (côté trottoir), pente vers le bas
         const FLAT_ROLES = new Set(["central", "jonction", "fin"]);
         const row1Modules = modulesByRow[1 as ModuleRow] ?? [];
         const row1Z = getRowZ(1); // center Z of row 1
-        const rearEdgeZ = row1Z - ROW_DEPTH / 2; // back edge of row 1, toward trottoir
-        const REAR_DEPTH = 1.2; // depth of the rear rampe (shorter than full row)
+        const rearEdgeZ = row1Z - ROW_DEPTH / 2; // bord arrière du rang 1
+        const REAR_DEPTH = 0.51; // 510mm = profondeur rampe (collée au module)
         const REAR_LIP = 0.04;
-        const REAR_CANIVEAU_L = 0.51;
+        const REAR_CANIVEAU_L = 0.45; // volet caniveau
         const REAR_CANIVEAU_H = 0.04;
 
         for (const m of row1Modules) {
