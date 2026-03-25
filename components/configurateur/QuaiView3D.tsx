@@ -464,56 +464,79 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         }
 
         // --- Auto-generated rear rampes behind flat modules of row 1 ----
+        // Rampes slope from quai height (180mm) down toward trottoir, with caniveau flap
         const FLAT_ROLES = new Set(["central", "jonction", "fin"]);
         const row1Modules = modulesByRow[1 as ModuleRow] ?? [];
-        const row1Z = getRowZ(1);
-        const rearRampeZ = row1Z - ROW_DEPTH / 2; // back edge of row 1
+        const row1Z = getRowZ(1); // center Z of row 1
+        const rearEdgeZ = row1Z - ROW_DEPTH / 2; // back edge of row 1, toward trottoir
+        const REAR_DEPTH = 1.2; // depth of the rear rampe (shorter than full row)
         const REAR_LIP = 0.04;
         const REAR_CANIVEAU_L = 0.51;
         const REAR_CANIVEAU_H = 0.04;
-        const rearRampeMat = new THREE.MeshStandardMaterial({ color: "#F5D4A0", roughness: 0.6 });
-        const rearEdgeMat = new THREE.LineBasicMaterial({ color: "#D97706" });
 
         for (const m of row1Modules) {
           if (!FLAT_ROLES.has(m.spec.role)) continue;
 
-          const mw = m.spec.longueur * S;
-          const mh = m.spec.hauteur * S;
-          const rd = ROW_DEPTH - 0.02; // slightly smaller than row depth
+          const mw = m.spec.longueur * S; // module width along X
+          const mh = m.spec.hauteur * S;  // quai height
           const startX = m.x * S + 0.01;
           const rw = mw - 0.02;
 
-          // Rear rampe shape: slopes from quai height at front to lip at back
-          const shape = new THREE.Shape();
-          shape.moveTo(0, 0);        // bottom-front
-          shape.lineTo(0, mh);       // top-front (full height)
-          shape.lineTo(rd, REAR_LIP); // top-back (lip, toward trottoir)
-          shape.lineTo(rd, 0);       // bottom-back
-          shape.closePath();
+          // Use a Group to avoid rotation/translation issues
+          const rearGroup = new THREE.Group();
 
-          const geo = new THREE.ExtrudeGeometry(shape, { depth: rw, bevelEnabled: false });
-          const mesh = new THREE.Mesh(geo, rearRampeMat);
-          mesh.rotation.y = Math.PI / 2;
-          mesh.position.set(startX + rw, 0, rearRampeZ - rd);
-          mesh.castShadow = true;
-          scene.add(mesh);
-          scene.add(new THREE.LineSegments(
-            new THREE.EdgesGeometry(geo), rearEdgeMat
-          ).rotateY(Math.PI / 2).translateX(startX + rw).translateZ(rearRampeZ - rd));
+          // Rampe body: slope from mh (front, adjacent to row 1) to LIP (back, toward trottoir)
+          // Built as a box-like shape along Z axis using BufferGeometry
+          const positions = new Float32Array([
+            // Front face (full height, at Z=0, adjacent to row 1)
+            0,  0,  0,    rw, 0,  0,    rw, mh, 0,
+            0,  0,  0,    rw, mh, 0,    0,  mh, 0,
+            // Back face (lip height, at Z=-REAR_DEPTH)
+            0,  0,  -REAR_DEPTH,    rw, REAR_LIP, -REAR_DEPTH,    rw, 0, -REAR_DEPTH,
+            0,  0,  -REAR_DEPTH,    0,  REAR_LIP, -REAR_DEPTH,    rw, REAR_LIP, -REAR_DEPTH,
+            // Top face (slope)
+            0,  mh, 0,    rw, mh, 0,    rw, REAR_LIP, -REAR_DEPTH,
+            0,  mh, 0,    rw, REAR_LIP, -REAR_DEPTH,    0, REAR_LIP, -REAR_DEPTH,
+            // Bottom face
+            0,  0,  0,    rw, 0,  -REAR_DEPTH,    rw, 0,  0,
+            0,  0,  0,    0,  0,  -REAR_DEPTH,    rw, 0,  -REAR_DEPTH,
+            // Left face
+            0,  0,  0,    0,  mh, 0,    0,  REAR_LIP, -REAR_DEPTH,
+            0,  0,  0,    0,  REAR_LIP, -REAR_DEPTH,    0, 0, -REAR_DEPTH,
+            // Right face
+            rw, 0,  0,    rw, REAR_LIP, -REAR_DEPTH,    rw, mh, 0,
+            rw, 0,  0,    rw, 0,  -REAR_DEPTH,    rw, REAR_LIP, -REAR_DEPTH,
+          ]);
+          const rearGeo = new THREE.BufferGeometry();
+          rearGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+          rearGeo.computeVertexNormals();
+          const rearMesh = new THREE.Mesh(rearGeo, new THREE.MeshStandardMaterial({ color: "#F5D4A0", roughness: 0.6 }));
+          rearMesh.castShadow = true;
+          rearGroup.add(rearMesh);
 
-          // Caniveau flap extending toward trottoir
+          // Edges
+          rearGroup.add(new THREE.LineSegments(
+            new THREE.EdgesGeometry(rearGeo),
+            new THREE.LineBasicMaterial({ color: "#D97706" })
+          ));
+
+          // Caniveau flap (flat, extending further toward trottoir)
           const canGeo = new THREE.BoxGeometry(rw, REAR_CANIVEAU_H, REAR_CANIVEAU_L);
-          const canMat = new THREE.MeshStandardMaterial({ color: "#8B8B85", roughness: 0.7, metalness: 0.1 });
-          const canMesh = new THREE.Mesh(canGeo, canMat);
-          canMesh.position.set(startX + rw / 2, REAR_CANIVEAU_H / 2, rearRampeZ - rd - REAR_CANIVEAU_L / 2);
+          const canMesh = new THREE.Mesh(canGeo, new THREE.MeshStandardMaterial({ color: "#8B8B85", roughness: 0.7, metalness: 0.1 }));
+          canMesh.position.set(rw / 2, REAR_CANIVEAU_H / 2, -REAR_DEPTH - REAR_CANIVEAU_L / 2);
           canMesh.castShadow = true;
-          scene.add(canMesh);
-          scene.add(new THREE.LineSegments(
-            new THREE.EdgesGeometry(canGeo), new THREE.LineBasicMaterial({ color: "#666" })
-          ).translateX(canMesh.position.x).translateY(canMesh.position.y).translateZ(canMesh.position.z));
+          rearGroup.add(canMesh);
+          rearGroup.add(new THREE.LineSegments(
+            new THREE.EdgesGeometry(canGeo),
+            new THREE.LineBasicMaterial({ color: "#666" })
+          ).translateX(rw / 2).translateY(REAR_CANIVEAU_H / 2).translateZ(-REAR_DEPTH - REAR_CANIVEAU_L / 2));
+
+          // Position the group: X = module position, Z = back edge of row 1
+          rearGroup.position.set(startX, 0, rearEdgeZ);
+          scene.add(rearGroup);
 
           if (showLabels) {
-            createLabel("D-009a", new THREE.Vector3(startX + rw / 2, mh + 0.1, rearRampeZ - rd / 2));
+            createLabel("D-009a", new THREE.Vector3(startX + rw / 2, mh + 0.1, rearEdgeZ - REAR_DEPTH / 2));
           }
         }
 
