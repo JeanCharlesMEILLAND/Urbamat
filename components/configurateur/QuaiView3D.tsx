@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import type { PlacedModule, ModuleRow, NbRangees } from "@/lib/configurateur";
 import { COLORIS } from "@/lib/configurateur";
-import { Maximize2, Minimize2 } from "lucide-react";
+import { Maximize2, Minimize2, FlipHorizontal2, Eye, EyeOff, Home } from "lucide-react";
 
 interface QuaiView3DProps {
   modulesByRow: Record<ModuleRow, PlacedModule[]>;
@@ -657,8 +657,9 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           }
         }
 
-        // --- Orbit controls ----
+        // --- Orbit + Pan controls ----
         let isDragging = false;
+        let isPanning = false;
         let prevX = 0, prevY = 0;
         let theta = -0.5, phi = 0.55, radius = dist;
         const quaiCenterZ = (getRowZ(1) + getRowZ(nbRangees)) / 2;
@@ -674,24 +675,56 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         }
         updateCam();
 
+        // Exposer flipAxis et resetCam pour les boutons overlay
+        (wrapper as any).__flipAxis = () => {
+          theta = -theta;
+          updateCam();
+        };
+        (wrapper as any).__resetCam = () => {
+          theta = -0.5; phi = 0.55; radius = dist;
+          target.set(cx, 0.1, quaiCenterZ);
+          updateCam();
+        };
+
         const cvs = renderer.domElement;
         cvs.style.display = "block";
 
-        const onDown = (e: PointerEvent) => { isDragging = true; prevX = e.clientX; prevY = e.clientY; cvs.setPointerCapture(e.pointerId); };
-        const onMove = (e: PointerEvent) => {
-          if (!isDragging) return;
-          theta -= (e.clientX - prevX) * 0.005;
-          phi = Math.max(0.1, Math.min(1.5, phi - (e.clientY - prevY) * 0.005));
+        const onDown = (e: PointerEvent) => {
+          // Clic droit ou Shift+clic = pan, sinon = orbit
+          if (e.button === 2 || e.shiftKey) {
+            isPanning = true;
+          } else {
+            isDragging = true;
+          }
           prevX = e.clientX; prevY = e.clientY;
-          updateCam();
+          cvs.setPointerCapture(e.pointerId);
         };
-        const onUp = (e: PointerEvent) => { isDragging = false; cvs.releasePointerCapture(e.pointerId); };
+        const onMove = (e: PointerEvent) => {
+          if (isPanning) {
+            // Pan horizontal et vertical
+            const dx = (e.clientX - prevX) * 0.01;
+            const dz = (e.clientY - prevY) * 0.01;
+            target.x -= dx * Math.cos(theta) + dz * Math.sin(theta) * Math.sin(phi);
+            target.z += dx * Math.sin(theta) - dz * Math.cos(theta) * Math.sin(phi);
+            target.y += (e.clientY - prevY) * -0.005 * Math.cos(phi);
+            prevX = e.clientX; prevY = e.clientY;
+            updateCam();
+          } else if (isDragging) {
+            theta -= (e.clientX - prevX) * 0.005;
+            phi = Math.max(0.1, Math.min(1.5, phi - (e.clientY - prevY) * 0.005));
+            prevX = e.clientX; prevY = e.clientY;
+            updateCam();
+          }
+        };
+        const onUp = (e: PointerEvent) => { isDragging = false; isPanning = false; cvs.releasePointerCapture(e.pointerId); };
         const onWheel = (e: WheelEvent) => { e.preventDefault(); radius = Math.max(1.5, Math.min(dist * 3, radius + e.deltaY * 0.005)); updateCam(); };
+        const onContextMenu = (e: Event) => { e.preventDefault(); }; // empêcher menu contextuel
 
         cvs.addEventListener("pointerdown", onDown);
         cvs.addEventListener("pointermove", onMove);
         cvs.addEventListener("pointerup", onUp);
         cvs.addEventListener("wheel", onWheel, { passive: false });
+        cvs.addEventListener("contextmenu", onContextMenu);
 
         let animId: number;
         const animate = () => { animId = requestAnimationFrame(animate); renderer.render(scene, camera); };
@@ -712,6 +745,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           cvs.removeEventListener("pointermove", onMove);
           cvs.removeEventListener("pointerup", onUp);
           cvs.removeEventListener("wheel", onWheel);
+          cvs.removeEventListener("contextmenu", onContextMenu);
           renderer.dispose();
           scene.clear();
           if (wrapper.contains(cvs)) wrapper.removeChild(cvs);
@@ -752,14 +786,43 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
           Chargement de la vue 3D...
         </div>
       )}
-      <button
-        onClick={toggleFullscreen}
-        className="absolute top-2 right-2 z-10 p-2 rounded-md bg-white/80 hover:bg-white border border-gray-300 shadow-sm transition-colors"
-        title={isFullscreen ? "Quitter le plein ecran" : "Plein ecran"}
-        type="button"
-      >
-        {isFullscreen ? <Minimize2 className="w-4 h-4 text-gray-600" /> : <Maximize2 className="w-4 h-4 text-gray-600" />}
-      </button>
+      {/* Toolbar overlay — visible en fullscreen aussi */}
+      <div className="absolute top-2 right-2 z-10 flex items-center gap-1">
+        <button
+          onClick={() => {
+            const w = canvasWrapperRef.current;
+            if (w && (w as any).__flipAxis) (w as any).__flipAxis();
+          }}
+          className="p-2 rounded-md bg-white/80 hover:bg-white border border-gray-300 shadow-sm transition-colors"
+          title="Inverser l'axe (miroir)"
+          type="button"
+        >
+          <FlipHorizontal2 className="w-4 h-4 text-gray-600" />
+        </button>
+        <button
+          onClick={() => {
+            const w = canvasWrapperRef.current;
+            if (w && (w as any).__resetCam) (w as any).__resetCam();
+          }}
+          className="p-2 rounded-md bg-white/80 hover:bg-white border border-gray-300 shadow-sm transition-colors"
+          title="Réinitialiser la vue"
+          type="button"
+        >
+          <Home className="w-4 h-4 text-gray-600" />
+        </button>
+        <button
+          onClick={toggleFullscreen}
+          className="p-2 rounded-md bg-white/80 hover:bg-white border border-gray-300 shadow-sm transition-colors"
+          title={isFullscreen ? "Quitter le plein écran" : "Plein écran"}
+          type="button"
+        >
+          {isFullscreen ? <Minimize2 className="w-4 h-4 text-gray-600" /> : <Maximize2 className="w-4 h-4 text-gray-600" />}
+        </button>
+      </div>
+      {/* Info contrôles */}
+      <div className="absolute bottom-2 left-2 z-10 text-[10px] text-white/60 bg-black/30 rounded px-2 py-1">
+        Clic gauche : orbiter · Clic droit / Shift+clic : déplacer · Molette : zoomer
+      </div>
     </div>
   );
 }

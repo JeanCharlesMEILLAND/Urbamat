@@ -27,8 +27,8 @@ export default function ConfigurateurPage() {
   const [coloris, setColoris] = useState("granit-gris");
   const [showForm, setShowForm] = useState(false);
   const [view3D, setView3D] = useState(false);
-  const [showShelter, setShowShelter] = useState(true);
-  const [showLabels, setShowLabels] = useState(true);
+  const [showShelter, setShowShelter] = useState(false);
+  const [showLabels, setShowLabels] = useState(false);
 
   const allModules = [...modulesByRow[1], ...modulesByRow[2], ...modulesByRow[3], ...modulesByRow[4]];
 
