@@ -22,7 +22,7 @@ const QuaiView3D = lazy(() => import("@/components/configurateur/QuaiView3D").th
 
 export default function ConfigurateurPage() {
   const [nbRangees, setNbRangees] = useState<NbRangees>(1);
-  const [modulesByRow, setModulesByRow] = useState<Record<ModuleRow, PlacedModule[]>>({ 1: [], 2: [], 3: [] });
+  const [modulesByRow, setModulesByRow] = useState<Record<ModuleRow, PlacedModule[]>>({ 1: [], 2: [], 3: [], 4: [] });
   const [selectedModule, setSelectedModule] = useState<ModuleRef | null>(null);
   const [activeRow, setActiveRow] = useState<ModuleRow>(1);
   const [coloris, setColoris] = useState("granit-gris");
@@ -31,7 +31,7 @@ export default function ConfigurateurPage() {
   const [showShelter, setShowShelter] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
 
-  const allModules = [...modulesByRow[1], ...modulesByRow[2], ...modulesByRow[3]];
+  const allModules = [...modulesByRow[1], ...modulesByRow[2], ...modulesByRow[3], ...modulesByRow[4]];
 
   // ─── Generic row updater ───────────────────────────────────────
   const updateRow = useCallback(
@@ -104,7 +104,7 @@ export default function ConfigurateurPage() {
   );
 
   function handleReset() {
-    setModulesByRow({ 1: [], 2: [], 3: [] });
+    setModulesByRow({ 1: [], 2: [], 3: [], 4: [] });
     setSelectedModule(null);
   }
 
@@ -131,8 +131,8 @@ export default function ConfigurateurPage() {
       { ref: "D-003", rang: 2 },
     ];
 
-    const rows: Record<ModuleRow, PlacedModule[]> = { 1: [], 2: [], 3: [] };
-    const xByRow: Record<ModuleRow, number> = { 1: 0, 2: 0, 3: 0 };
+    const rows: Record<ModuleRow, PlacedModule[]> = { 1: [], 2: [], 3: [], 4: [] };
+    const xByRow: Record<ModuleRow, number> = { 1: 0, 2: 0, 3: 0, 4: 0 };
 
     for (const t of template) {
       const spec = MODULE_CATALOG[t.ref];
@@ -159,7 +159,7 @@ export default function ConfigurateurPage() {
             </div>
             <div className="flex items-center gap-2">
               {/* Ajouter / retirer un rang */}
-              {nbRangees < 3 && (
+              {nbRangees < 4 && (
                 <Button
                   variant="outline"
                   size="sm"

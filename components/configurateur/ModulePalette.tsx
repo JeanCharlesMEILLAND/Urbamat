@@ -44,6 +44,7 @@ const ROW_TABS: { row: ModuleRow; label: string }[] = [
   { row: 1, label: "Voirie" },
   { row: 2, label: "Rang 2" },
   { row: 3, label: "Rang 3" },
+  { row: 4, label: "Rang 4" },
 ];
 
 export function ModulePalette({

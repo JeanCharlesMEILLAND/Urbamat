@@ -19,8 +19,8 @@ export type ModuleRef =
   | "D-003"   // Fin de quai droit (variante)
   | "VIDE";   // Espaceur 1500mm
 
-export type ModuleRow = 1 | 2 | 3;
-export type NbRangees = 1 | 2 | 3;
+export type ModuleRow = 1 | 2 | 3 | 4;
+export type NbRangees = 1 | 2 | 3 | 4;
 export type RampeType = "laterale" | "arriere";
 export type ModuleRole = "rampe" | "lateral" | "central" | "jonction" | "fin" | "vide";
 
