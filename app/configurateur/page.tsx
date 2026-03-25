@@ -15,7 +15,7 @@ import {
   type ModuleRef,
   type ModuleRow,
   type NbRangees,
-  type RoadConfig,
+  type EnvironmentConfig,
 } from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
@@ -30,7 +30,9 @@ export default function ConfigurateurPage() {
   const [view3D, setView3D] = useState(false);
   const [showShelter, setShowShelter] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
-  const [roadConfig, setRoadConfig] = useState<RoadConfig>("simple");
+  const [envConfig, setEnvConfig] = useState<EnvironmentConfig>({
+    trottoir: 3.0, parking: 0, cyclable: 0, voie: 3.5,
+  });
 
   const allModules = [...modulesByRow[1], ...modulesByRow[2], ...modulesByRow[3], ...modulesByRow[4]];
 
@@ -209,30 +211,31 @@ export default function ConfigurateurPage() {
                 {/* Coloris */}
                 <StepOptions coloris={coloris} onColorisChange={setColoris} />
 
-                {/* Configuration route */}
+                {/* Environnement */}
                 <div className="space-y-2">
                   <h3 className="text-sm font-bold text-neutral-dark uppercase tracking-wider">
-                    Voirie
+                    Environnement
                   </h3>
-                  <div className="grid grid-cols-1 gap-1.5">
+                  <div className="space-y-2">
                     {([
-                      { id: "simple" as RoadConfig, label: "Route simple", desc: "Voie de circulation" },
-                      { id: "parking" as RoadConfig, label: "Parking + Route", desc: "Stationnement puis voie" },
-                      { id: "cyclable" as RoadConfig, label: "Piste cyclable + Route", desc: "Bande cyclable puis voie" },
-                    ]).map((opt) => (
-                      <button
-                        key={opt.id}
-                        onClick={() => setRoadConfig(opt.id)}
-                        className={cn(
-                          "p-2.5 rounded-lg border-2 text-left transition-all text-xs",
-                          roadConfig === opt.id
-                            ? "border-primary bg-primary/5 text-primary"
-                            : "border-gray-200 text-gray-500 hover:border-gray-300"
-                        )}
-                      >
-                        <div className="font-medium">{opt.label}</div>
-                        <div className="text-[10px] text-gray-400 mt-0.5">{opt.desc}</div>
-                      </button>
+                      { key: "trottoir" as const, label: "Trottoir" },
+                      { key: "parking" as const, label: "Parking" },
+                      { key: "cyclable" as const, label: "Piste cyclable" },
+                      { key: "voie" as const, label: "Voie circulation" },
+                    ]).map((field) => (
+                      <div key={field.key} className="flex items-center gap-2">
+                        <label className="text-xs text-gray-600 w-24 shrink-0">{field.label}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="10"
+                          step="0.5"
+                          value={envConfig[field.key]}
+                          onChange={(e) => setEnvConfig((prev) => ({ ...prev, [field.key]: parseFloat(e.target.value) || 0 }))}
+                          className="w-16 px-2 py-1 text-xs font-mono border border-gray-300 rounded text-center focus:ring-1 focus:ring-primary focus:border-primary"
+                        />
+                        <span className="text-[10px] text-gray-400">m</span>
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -296,8 +299,7 @@ export default function ConfigurateurPage() {
                       coloris={coloris}
                       showShelter={showShelter}
                       showLabels={showLabels}
-                      roadConfig={roadConfig}
-                      onRoadConfigChange={setRoadConfig}
+                      envConfig={envConfig}
                     />
                     <div className="flex items-center justify-between mt-2">
                       <p className="text-xs text-gray-400">

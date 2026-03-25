@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import type { PlacedModule, ModuleRow, NbRangees, RoadConfig } from "@/lib/configurateur";
+import type { PlacedModule, ModuleRow, NbRangees, EnvironmentConfig } from "@/lib/configurateur";
 import { COLORIS } from "@/lib/configurateur";
 import { Maximize2, Minimize2, FlipHorizontal2, Eye, EyeOff, Home } from "lucide-react";
 
@@ -11,8 +11,7 @@ interface QuaiView3DProps {
   coloris: string;
   showShelter?: boolean;
   showLabels?: boolean;
-  roadConfig?: RoadConfig;
-  onRoadConfigChange?: (config: RoadConfig) => void;
+  envConfig?: EnvironmentConfig;
 }
 
 const S = 1 / 1000; // mm -> m
@@ -59,7 +58,9 @@ const getRowZ = (row: number): number => {
   return (row - 1) * (ROW_DEPTH + GAP);
 };
 
-export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, roadConfig = "simple", onRoadConfigChange }: QuaiView3DProps) {
+const DEFAULT_ENV: EnvironmentConfig = { trottoir: 3, parking: 0, cyclable: 0, voie: 3.5 };
+
+export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = false, showLabels = false, envConfig = DEFAULT_ENV }: QuaiView3DProps) {
   const canvasWrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
@@ -145,6 +146,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         //   La rampe s'appuie sur la bordure trottoir, quasi collée (50mm de jeu pour l'eau)
         //
         const TROT_HEIGHT = 0.14;       // trottoir surélevé 140mm
+        const env = envConfig;
         const CANIVEAU_WIDTH = 0.25;    // 250mm entre module et bordure trottoir
         const RAMPE_DEPTH = 0.51;       // 510mm largeur rampe (enjambe caniveau + 260mm sur trottoir)
         const RAMPE_THICKNESS = 0.04;   // épaisseur dalle rampe 40mm
@@ -157,7 +159,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         const QUAI_FRONT = QUAI_BACK + QUAI_DEPTH;                   // bord avant dernier rang
 
         // --- Trottoir surélevé (140mm) ----
-        const TROT_WIDTH = 3;
+        const TROT_WIDTH = env.trottoir;
         const trot = new THREE.Mesh(
           new THREE.BoxGeometry(maxLen + 4, TROT_HEIGHT, TROT_WIDTH),
           new THREE.MeshStandardMaterial({ color: "#CBC7BB", roughness: 0.85 })
@@ -174,16 +176,49 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         bordure.position.set(cx, (TROT_HEIGHT + 0.02) / 2, CURB_Z + 0.04);
         scene.add(bordure);
 
-        // --- Route configurable ----
-        // Le quai est posé SUR la route (et sur les places de parking si mode parking)
+        // --- Route configurable (dimensions depuis envConfig) ----
         const ROUTE_START_Z = CURB_Z + 0.08;
-        const PARKING_DEPTH = 2.0; // largeur stationnement longitudinal
-        const CYCLE_DEPTH = 1.5;
-        const LANE_WIDTH = 3.5;
-        const ROUTE_EXTRA = 5;
+        let zCursor = QUAI_FRONT; // on empile les éléments devant le quai
 
-        // Chaussée principale (toujours la même taille)
-        const ROUTE_END_Z = QUAI_FRONT + LANE_WIDTH + ROUTE_EXTRA;
+        // Parking (sous le quai, marquage visible avant/après)
+        if (env.parking > 0) {
+          const slotMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.4 });
+          const parkZCenter = (getRowZ(1) + getRowZ(nbRangees)) / 2;
+          for (const xOff of [-1.5, maxLen + 1.5]) {
+            for (let p = 0; p < 3; p++) {
+              const sepLine = new THREE.Mesh(new THREE.PlaneGeometry(0.06, QUAI_DEPTH + 0.5), slotMat);
+              sepLine.rotation.x = -Math.PI / 2;
+              sepLine.position.set(xOff + p * 5.5, 0.001, parkZCenter);
+              scene.add(sepLine);
+            }
+            const riveLine = new THREE.Mesh(new THREE.PlaneGeometry(16, 0.06), slotMat);
+            riveLine.rotation.x = -Math.PI / 2;
+            riveLine.position.set(xOff + 7.5, 0.001, QUAI_FRONT + 0.05);
+            scene.add(riveLine);
+          }
+        }
+
+        // Piste cyclable (sous le quai, bande verte visible avant/après)
+        if (env.cyclable > 0) {
+          const cycleMat = new THREE.MeshStandardMaterial({ color: "#2D8B4E", roughness: 0.8 });
+          const cycleDashMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.5 });
+          const cycleZ = QUAI_FRONT - env.cyclable / 2;
+          const cycleTotalLen = maxLen + 8;
+          const cycleGeo = new THREE.PlaneGeometry(cycleTotalLen, env.cyclable);
+          const cycleMesh = new THREE.Mesh(cycleGeo, cycleMat);
+          cycleMesh.rotation.x = -Math.PI / 2;
+          cycleMesh.position.set(cx, -0.003, cycleZ);
+          scene.add(cycleMesh);
+          for (let i = 0; i < Math.floor(cycleTotalLen / 1.4); i++) {
+            const cd = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.06), cycleDashMat);
+            cd.rotation.x = -Math.PI / 2;
+            cd.position.set(i * 1.4 - 2, 0.001, cycleZ);
+            scene.add(cd);
+          }
+        }
+
+        // Chaussée (voie de circulation)
+        const ROUTE_END_Z = zCursor + env.voie + 3;
         const ROUTE_WIDTH = ROUTE_END_Z - ROUTE_START_Z;
         const ground = new THREE.Mesh(
           new THREE.PlaneGeometry(maxLen + 8, ROUTE_WIDTH),
@@ -194,52 +229,8 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         ground.receiveShadow = true;
         scene.add(ground);
 
-        if (roadConfig === "parking") {
-          // Stationnement longitudinal SOUS le quai — marquage visible avant/après le quai
-          const slotMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.4 });
-          const parkZCenter = (getRowZ(1) + getRowZ(nbRangees)) / 2;
-          // Lignes longitudinales (bords du stationnement) visibles avant et après le quai
-          for (const xOff of [-1.5, maxLen + 1.5]) {
-            // Marquage places (5m par place, lignes perpendiculaires à la route)
-            for (let p = 0; p < 3; p++) {
-              const px = xOff + p * 5.5;
-              // Ligne séparatrice (perpendiculaire)
-              const sepLine = new THREE.Mesh(new THREE.PlaneGeometry(0.06, QUAI_DEPTH + 0.5), slotMat);
-              sepLine.rotation.x = -Math.PI / 2;
-              sepLine.position.set(px, 0.001, parkZCenter);
-              scene.add(sepLine);
-            }
-            // Ligne de rive (le long de la route, longitudinale)
-            const riveLine = new THREE.Mesh(new THREE.PlaneGeometry(16, 0.06), slotMat);
-            riveLine.rotation.x = -Math.PI / 2;
-            riveLine.position.set(xOff + 7.5, 0.001, QUAI_FRONT + 0.05);
-            scene.add(riveLine);
-          }
-        } else if (roadConfig === "cyclable") {
-          // Piste cyclable SOUS le quai (1.5m de large) — bande verte visible avant/après
-          const CYCLE_W = 1.5; // largeur réelle piste cyclable
-          const cycleMat = new THREE.MeshStandardMaterial({ color: "#2D8B4E", roughness: 0.8 });
-          const cycleDashMat = new THREE.MeshBasicMaterial({ color: "#FFFFFF", transparent: true, opacity: 0.5 });
-          // Bande verte le long du quai (sous les modules) + extensions avant/après
-          const cycleZ = QUAI_FRONT - CYCLE_W / 2; // côté route du quai
-          const cycleTotalLen = maxLen + 8;
-          const cycleGeo = new THREE.PlaneGeometry(cycleTotalLen, CYCLE_W);
-          const cycleMesh = new THREE.Mesh(cycleGeo, cycleMat);
-          cycleMesh.rotation.x = -Math.PI / 2;
-          cycleMesh.position.set(cx, -0.003, cycleZ);
-          scene.add(cycleMesh);
-          // Pointillés blancs le long de la piste
-          for (let i = 0; i < Math.floor(cycleTotalLen / 1.4); i++) {
-            const cd = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 0.06), cycleDashMat);
-            cd.rotation.x = -Math.PI / 2;
-            cd.position.set(i * 1.4 - 2, 0.001, cycleZ);
-            scene.add(cd);
-          }
-        }
-
-        // Marquage route (pointillés centrés sur la voie de circulation)
-        const laneStartZ = QUAI_FRONT; // la voie commence toujours après le quai
-        const ROAD_CENTER_Z = laneStartZ + LANE_WIDTH / 2 + 1;
+        // Marquage route (pointillés centrés sur la voie)
+        const ROAD_CENTER_Z = zCursor + env.voie / 2 + 1;
         const dashGeo = new THREE.PlaneGeometry(0.7, 0.07);
         const dashMat = new THREE.MeshBasicMaterial({ color: "#E8E4D0", transparent: true, opacity: 0.5 });
         for (let i = 0; i < Math.floor((maxLen + 2) / 1.4); i++) {
@@ -698,7 +689,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
         }
 
         // --- Labels route (après createLabel) ----
-        if (showLabels && roadConfig === "cyclable") {
+        if (showLabels && env.cyclable > 0) {
           createLabel("VÉLO", new THREE.Vector3(-2, 0.05, (getRowZ(1) + getRowZ(nbRangees)) / 2));
         }
 
@@ -813,7 +804,7 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
     })();
 
     return () => { cancelled = true; cleanupRef.current?.(); cleanupRef.current = null; };
-  }, [modulesByRow, nbRangees, coloris, hasModules, showShelter, showLabels, roadConfig]);
+  }, [modulesByRow, nbRangees, coloris, hasModules, showShelter, showLabels, envConfig]);
 
   if (!hasModules) {
     return (
@@ -876,29 +867,6 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = fal
           {isFullscreen ? <Minimize2 className="w-4 h-4 text-gray-600" /> : <Maximize2 className="w-4 h-4 text-gray-600" />}
         </button>
       </div>
-      {/* Sélecteur route — overlay en bas à droite */}
-      {onRoadConfigChange && (
-        <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1 bg-black/40 rounded-lg p-1">
-          {([
-            { id: "simple" as RoadConfig, label: "Route" },
-            { id: "parking" as RoadConfig, label: "Parking" },
-            { id: "cyclable" as RoadConfig, label: "Vélo" },
-          ]).map((opt) => (
-            <button
-              key={opt.id}
-              onClick={() => onRoadConfigChange(opt.id)}
-              className={`px-2.5 py-1 text-[10px] font-medium rounded-md transition-colors ${
-                roadConfig === opt.id
-                  ? "bg-white text-gray-800"
-                  : "text-white/70 hover:text-white hover:bg-white/20"
-              }`}
-              type="button"
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      )}
       {/* Info contrôles */}
       <div className="absolute bottom-2 left-2 z-10 text-[10px] text-white/60 bg-black/30 rounded px-2 py-1">
         Clic gauche : orbiter · Clic droit / Shift+clic : déplacer · Molette : zoomer

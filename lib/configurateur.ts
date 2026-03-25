@@ -22,7 +22,13 @@ export type ModuleRef =
 export type ModuleRow = 1 | 2 | 3 | 4;
 export type NbRangees = 1 | 2 | 3 | 4;
 export type RampeType = "laterale" | "arriere";
-export type RoadConfig = "simple" | "parking" | "cyclable";
+
+export interface EnvironmentConfig {
+  trottoir: number;   // largeur trottoir en m (ex: 3.0)
+  parking: number;    // largeur parking en m (0 = pas de parking)
+  cyclable: number;   // largeur piste cyclable en m (0 = pas de piste)
+  voie: number;       // largeur voie de circulation en m (ex: 3.5)
+}
 export type ModuleRole = "rampe" | "lateral" | "central" | "jonction" | "fin" | "vide";
 
 export interface ModuleSpec {
