@@ -139,27 +139,22 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         // --- Layout Z -- all rows on road (chaussee), extending from curb outward ----
         //
         // LAYOUT (Z axis, from back to front):
-        //   TROTTOIR (surélevé 150mm) → BORDURE → CANIVEAU (espace eau) → RAMPES ARRIERE → RANG 1 → RANG 2 → ... → ROUTE
+        //   TROTTOIR (140mm) → BORDURE → [rampes en pont 510mm] → RANG 1 → RANG 2 → ... → ROUTE
+        //   La rampe s'appuie sur la bordure trottoir, quasi collée (50mm de jeu pour l'eau)
         //
         const TROT_HEIGHT = 0.14;       // trottoir surélevé 140mm
-        const CANIVEAU_GAP = 0.6;       // espace caniveau entre trottoir et rampes (600mm)
+        const CANIVEAU_GAP = 0.05;      // 50mm jeu entre bordure et rampe (eau dessous)
         const RAMPE_DEPTH = 0.51;       // profondeur rampe arrière (510mm)
         const RAMPE_THICKNESS = 0.04;   // épaisseur dalle rampe 40mm
 
         const QUAI_DEPTH = nbRangees * ROW_DEPTH + (nbRangees - 1) * GAP;
 
         // Z positions: rang 1 center est à Z = 0
-        // Derrière le rang 1 : rampes arrière, caniveau, bordure, trottoir
-        const QUAI_BACK = -ROW_DEPTH / 2;                    // bord arrière rang 1
-        const RAMPE_BACK = QUAI_BACK - RAMPE_DEPTH;           // bord arrière des rampes
-        const CANIVEAU_BACK = RAMPE_BACK - CANIVEAU_GAP;       // bord arrière caniveau
-        const CURB_Z = CANIVEAU_BACK;                          // bordure trottoir
-        const QUAI_FRONT = QUAI_BACK + QUAI_DEPTH;            // bord avant dernier rang
+        const QUAI_BACK = -ROW_DEPTH / 2;                            // bord arrière rang 1
+        const CURB_Z = QUAI_BACK - RAMPE_DEPTH - CANIVEAU_GAP;       // bordure trottoir
+        const QUAI_FRONT = QUAI_BACK + QUAI_DEPTH;                   // bord avant dernier rang
 
-        // Route commence à la bordure (quai sur la route)
-        const ROUTE_START = CURB_Z;
-
-        // --- Trottoir surélevé (150mm) ----
+        // --- Trottoir surélevé (140mm) ----
         const TROT_WIDTH = 3;
         const trot = new THREE.Mesh(
           new THREE.BoxGeometry(maxLen + 4, TROT_HEIGHT, TROT_WIDTH),
@@ -169,36 +164,30 @@ export function QuaiView3D({ modulesByRow, nbRangees, coloris, showShelter = tru
         trot.receiveShadow = true;
         scene.add(trot);
 
-        // Bordure trottoir
+        // Bordure trottoir (face avant, côté quai)
         const bordure = new THREE.Mesh(
-          new THREE.BoxGeometry(maxLen + 4, TROT_HEIGHT + 0.02, 0.1),
+          new THREE.BoxGeometry(maxLen + 4, TROT_HEIGHT + 0.02, 0.08),
           new THREE.MeshStandardMaterial({ color: "#A0A0A0", roughness: 0.7 })
         );
-        bordure.position.set(cx, (TROT_HEIGHT + 0.02) / 2, CURB_Z + 0.05);
+        bordure.position.set(cx, (TROT_HEIGHT + 0.02) / 2, CURB_Z + 0.04);
         scene.add(bordure);
 
-        // Caniveau (espace vide entre bordure et rampes — sol visible)
-        const caniveauSol = new THREE.Mesh(
-          new THREE.PlaneGeometry(maxLen + 4, CANIVEAU_GAP + RAMPE_DEPTH),
-          new THREE.MeshStandardMaterial({ color: "#555555", roughness: 0.95 })
-        );
-        caniveauSol.rotation.x = -Math.PI / 2;
-        caniveauSol.position.set(cx, -0.003, CURB_Z + (CANIVEAU_GAP + RAMPE_DEPTH) / 2);
-        scene.add(caniveauSol);
-
-        // --- Route (chaussée, sous le quai et devant) ----
-        const ROUTE_WIDTH = 7 + QUAI_DEPTH + CANIVEAU_GAP + RAMPE_DEPTH;
+        // --- Route (chaussée unique, du trottoir jusqu'à devant le quai) ----
+        const ROUTE_EXTRA = 5; // route visible devant le quai
+        const ROUTE_START_Z = CURB_Z + 0.08; // juste après la bordure
+        const ROUTE_END_Z = QUAI_FRONT + ROUTE_EXTRA;
+        const ROUTE_WIDTH = ROUTE_END_Z - ROUTE_START_Z;
         const ground = new THREE.Mesh(
           new THREE.PlaneGeometry(maxLen + 8, ROUTE_WIDTH),
           new THREE.MeshStandardMaterial({ color: "#3a3a3a", roughness: 0.95 })
         );
         ground.rotation.x = -Math.PI / 2;
-        ground.position.set(cx, -0.005, CURB_Z + ROUTE_WIDTH / 2);
+        ground.position.set(cx, -0.005, ROUTE_START_Z + ROUTE_WIDTH / 2);
         ground.receiveShadow = true;
         scene.add(ground);
 
-        // --- Marquage route (centré sur la chaussée) ----
-        const ROAD_CENTER_Z = (QUAI_FRONT + QUAI_FRONT + 7) / 2; // milieu de la route
+        // --- Marquage route (centré sur la voie devant le quai) ----
+        const ROAD_CENTER_Z = QUAI_FRONT + ROUTE_EXTRA / 2;
         const dashGeo = new THREE.PlaneGeometry(0.7, 0.07);
         const dashMat = new THREE.MeshBasicMaterial({ color: "#E8E4D0", transparent: true, opacity: 0.5 });
         for (let i = 0; i < Math.floor((maxLen + 2) / 1.4); i++) {
