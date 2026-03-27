@@ -5,6 +5,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { RealisationsGrid } from "@/components/realisations/RealisationsGrid";
 import { prisma } from "@/lib/prisma";
 import type { Realisation } from "@/lib/types";
+import { getCmsOverrides } from "@/lib/cms";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -34,6 +35,7 @@ export default async function RealisationsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("realisations");
+  const cms = await getCmsOverrides("realisations", locale);
   const realisations = await getRealisations();
   const totalMl = realisations.reduce((s, r) => s + r.longueurMl, 0);
   const totalStations = realisations.reduce((s, r) => s + r.nbStations, 0);
@@ -42,7 +44,7 @@ export default async function RealisationsPage({ params }: Props) {
     <div>
       <section className="bg-neutral-light py-16 lg:py-24">
         <Container>
-          <SectionHeader titre={t("titre")} sousTitre={t("sousTitre")} />
+          <SectionHeader titre={cms.titre || t("titre")} sousTitre={cms.sous_titre || t("sousTitre")} />
           <div className="flex flex-wrap justify-center gap-8 mt-8">
             <div className="text-center">
               <div className="text-3xl font-bold text-primary">{realisations.length}</div>

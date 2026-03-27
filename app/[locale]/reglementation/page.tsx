@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { getCmsOverrides } from "@/lib/cms";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -22,12 +23,13 @@ export default async function ReglementationPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("reglementation");
+  const cms = await getCmsOverrides("reglementation", locale);
 
   return (
     <div>
       <section className="bg-neutral-light py-16 lg:py-24">
         <Container>
-          <SectionHeader titre={t("titre")} sousTitre={t("sousTitre")} />
+          <SectionHeader titre={cms.titre || t("titre")} sousTitre={cms.sous_titre || t("sousTitre")} />
         </Container>
       </section>
 

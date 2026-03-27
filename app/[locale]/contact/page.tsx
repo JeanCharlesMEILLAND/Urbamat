@@ -5,6 +5,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { LeadForm } from "@/components/LeadForm";
 import { SITE_CONFIG } from "@/lib/constants";
+import { getCmsOverrides } from "@/lib/cms";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -23,6 +24,7 @@ export default async function ContactPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("contact");
+  const cms = await getCmsOverrides("contact", locale);
 
   const CONTACT_INFO = [
     { icon: Phone, label: t("telephone"), value: SITE_CONFIG.tel, href: "tel:+33388010961" },
@@ -35,7 +37,7 @@ export default async function ContactPage({ params }: Props) {
     <div>
       <section className="bg-neutral-light py-16 lg:py-24">
         <Container>
-          <SectionHeader titre={t("titre")} sousTitre={t("sousTitre")} />
+          <SectionHeader titre={cms.titre || t("titre")} sousTitre={cms.sous_titre || t("sousTitre")} />
         </Container>
       </section>
 

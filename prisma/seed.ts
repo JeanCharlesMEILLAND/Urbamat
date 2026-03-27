@@ -134,9 +134,9 @@ async function main() {
 
   for (const pc of pageContents) {
     await prisma.pageContent.upsert({
-      where: { page_section: { page: pc.page, section: pc.section } },
+      where: { page_section_locale: { page: pc.page, section: pc.section, locale: "fr" } },
       update: { contenu: pc.contenu, ordre: pc.ordre },
-      create: { ...pc, type: "texte" },
+      create: { ...pc, type: "texte", locale: "fr" },
     });
     console.log(`✓ Page: ${pc.page} / ${pc.section}`);
   }

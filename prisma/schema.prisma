@@ -87,13 +87,26 @@ model PageContent {
   id        String      @id @default(cuid())
   page      String      // "home", "produit", "contact", etc.
   section   String      // "hero_titre", "hero_description", etc.
+  locale    String      @default("fr") // "fr", "en", "de"
   contenu   String
   type      ContentType @default(texte)
   ordre     Int         @default(0)
   updatedAt DateTime    @updatedAt
 
-  @@unique([page, section])
+  @@unique([page, section, locale])
   @@map("page_contents")
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  alt       String   @default("")
+  size      Int      @default(0)
+  mimeType  String   @default("image/jpeg")
+  createdAt DateTime @default(now())
+
+  @@map("medias")
 }
 
 enum ContentType {
