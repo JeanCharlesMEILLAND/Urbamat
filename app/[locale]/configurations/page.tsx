@@ -6,6 +6,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
+import { CONFIG_DIAGRAMS } from "@/components/produit/ConfigurationDiagrams";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -16,13 +17,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const CONFIG_IDS = ["avancee", "avancee_velo", "ile", "ile_velo"] as const;
-
-const SCHEMA_VISUALS: Record<string, { top: string; bottom: string; color: string }> = {
-  avancee: { top: "━━━━━━━━━━━━━━ VOIE BUS ━━━━━━━━━━━━━━", bottom: "▓▓▓▓▓▓████████▓▓▓ TROTTOIR ▓▓▓▓▓▓▓▓▓▓", color: "from-primary/10 to-primary/5" },
-  avancee_velo: { top: "━━━━━━━━━━━━━━ VOIE BUS ━━━━━━━━━━━━━━", bottom: "🚲🚲🚲 ▓▓████████▓▓ TROTTOIR ▓▓▓▓▓▓▓▓", color: "from-emerald-50 to-emerald-100/30" },
-  ile: { top: "━━━━━ VOIE ━━━━━ ██████ ━━━━━ VOIE ━━━━━", bottom: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓", color: "from-accent/10 to-accent/5" },
-  ile_velo: { top: "━━ VOIE ━━ 🚲 ██████ 🚲 ━━ VOIE ━━", bottom: "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓", color: "from-blue-50 to-blue-100/30" },
-};
 
 export default async function ConfigurationsPage({ params }: Props) {
   const { locale } = await params;
@@ -42,22 +36,16 @@ export default async function ConfigurationsPage({ params }: Props) {
         <Container>
           <div className="space-y-20">
             {CONFIG_IDS.map((id, index) => {
-              const visual = SCHEMA_VISUALS[id];
+              const Diagram = CONFIG_DIAGRAMS[id];
               const isEven = index % 2 === 0;
 
               return (
                 <div key={id} id={id} className="scroll-mt-24">
                   <div className={cn("grid grid-cols-1 lg:grid-cols-2 gap-12 items-center", !isEven && "lg:grid-flow-dense")}>
                     <div className={cn(!isEven && "lg:col-start-2")}>
-                      <div className={cn("rounded-xl p-8 bg-gradient-to-br", visual.color, "border border-gray-100")}>
-                        <div className="font-mono text-xs text-center space-y-6 text-gray-500">
-                          <div className="bg-white/60 rounded p-3 tracking-wider">{visual.top}</div>
-                          <div className="flex justify-center">
-                            <div className="bg-primary/20 border-2 border-primary/40 rounded px-6 py-3 text-primary font-bold text-sm">QUAI URBAQUAI</div>
-                          </div>
-                          <div className="bg-white/60 rounded p-3 tracking-wider">{visual.bottom}</div>
-                        </div>
-                        <p className="text-center text-xs text-gray-400 mt-4">
+                      <div className="rounded-xl p-4 lg:p-6 bg-gray-50 border border-gray-100 shadow-sm">
+                        <Diagram className="w-full h-auto" />
+                        <p className="text-center text-xs text-gray-400 mt-3">
                           {tPage("vueSchematique")} {tConfig(`${id}.sousTitre`)}
                         </p>
                       </div>

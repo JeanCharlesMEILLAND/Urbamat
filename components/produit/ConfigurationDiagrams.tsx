@@ -2,12 +2,9 @@
  * Schémas SVG des 4 configurations URBAQUAI : avancée trottoir, avancée + piste cyclable,
  * île, île + piste cyclable. Vue de dessus.
  *
- * Layout vertical commun pour chaque carte :
- *   - Trottoir en haut
- *   - (Piste cyclable si présente)
- *   - Quai URBAQUAI + bus
- *   - Chaussée principale
- *   - Trottoir / île si configuration en île
+ * Exporte :
+ *   - 4 composants SVG individuels (utilisables seuls dans une card)
+ *   - <ConfigurationDiagrams /> : grille 2x2 avec cards titrées (page /produit)
  */
 
 const ROAD_FILL = "#525a64";
@@ -19,9 +16,9 @@ const CONCRETE_DARK = "#9b9489";
 const RUBAN_FILL = "#1f1c19";
 const BUS_FILL = "#1f2937";
 const BUS_WINDOW = "#cbd5e1";
-const BIKE_FILL = "#bbf7d0";       // vert clair piste cyclable
-const BIKE_LINE = "#16a34a";        // vert ligne
-const PEDESTRIAN_FILL = "#fde047";  // marquage piéton
+const BIKE_FILL = "#bbf7d0";
+const BIKE_LINE = "#16a34a";
+const PEDESTRIAN_FILL = "#fde047";
 
 function Bus({ x, y, width = 110, height = 28 }: { x: number; y: number; width?: number; height?: number }) {
   return (
@@ -41,20 +38,20 @@ function QuaiUrbaquai({
   y,
   width,
   depth = 26,
+  showLabel = true,
 }: {
   x: number;
   y: number;
   width: number;
   depth?: number;
+  showLabel?: boolean;
 }) {
   const leftW = width * 0.25;
   const midW = width * 0.50;
-  const rightW = width * 0.25;
   const chamfer = 3;
 
   return (
     <g transform={`translate(${x}, ${y})`}>
-      {/* D-004 fin gauche */}
       <path
         d={`M0 0 L${leftW} 0 L${leftW} ${depth} L${chamfer} ${depth} L0 ${depth - chamfer} Z`}
         fill={CONCRETE_FILL}
@@ -73,7 +70,6 @@ function QuaiUrbaquai({
         />
       ))}
 
-      {/* D-002 central */}
       <rect
         x={leftW}
         y={0}
@@ -95,7 +91,6 @@ function QuaiUrbaquai({
         opacity={0.6}
       />
 
-      {/* D-003 fin droite */}
       <path
         d={`M${leftW + midW} 0 L${width} 0 L${width} ${depth - chamfer} L${width - chamfer} ${depth} L${leftW + midW} ${depth} Z`}
         fill={CONCRETE_FILL}
@@ -103,22 +98,23 @@ function QuaiUrbaquai({
         strokeWidth={0.5}
       />
 
-      <text
-        x={width / 2}
-        y={depth / 2 + 3}
-        textAnchor="middle"
-        fontSize={7}
-        fontFamily="monospace"
-        fill={CONCRETE_DARK}
-        opacity={0.7}
-      >
-        URBAQUAI
-      </text>
+      {showLabel && (
+        <text
+          x={width / 2}
+          y={depth / 2 + 3}
+          textAnchor="middle"
+          fontSize={7}
+          fontFamily="monospace"
+          fill={CONCRETE_DARK}
+          opacity={0.7}
+        >
+          URBAQUAI
+        </text>
+      )}
     </g>
   );
 }
 
-/** Pictogramme vélo (simplifié) sur la piste cyclable */
 function BikeIcon({ x, y, size = 14 }: { x: number; y: number; size?: number }) {
   return (
     <g transform={`translate(${x}, ${y})`}>
@@ -136,7 +132,6 @@ function BikeIcon({ x, y, size = 14 }: { x: number; y: number; size?: number }) 
   );
 }
 
-/** Marquage passage piéton */
 function CrossWalk({ x, y, width, height = 14, vertical = false }: { x: number; y: number; width: number; height?: number; vertical?: boolean }) {
   if (vertical) {
     const stripes = Math.floor(height / 4);
@@ -158,189 +153,162 @@ function CrossWalk({ x, y, width, height = 14, vertical = false }: { x: number; 
   );
 }
 
-function Diagram({
-  title,
-  subtitle,
-  children,
-  viewBox = "0 0 380 220",
-}: {
-  title: string;
-  subtitle: string;
-  children: React.ReactNode;
-  viewBox?: string;
-}) {
+const QUAI_X = 130;
+const QUAI_W = 120;
+const QUAI_DEPTH = 26;
+
+interface DiagramSvgProps {
+  className?: string;
+  showLabel?: boolean;
+}
+
+/* ─── 1. Avancée de trottoir ─────────────────────────────── */
+export function AvanceeTrottoirDiagram({ className = "w-full h-auto", showLabel = true }: DiagramSvgProps) {
+  return (
+    <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden>
+      <rect x={0} y={0} width={380} height={50} fill={SIDEWALK_FILL} />
+      <rect x={QUAI_X - 10} y={50} width={QUAI_W + 20} height={QUAI_DEPTH + 8} fill={SIDEWALK_FILL} />
+      <rect x={0} y={48.5} width={QUAI_X - 10} height={1.5} fill={CURB_FILL} />
+      <rect x={QUAI_X + QUAI_W + 10} y={48.5} width={380 - (QUAI_X + QUAI_W + 10)} height={1.5} fill={CURB_FILL} />
+      <rect x={QUAI_X - 10} y={50 + QUAI_DEPTH + 6.5} width={QUAI_W + 20} height={1.5} fill={CURB_FILL} />
+
+      <QuaiUrbaquai x={QUAI_X} y={56} width={QUAI_W} showLabel={showLabel} />
+
+      <rect x={0} y={50 + QUAI_DEPTH + 8} width={380} height={220 - (50 + QUAI_DEPTH + 8)} fill={ROAD_FILL} />
+      <line x1={0} y1={140} x2={380} y2={140} stroke={ROAD_LINE} strokeWidth={1} strokeDasharray="8 6" />
+      <Bus x={QUAI_X + 5} y={50 + QUAI_DEPTH + 18} />
+    </svg>
+  );
+}
+
+/* ─── 2. Avancée + piste cyclable ────────────────────────── */
+export function AvanceeVeloDiagram({ className = "w-full h-auto", showLabel = true }: DiagramSvgProps) {
+  return (
+    <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden>
+      <rect x={0} y={0} width={380} height={40} fill={SIDEWALK_FILL} />
+
+      <rect x={0} y={40} width={380} height={14} fill={BIKE_FILL} />
+      <line x1={0} y1={40} x2={380} y2={40} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
+      <line x1={0} y1={54} x2={380} y2={54} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
+      <BikeIcon x={50} y={47} />
+      <BikeIcon x={310} y={47} />
+
+      <rect x={QUAI_X - 10} y={54} width={QUAI_W + 20} height={QUAI_DEPTH + 8} fill={SIDEWALK_FILL} />
+      <rect x={QUAI_X - 10} y={54 + QUAI_DEPTH + 6.5} width={QUAI_W + 20} height={1.5} fill={CURB_FILL} />
+      <QuaiUrbaquai x={QUAI_X} y={60} width={QUAI_W} showLabel={showLabel} />
+
+      <rect x={0} y={54 + QUAI_DEPTH + 8} width={380} height={220 - (54 + QUAI_DEPTH + 8)} fill={ROAD_FILL} />
+      <line x1={0} y1={148} x2={380} y2={148} stroke={ROAD_LINE} strokeWidth={1} strokeDasharray="8 6" />
+      <Bus x={QUAI_X + 5} y={54 + QUAI_DEPTH + 18} />
+    </svg>
+  );
+}
+
+/* ─── 3. Configuration en île ────────────────────────────── */
+export function IleDiagram({ className = "w-full h-auto", showLabel = true }: DiagramSvgProps) {
+  return (
+    <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden>
+      <rect x={0} y={0} width={380} height={36} fill={SIDEWALK_FILL} />
+      <rect x={0} y={34.5} width={380} height={1.5} fill={CURB_FILL} />
+
+      <rect x={0} y={36} width={380} height={32} fill={ROAD_FILL} />
+      <Bus x={QUAI_X + 5} y={42} />
+
+      <rect x={QUAI_X - 12} y={70} width={QUAI_W + 24} height={QUAI_DEPTH + 14} fill={SIDEWALK_FILL} />
+      <rect x={QUAI_X - 12} y={68.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
+      <rect x={QUAI_X - 12} y={70 + QUAI_DEPTH + 12.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
+      <QuaiUrbaquai x={QUAI_X} y={76} width={QUAI_W} showLabel={showLabel} />
+
+      <CrossWalk x={QUAI_X + QUAI_W / 2 - 6} y={36} width={12} height={32} vertical />
+
+      <rect x={0} y={70 + QUAI_DEPTH + 14} width={380} height={220 - (70 + QUAI_DEPTH + 14)} fill={ROAD_FILL} />
+      <line
+        x1={0}
+        y1={70 + QUAI_DEPTH + 14 + 30}
+        x2={380}
+        y2={70 + QUAI_DEPTH + 14 + 30}
+        stroke={ROAD_LINE}
+        strokeWidth={1}
+        strokeDasharray="8 6"
+      />
+    </svg>
+  );
+}
+
+/* ─── 4. Île + piste cyclable ────────────────────────────── */
+export function IleVeloDiagram({ className = "w-full h-auto", showLabel = true }: DiagramSvgProps) {
+  return (
+    <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden>
+      <rect x={0} y={0} width={380} height={30} fill={SIDEWALK_FILL} />
+      <rect x={0} y={28.5} width={380} height={1.5} fill={CURB_FILL} />
+
+      <rect x={0} y={30} width={380} height={14} fill={BIKE_FILL} />
+      <line x1={0} y1={30} x2={380} y2={30} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
+      <line x1={0} y1={44} x2={380} y2={44} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
+      <BikeIcon x={50} y={37} />
+      <BikeIcon x={310} y={37} />
+
+      <rect x={0} y={44} width={380} height={32} fill={ROAD_FILL} />
+      <Bus x={QUAI_X + 5} y={50} />
+
+      <rect x={QUAI_X - 12} y={78} width={QUAI_W + 24} height={QUAI_DEPTH + 14} fill={SIDEWALK_FILL} />
+      <rect x={QUAI_X - 12} y={76.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
+      <rect x={QUAI_X - 12} y={78 + QUAI_DEPTH + 12.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
+      <QuaiUrbaquai x={QUAI_X} y={84} width={QUAI_W} showLabel={showLabel} />
+
+      <CrossWalk x={QUAI_X + QUAI_W / 2 - 6} y={30} width={12} height={46} vertical />
+
+      <rect x={0} y={78 + QUAI_DEPTH + 14} width={380} height={220 - (78 + QUAI_DEPTH + 14)} fill={ROAD_FILL} />
+      <line
+        x1={0}
+        y1={78 + QUAI_DEPTH + 14 + 28}
+        x2={380}
+        y2={78 + QUAI_DEPTH + 14 + 28}
+        stroke={ROAD_LINE}
+        strokeWidth={1}
+        strokeDasharray="8 6"
+      />
+    </svg>
+  );
+}
+
+/* ────────── Card-wrapper helper (utilisé par /produit) ────────── */
+function DiagramCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-xl ring-1 ring-black/5 shadow-sm overflow-hidden">
       <div className="px-4 py-3 border-b border-gray-100">
-        <p className="text-[11px] uppercase tracking-widest text-accent font-bold">
-          {subtitle}
-        </p>
+        <p className="text-[11px] uppercase tracking-widest text-accent font-bold">{subtitle}</p>
         <h3 className="text-sm font-bold text-neutral-dark mt-0.5">{title}</h3>
       </div>
-      <div className="bg-gray-50 p-3">
-        <svg viewBox={viewBox} xmlns="http://www.w3.org/2000/svg" className="w-full h-auto" aria-hidden>
-          {children}
-        </svg>
-      </div>
+      <div className="bg-gray-50 p-3">{children}</div>
     </div>
   );
 }
 
+/** Grille 2×2 utilisée sur la page /produit (avec cards titrées). */
 export function ConfigurationDiagrams() {
-  const QUAI_X = 130;
-  const QUAI_W = 120;
-  const QUAI_DEPTH = 26;
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-
-      {/* ─── 1. Avancée de trottoir ─────────────────────────────── */}
-      <Diagram title="Avancée de trottoir" subtitle="Configuration 1">
-        {/* Trottoir principal en haut */}
-        <rect x={0} y={0} width={380} height={50} fill={SIDEWALK_FILL} />
-        {/* Avancée du trottoir : extension dans la chaussée à l'emplacement du quai */}
-        <rect x={QUAI_X - 10} y={50} width={QUAI_W + 20} height={QUAI_DEPTH + 8} fill={SIDEWALK_FILL} />
-        {/* Bordure */}
-        <rect x={0} y={48.5} width={QUAI_X - 10} height={1.5} fill={CURB_FILL} />
-        <rect x={QUAI_X + QUAI_W + 10} y={48.5} width={380 - (QUAI_X + QUAI_W + 10)} height={1.5} fill={CURB_FILL} />
-        {/* Bordure de l'avancée (côté chaussée) */}
-        <rect x={QUAI_X - 10} y={50 + QUAI_DEPTH + 6.5} width={QUAI_W + 20} height={1.5} fill={CURB_FILL} />
-
-        {/* Quai URBAQUAI au bord de l'avancée */}
-        <QuaiUrbaquai x={QUAI_X} y={56} width={QUAI_W} />
-
-        {/* Chaussée */}
-        <rect x={0} y={50 + QUAI_DEPTH + 8} width={380} height={220 - (50 + QUAI_DEPTH + 8)} fill={ROAD_FILL} />
-        <line
-          x1={0}
-          y1={140}
-          x2={380}
-          y2={140}
-          stroke={ROAD_LINE}
-          strokeWidth={1}
-          strokeDasharray="8 6"
-        />
-
-        {/* Bus stationné contre le quai */}
-        <Bus x={QUAI_X + 5} y={50 + QUAI_DEPTH + 18} />
-
-        {/* Légende */}
-        <text x={5} y={20} fontSize={8} fontFamily="monospace" fill="#374151">Trottoir</text>
-        <text x={QUAI_X + QUAI_W / 2} y={42} textAnchor="middle" fontSize={7} fontFamily="monospace" fill="#374151" opacity={0.7}>↓ avancée</text>
-      </Diagram>
-
-      {/* ─── 2. Avancée + piste cyclable ────────────────────────── */}
-      <Diagram title="Avancée + piste cyclable" subtitle="Configuration 2">
-        {/* Trottoir */}
-        <rect x={0} y={0} width={380} height={40} fill={SIDEWALK_FILL} />
-
-        {/* Piste cyclable contournant l'avancée par l'arrière (passe SOUS le quai côté trottoir) */}
-        <rect x={0} y={40} width={380} height={14} fill={BIKE_FILL} />
-        <line x1={0} y1={40} x2={380} y2={40} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
-        <line x1={0} y1={54} x2={380} y2={54} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
-        <BikeIcon x={50} y={47} />
-        <BikeIcon x={310} y={47} />
-
-        {/* Avancée + quai derrière la piste */}
-        <rect x={QUAI_X - 10} y={54} width={QUAI_W + 20} height={QUAI_DEPTH + 8} fill={SIDEWALK_FILL} />
-        <rect x={QUAI_X - 10} y={54 + QUAI_DEPTH + 6.5} width={QUAI_W + 20} height={1.5} fill={CURB_FILL} />
-        <QuaiUrbaquai x={QUAI_X} y={60} width={QUAI_W} />
-
-        {/* Chaussée */}
-        <rect x={0} y={54 + QUAI_DEPTH + 8} width={380} height={220 - (54 + QUAI_DEPTH + 8)} fill={ROAD_FILL} />
-        <line
-          x1={0}
-          y1={148}
-          x2={380}
-          y2={148}
-          stroke={ROAD_LINE}
-          strokeWidth={1}
-          strokeDasharray="8 6"
-        />
-
-        <Bus x={QUAI_X + 5} y={54 + QUAI_DEPTH + 18} />
-
-        <text x={5} y={20} fontSize={8} fontFamily="monospace" fill="#374151">Trottoir</text>
-        <text x={5} y={51} fontSize={7} fontFamily="monospace" fill={BIKE_LINE}>Vélo</text>
-      </Diagram>
-
-      {/* ─── 3. Configuration en île ────────────────────────────── */}
-      <Diagram title="Configuration en île" subtitle="Configuration 3">
-        {/* Trottoir principal en haut */}
-        <rect x={0} y={0} width={380} height={36} fill={SIDEWALK_FILL} />
-        <rect x={0} y={34.5} width={380} height={1.5} fill={CURB_FILL} />
-
-        {/* Voie de bus (entre trottoir et île) */}
-        <rect x={0} y={36} width={380} height={32} fill={ROAD_FILL} />
-        {/* Bus circulant côté trottoir */}
-        <Bus x={QUAI_X + 5} y={42} />
-
-        {/* Île : quai URBAQUAI au milieu de la chaussée */}
-        <rect x={QUAI_X - 12} y={70} width={QUAI_W + 24} height={QUAI_DEPTH + 14} fill={SIDEWALK_FILL} />
-        <rect x={QUAI_X - 12} y={68.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
-        <rect x={QUAI_X - 12} y={70 + QUAI_DEPTH + 12.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
-        <QuaiUrbaquai x={QUAI_X} y={76} width={QUAI_W} />
-
-        {/* Passage piéton qui mène à l'île depuis le trottoir principal */}
-        <CrossWalk x={QUAI_X + QUAI_W / 2 - 6} y={36} width={12} height={32} vertical />
-
-        {/* Voie de circulation (autre sens) sous l'île */}
-        <rect x={0} y={70 + QUAI_DEPTH + 14} width={380} height={220 - (70 + QUAI_DEPTH + 14)} fill={ROAD_FILL} />
-        <line
-          x1={0}
-          y1={70 + QUAI_DEPTH + 14 + 30}
-          x2={380}
-          y2={70 + QUAI_DEPTH + 14 + 30}
-          stroke={ROAD_LINE}
-          strokeWidth={1}
-          strokeDasharray="8 6"
-        />
-
-        <text x={5} y={20} fontSize={8} fontFamily="monospace" fill="#374151">Trottoir</text>
-        <text x={QUAI_X + QUAI_W / 2} y={66} textAnchor="middle" fontSize={7} fontFamily="monospace" fill="#374151">↓ île ↓</text>
-      </Diagram>
-
-      {/* ─── 4. Île + piste cyclable ────────────────────────────── */}
-      <Diagram title="Île + piste cyclable" subtitle="Configuration 4">
-        {/* Trottoir */}
-        <rect x={0} y={0} width={380} height={30} fill={SIDEWALK_FILL} />
-        <rect x={0} y={28.5} width={380} height={1.5} fill={CURB_FILL} />
-
-        {/* Piste cyclable (entre trottoir et voie bus) */}
-        <rect x={0} y={30} width={380} height={14} fill={BIKE_FILL} />
-        <line x1={0} y1={30} x2={380} y2={30} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
-        <line x1={0} y1={44} x2={380} y2={44} stroke={BIKE_LINE} strokeWidth={1} strokeDasharray="4 3" />
-        <BikeIcon x={50} y={37} />
-        <BikeIcon x={310} y={37} />
-
-        {/* Voie bus (entre piste cyclable et île) */}
-        <rect x={0} y={44} width={380} height={32} fill={ROAD_FILL} />
-        <Bus x={QUAI_X + 5} y={50} />
-
-        {/* Île + quai URBAQUAI */}
-        <rect x={QUAI_X - 12} y={78} width={QUAI_W + 24} height={QUAI_DEPTH + 14} fill={SIDEWALK_FILL} />
-        <rect x={QUAI_X - 12} y={76.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
-        <rect x={QUAI_X - 12} y={78 + QUAI_DEPTH + 12.5} width={QUAI_W + 24} height={1.5} fill={CURB_FILL} />
-        <QuaiUrbaquai x={QUAI_X} y={84} width={QUAI_W} />
-
-        {/* Passage piéton trottoir → piste vélo → voie bus → île */}
-        <CrossWalk x={QUAI_X + QUAI_W / 2 - 6} y={30} width={12} height={46} vertical />
-
-        {/* Voie de circulation sous l'île */}
-        <rect x={0} y={78 + QUAI_DEPTH + 14} width={380} height={220 - (78 + QUAI_DEPTH + 14)} fill={ROAD_FILL} />
-        <line
-          x1={0}
-          y1={78 + QUAI_DEPTH + 14 + 28}
-          x2={380}
-          y2={78 + QUAI_DEPTH + 14 + 28}
-          stroke={ROAD_LINE}
-          strokeWidth={1}
-          strokeDasharray="8 6"
-        />
-
-        <text x={5} y={20} fontSize={7} fontFamily="monospace" fill="#374151">Trottoir</text>
-        <text x={5} y={42} fontSize={7} fontFamily="monospace" fill={BIKE_LINE}>Vélo</text>
-      </Diagram>
+      <DiagramCard title="Avancée de trottoir" subtitle="Configuration 1">
+        <AvanceeTrottoirDiagram />
+      </DiagramCard>
+      <DiagramCard title="Avancée + piste cyclable" subtitle="Configuration 2">
+        <AvanceeVeloDiagram />
+      </DiagramCard>
+      <DiagramCard title="Configuration en île" subtitle="Configuration 3">
+        <IleDiagram />
+      </DiagramCard>
+      <DiagramCard title="Île + piste cyclable" subtitle="Configuration 4">
+        <IleVeloDiagram />
+      </DiagramCard>
     </div>
   );
 }
+
+/** Map id config → composant SVG pour usage dans les listings (ex: ConfigurationsGrid de la home). */
+export const CONFIG_DIAGRAMS = {
+  avancee: AvanceeTrottoirDiagram,
+  avancee_velo: AvanceeVeloDiagram,
+  ile: IleDiagram,
+  ile_velo: IleVeloDiagram,
+} as const;

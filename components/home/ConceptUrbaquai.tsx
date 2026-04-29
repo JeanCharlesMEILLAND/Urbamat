@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
@@ -34,6 +34,31 @@ export function ConceptUrbaquai() {
   const tStats = useTranslations("stats");
   const [selectedColoris, setSelectedColoris] = useState<ColorisId>("granit-gris");
 
+  // ─── Scroll auto pour centrer la vidéo quand l'animation se lance ─────
+  const videoRef = useRef<HTMLDivElement>(null);
+  const hasScrolledRef = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || hasScrolledRef.current) return;
+    const el = videoRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        // Quand au moins 50% de la vidéo est visible et qu'on n'a pas encore scrollé,
+        // on centre automatiquement la vidéo dans le viewport.
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !hasScrolledRef.current) {
+          hasScrolledRef.current = true;
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      },
+      { threshold: [0, 0.5, 1] }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section id="concept" className="py-20 lg:py-28 bg-white scroll-mt-24" ref={ref}>
       <Container>
@@ -56,7 +81,7 @@ export function ConceptUrbaquai() {
           </div>
         </div>
 
-        <div className="mt-14 aspect-[16/7] overflow-hidden relative">
+        <div ref={videoRef} className="mt-14 aspect-[16/7] overflow-hidden relative scroll-mt-24">
           <QuaiAssemblyAnimation coloris={selectedColoris} />
         </div>
 
