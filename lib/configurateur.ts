@@ -236,6 +236,16 @@ export interface PlacedModule {
   rang: ModuleRow;  // numéro de rangée (1, 2 ou 3)
 }
 
+/** Modules rendus avec rotation 90° (leur "longueur" catalogue va sur Z, pas sur X). */
+export const ROTATED_90_MODULES = new Set<ModuleRef>(["D-007", "D-007a"]);
+
+/** Longueur effective d'un module le long de l'axe X (direction du rang).
+ * Utilisée pour le placement : pour les modules rotatés 90°, c'est la largeur catalogue. */
+export function getModuleXLength(ref: ModuleRef): number {
+  const spec = MODULE_CATALOG[ref];
+  return ROTATED_90_MODULES.has(ref) ? spec.largeur : spec.longueur;
+}
+
 export interface QuaiConfig {
   longueurDemandee: number; // mm
   longueurReelle: number;   // mm (calculée)

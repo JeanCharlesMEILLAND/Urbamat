@@ -4,16 +4,16 @@ import { Link } from "@/i18n/navigation";
 import { Container } from "@/components/ui/Container";
 import { SITE_CONFIG } from "@/lib/constants";
 
+// Liens conformes à l'arborescence URBAMAT (avril 2026).
+// Pages cachées pour l'instant : /urbaterra, /configurations, /realisations, /reglementation.
 const FOOTER_PRODUCT_LINKS = [
   { key: "urbaquai", href: "/produit" },
-  { key: "urbaterra", href: "/urbaterra" },
-  { key: "configurations", href: "/configurations" },
-  { key: "realisations", href: "/realisations" },
+  { key: "configurateur", href: "/configurateur" },
   { key: "telechargements", href: "/telechargements" },
 ] as const;
 
 const FOOTER_RESOURCE_LINKS = [
-  { key: "reglementation", href: "/reglementation" },
+  { key: "apropos", href: "/apropos" },
   { key: "contact", href: "/contact" },
 ] as const;
 
@@ -27,12 +27,14 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Colonne 1 — Marque */}
             <div className="lg:col-span-1">
-              <Link href="/" className="inline-block" aria-label="URBAQUAI - Accueil">
+              <Link href="/" className="inline-block" aria-label="URBAMAT - Accueil">
+                {/* Même logo que la navbar — SVG URBAMAT, mis en blanc via CSS filter
+                    (le SVG contient des fills hardcodés #06030D, brightness-0 invert les passe en blanc). */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/logo-urbaquai.png"
-                  alt="URBAQUAI®"
-                  className="h-8 w-auto brightness-0 invert"
+                  src="/images/logo-urbamat.svg"
+                  alt="URBAMAT"
+                  className="h-7 w-auto brightness-0 invert"
                 />
               </Link>
               <p className="mt-4 text-sm leading-relaxed text-gray-400">

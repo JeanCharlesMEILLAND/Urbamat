@@ -16,10 +16,12 @@
     "contact": "Kontakt",
     "links": {
       "urbaquai": "URBAQUAI — Bushaltestelle",
+      "configurateur": "3D-Konfigurator",
+      "telechargements": "Downloads",
+      "apropos": "Über URBAMAT",
       "urbaterra": "URBATERRA — Terrasse",
       "configurations": "Konfigurationen",
       "realisations": "Referenzen",
-      "telechargements": "Downloads",
       "reglementation": "Vorschriften",
       "contact": "Kontakt"
     },

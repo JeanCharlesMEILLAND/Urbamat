@@ -2,16 +2,18 @@
 
 import { useState, useCallback, lazy, Suspense } from "react";
 import { useTranslations } from "next-intl";
-import { RotateCcw, Send, Download, Box, Layout, Tag, EyeOff } from "lucide-react";
+import { RotateCcw, Send, Download, Box, Layout } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ModulePalette } from "@/components/configurateur/ModulePalette";
 import { QuaiCanvas } from "@/components/configurateur/QuaiCanvas";
 import { BomTable } from "@/components/configurateur/BomTable";
 import { StepOptions } from "@/components/configurateur/StepOptions";
+import { SavedQuaiManager, type SavedQuai } from "@/components/configurateur/SavedQuaiManager";
 import { LeadForm } from "@/components/LeadForm";
 import {
   MODULE_CATALOG,
+  getModuleXLength,
   type PlacedModule,
   type ModuleRef,
   type ModuleRow,
@@ -20,7 +22,7 @@ import {
 } from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
-const QuaiView3D = lazy(() => import("@/components/configurateur/QuaiView3D").then((m) => ({ default: m.QuaiView3D })));
+const QuaiView3D = lazy(() => import("@/components/configurateur/QuaiView3DCombo").then((m) => ({ default: m.QuaiView3DCombo })));
 
 export default function ConfigurateurPage() {
   const t = useTranslations("configurateur");
@@ -30,7 +32,6 @@ export default function ConfigurateurPage() {
   const [coloris, setColoris] = useState("granit-gris");
   const [showForm, setShowForm] = useState(false);
   const [view3D, setView3D] = useState(false);
-  const [showShelter, setShowShelter] = useState(false);
   const [showLabels, setShowLabels] = useState(false);
   const [envConfig, setEnvConfig] = useState<EnvironmentConfig>({
     trottoir: 3.0, parking: 0, cyclable: 0, voie: 3.5,
@@ -51,7 +52,7 @@ export default function ConfigurateurPage() {
     let x = 0;
     return modules.map((m) => {
       const updated = { ...m, x };
-      x += m.spec.longueur;
+      x += getModuleXLength(m.ref);
       return updated;
     });
   }
@@ -65,7 +66,7 @@ export default function ConfigurateurPage() {
       const spec = MODULE_CATALOG[selectedModule];
 
       updateRow(row, (prev) => {
-        const x = prev.reduce((sum, m) => sum + m.spec.longueur, 0);
+        const x = prev.reduce((sum, m) => sum + getModuleXLength(m.ref), 0);
         const newModule: PlacedModule = { ref: selectedModule, spec, x, rang: row };
         return [...prev, newModule];
       });
@@ -113,26 +114,29 @@ export default function ConfigurateurPage() {
     setSelectedModule(null);
   }
 
-  // ─── Template : plan de référence 19 m ─────────────────────────
+  function handleLoadSaved(s: SavedQuai) {
+    setNbRangees(s.nbRangees);
+    setModulesByRow(s.modulesByRow);
+    setColoris(s.coloris);
+    setEnvConfig(s.envConfig);
+    setSelectedModule(null);
+  }
+
+  // ─── Template : double quai îlot 10m (validé le 2026-04-29) ───────
+  // Rang 1 (bord arrière) : D-004a + D-005 + D-007a + D-005 + D-003a
+  // Rang 2 (chaussée)     : D-004 + D-002 + D-007 + D-002 + D-003
   function handleLoadTemplate() {
     const template: { ref: ModuleRef; rang: ModuleRow }[] = [
-      // Rang 1 (trottoir)
-      { ref: "D-009", rang: 1 },
       { ref: "D-004a", rang: 1 },
-      { ref: "D-005", rang: 1 },
-      { ref: "D-005", rang: 1 },
+      { ref: "D-005",  rang: 1 },
       { ref: "D-007a", rang: 1 },
-      { ref: "D-005", rang: 1 },
-      { ref: "D-005", rang: 1 },
+      { ref: "D-005",  rang: 1 },
       { ref: "D-003a", rang: 1 },
-      // Rang 2 (chaussée)
-      { ref: "D-004", rang: 2 },
-      { ref: "D-002", rang: 2 },
-      { ref: "D-002", rang: 2 },
-      { ref: "D-007", rang: 2 },
-      { ref: "D-002", rang: 2 },
-      { ref: "D-002", rang: 2 },
-      { ref: "D-003", rang: 2 },
+      { ref: "D-004",  rang: 2 },
+      { ref: "D-002",  rang: 2 },
+      { ref: "D-007",  rang: 2 },
+      { ref: "D-002",  rang: 2 },
+      { ref: "D-003",  rang: 2 },
     ];
 
     const rows: Record<ModuleRow, PlacedModule[]> = { 1: [], 2: [], 3: [], 4: [] };
@@ -141,7 +145,7 @@ export default function ConfigurateurPage() {
     for (const t of template) {
       const spec = MODULE_CATALOG[t.ref];
       rows[t.rang].push({ ref: t.ref, spec, x: xByRow[t.rang], rang: t.rang });
-      xByRow[t.rang] += spec.longueur;
+      xByRow[t.rang] += getModuleXLength(t.ref);
     }
 
     setModulesByRow(rows);
@@ -151,10 +155,10 @@ export default function ConfigurateurPage() {
   return (
     <>
       {/* Header */}
-      <section className="bg-neutral-light py-6 lg:py-10 border-b border-gray-200">
+      <section className="bg-neutral-light py-6 lg:py-8 border-b border-gray-200">
         <Container>
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="min-w-0">
               <h1 className="text-2xl md:text-3xl font-bold text-neutral-dark">
                 {t("titre")}
               </h1>
@@ -162,32 +166,25 @@ export default function ConfigurateurPage() {
                 {t("sousTitre")}
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              {/* Ajouter / retirer un rang */}
-              {nbRangees < 4 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setNbRangees((nbRangees + 1) as NbRangees)}
-                >
-                  {t("ajouterRang")}
+
+            {/* Toolbar : Fichier (exemple + sauvegardes) + Reset.
+                Les contrôles de rangs sont déplacés dans la barre du Plan de quai. */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={handleLoadTemplate}>
+                  {t("chargerExemple")}
                 </Button>
-              )}
-              {nbRangees > 1 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setModulesByRow((prev) => ({ ...prev, [nbRangees]: [] }));
-                    setNbRangees((nbRangees - 1) as NbRangees);
-                  }}
-                >
-                  {t("retirerRang", { rang: nbRangees })}
-                </Button>
-              )}
-              <Button variant="ghost" size="sm" onClick={handleLoadTemplate}>
-                {t("chargerExemple")}
-              </Button>
+                <SavedQuaiManager
+                  nbRangees={nbRangees}
+                  modulesByRow={modulesByRow}
+                  coloris={coloris}
+                  envConfig={envConfig}
+                  onLoad={handleLoadSaved}
+                />
+              </div>
+
+              <span className="hidden lg:block w-px h-6 bg-gray-300" aria-hidden />
+
               <Button variant="outline" size="sm" onClick={handleReset}>
                 <RotateCcw size={14} className="mr-1" />
                 {t("reinitialiser")}
@@ -207,6 +204,7 @@ export default function ConfigurateurPage() {
                 <ModulePalette
                   selectedModule={selectedModule}
                   onSelect={setSelectedModule}
+                  coloris={coloris}
                 />
 
                 {/* Coloris */}
@@ -246,15 +244,52 @@ export default function ConfigurateurPage() {
             {/* --- Canvas + BOM (centre + droite) --- */}
             <div className="lg:col-span-9 order-1 lg:order-2 space-y-6">
 
+              {/* ─── Plan du quai + Nomenclature : UNE SEULE div sticky ─── */}
+              <div className="lg:sticky lg:top-24 lg:z-10 space-y-4">
+
               {/* Canvas / 3D toggle */}
               <div className="bg-neutral-light rounded-xl p-4 lg:p-6 border border-gray-200">
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <h2 className="text-sm font-bold text-neutral-dark uppercase tracking-wider">
                     {view3D ? t("vue3D") : t("planQuai")}
                   </h2>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Contrôles rangs : intégrés ici car contextuels au plan */}
+                    <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (nbRangees < 4) setNbRangees((nbRangees + 1) as NbRangees);
+                        }}
+                        disabled={nbRangees >= 4}
+                        title={t("ajouterRang")}
+                        className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:text-primary disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <span className="text-base leading-none">+</span>
+                        <span className="hidden sm:inline">Rang</span>
+                      </button>
+                      <span className="px-2 text-xs font-mono text-gray-500 border-l border-r border-gray-200">
+                        {nbRangees}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (nbRangees > 1) {
+                            setModulesByRow((prev) => ({ ...prev, [nbRangees]: [] }));
+                            setNbRangees((nbRangees - 1) as NbRangees);
+                          }
+                        }}
+                        disabled={nbRangees <= 1}
+                        title={nbRangees > 1 ? t("retirerRang", { rang: nbRangees }) : ""}
+                        className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:text-red-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <span className="text-base leading-none">−</span>
+                        <span className="hidden sm:inline">Rang</span>
+                      </button>
+                    </div>
+
                     {!view3D && (
-                      <span className="text-xs text-gray-400 hidden sm:inline">
+                      <span className="text-xs text-gray-400 hidden xl:inline">
                         {t("retirerModule")}
                       </span>
                     )}
@@ -298,43 +333,10 @@ export default function ConfigurateurPage() {
                       modulesByRow={modulesByRow}
                       nbRangees={nbRangees}
                       coloris={coloris}
-                      showShelter={showShelter}
                       showLabels={showLabels}
-                      envConfig={envConfig}
-                      onEnvConfigChange={setEnvConfig}
                       onToggleLabels={() => setShowLabels((v) => !v)}
-                      onToggleShelter={() => setShowShelter((v) => !v)}
                     />
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="text-xs text-gray-400">
-                        {t("orbiter")}
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => setShowLabels(!showLabels)}
-                          className={cn(
-                            "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
-                            showLabels
-                              ? "bg-primary/10 border-primary/30 text-primary"
-                              : "bg-gray-100 border-gray-200 text-gray-500"
-                          )}
-                        >
-                          {showLabels ? <Tag size={12} /> : <EyeOff size={12} />}
-                          {showLabels ? t("masquerLabels") : t("afficherLabels")}
-                        </button>
-                        <button
-                          onClick={() => setShowShelter(!showShelter)}
-                          className={cn(
-                            "flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
-                            showShelter
-                              ? "bg-primary/10 border-primary/30 text-primary"
-                              : "bg-gray-100 border-gray-200 text-gray-500"
-                          )}
-                        >
-                          {showShelter ? t("masquerAbribus") : t("afficherAbribus")}
-                        </button>
-                      </div>
-                    </div>
+                    <p className="mt-2 text-xs text-gray-400">{t("orbiter")}</p>
                   </Suspense>
                 ) : (
                   <QuaiCanvas
@@ -350,6 +352,53 @@ export default function ConfigurateurPage() {
                 )}
               </div>
 
+              {/* Nomenclature + CTA côte à côte — toujours dans la div sticky */}
+              {allModules.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                  <div className="md:col-span-3 bg-white rounded-xl p-4 lg:p-5 border border-gray-200">
+                    <h2 className="text-sm font-bold text-neutral-dark uppercase tracking-wider mb-3">
+                      {t("nomenclature")}
+                    </h2>
+                    <BomTable modules={allModules} />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    {showForm ? (
+                      <div className="bg-neutral-light rounded-lg p-5 border border-gray-200">
+                        <h3 className="font-bold text-neutral-dark mb-2">
+                          {t("recevoirPlan")}
+                        </h3>
+                        <p className="text-xs text-gray-500 mb-4">
+                          {t("nomenclatureEmail")}
+                        </p>
+                        <LeadForm compact onSuccess={() => setShowForm(false)} />
+                      </div>
+                    ) : (
+                      <div className="bg-primary/5 rounded-lg p-5 border border-primary/20 text-center">
+                        <h3 className="font-bold text-neutral-dark">
+                          {t("configPrete")}
+                        </h3>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {t("recevoirNomenclature")}
+                        </p>
+                        <div className="space-y-2 mt-4">
+                          <Button onClick={() => setShowForm(true)} className="w-full" size="sm">
+                            <Send size={14} className="mr-2" />
+                            {t("recevoirDevis")}
+                          </Button>
+                          <Button href="/contact" variant="outline" className="w-full" size="sm">
+                            {t("nousContacter")}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              </div>
+              {/* ─── FIN du wrapper sticky ─── */}
+
               {/* Mode d'emploi si vide */}
               {allModules.length === 0 && (
                 <div className="text-center py-8 text-gray-400">
@@ -364,53 +413,6 @@ export default function ConfigurateurPage() {
                   <Button variant="ghost" size="sm" onClick={handleLoadTemplate} className="mt-4">
                     {t("chargerExemple19m")}
                   </Button>
-                </div>
-              )}
-
-              {/* BOM */}
-              {allModules.length > 0 && (
-                <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                  <div className="lg:col-span-3">
-                    <h2 className="text-sm font-bold text-neutral-dark uppercase tracking-wider mb-3">
-                      {t("nomenclature")}
-                    </h2>
-                    <BomTable modules={allModules} />
-                  </div>
-
-                  {/* CTA */}
-                  <div className="lg:col-span-2">
-                    <div className="lg:sticky lg:top-24">
-                      {showForm ? (
-                        <div className="bg-neutral-light rounded-lg p-5 border border-gray-200">
-                          <h3 className="font-bold text-neutral-dark mb-2">
-                            {t("recevoirPlan")}
-                          </h3>
-                          <p className="text-xs text-gray-500 mb-4">
-                            {t("nomenclatureEmail")}
-                          </p>
-                          <LeadForm compact onSuccess={() => setShowForm(false)} />
-                        </div>
-                      ) : (
-                        <div className="bg-primary/5 rounded-lg p-5 border border-primary/20 text-center">
-                          <h3 className="font-bold text-neutral-dark">
-                            {t("configPrete")}
-                          </h3>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {t("recevoirNomenclature")}
-                          </p>
-                          <div className="space-y-2 mt-4">
-                            <Button onClick={() => setShowForm(true)} className="w-full" size="sm">
-                              <Send size={14} className="mr-2" />
-                              {t("recevoirDevis")}
-                            </Button>
-                            <Button href="/contact" variant="outline" className="w-full" size="sm">
-                              {t("nousContacter")}
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
                 </div>
               )}
             </div>

@@ -78,10 +78,16 @@ export function ConceptUrbaquai() {
                 aria-pressed={isActive}
               >
                 <span
-                  className="w-6 h-6 rounded-full border border-black/10 shadow-inner"
-                  style={{ backgroundColor: c.hex }}
+                  className="w-7 h-7 rounded-full border border-black/10 shadow-inner overflow-hidden"
                   aria-hidden
-                />
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/images/urbamat/coloris-${c.id}.png`}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </span>
                 <span className={cn(
                   "text-xs font-medium",
                   isActive ? "text-accent" : "text-neutral-dark"

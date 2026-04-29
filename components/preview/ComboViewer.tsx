@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { type ModuleRef } from "@/lib/configurateur";
-import { buildProceduralModule, getConcreteColor } from "./ModuleViewer";
+import { buildProceduralModule, createConcreteMaterial } from "./ModuleViewer";
 
 const ROW_DEPTH = 1.5;
 
@@ -79,15 +79,11 @@ export function ComboViewer() {
     ground.receiveShadow = true;
     scene.add(ground);
 
-    const concreteMat = new THREE.MeshStandardMaterial({
-      color: getConcreteColor("granit-gris"),
-      roughness: 0.92,
-      metalness: 0.02,
-    });
+    const concreteMat = createConcreteMaterial("granit-gris");
 
     // Build a module group with all transforms applied, return {group, bboxX min/max, bboxY min}
     const buildPlacement = (p: ModulePlacement) => {
-      const g = buildProceduralModule(p.ref, concreteMat);
+      const g = buildProceduralModule(p.ref, concreteMat, "granit-gris", p.rotateY ?? 0);
       if (p.mirror) g.scale.x = -1;
       if (p.flipZ) g.scale.z = -1;
       if (p.rotateY) g.rotation.y = p.rotateY;
@@ -216,8 +212,8 @@ export function ComboViewer() {
     const fitRadius = Math.max(sceneSize.x, sceneSize.z * 2.5) * 0.55;
     const fovRad = camera.fov * (Math.PI / 180);
     const dist = (fitRadius / Math.tan(fovRad / 2)) * 1.0;
-    // Vue 3/4 légèrement plongeante
-    const dir = new THREE.Vector3(0.15, 0.55, 1).normalize();
+    // Vue 3/4 légèrement plongeante, côté chaussée (cohérent avec configurateur + vue éclatée produit)
+    const dir = new THREE.Vector3(0.15, 0.55, -1).normalize();
     camera.position.copy(sceneCenter).add(dir.multiplyScalar(dist));
     camera.lookAt(sceneCenter);
     camera.updateProjectionMatrix();

@@ -16,10 +16,12 @@
     "contact": "Contact",
     "links": {
       "urbaquai": "URBAQUAI — Bus platform",
+      "configurateur": "3D Configurator",
+      "telechargements": "Downloads",
+      "apropos": "About URBAMAT",
       "urbaterra": "URBATERRA — Terrace",
       "configurations": "Configurations",
       "realisations": "Projects",
-      "telechargements": "Downloads",
       "reglementation": "Regulations",
       "contact": "Contact"
     },

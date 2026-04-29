@@ -6,7 +6,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { type ModuleRef } from "@/lib/configurateur";
-import { buildProceduralModule, getConcreteColor, type ColorisId } from "./ModuleViewer";
+import { buildProceduralModule, createConcreteMaterial, type ColorisId } from "./ModuleViewer";
 
 interface QuaiAssemblyAnimationProps {
   coloris?: ColorisId;
@@ -541,11 +541,7 @@ export function QuaiAssemblyAnimation({
       }
     );
 
-    const concreteMat = new THREE.MeshStandardMaterial({
-      color: getConcreteColor(coloris),
-      roughness: 0.92,
-      metalness: 0.02,
-    });
+    const concreteMat = createConcreteMaterial(coloris);
 
     // Quai miroir global (orientation route France)
     const platformGroup = new THREE.Group();
@@ -553,7 +549,7 @@ export function QuaiAssemblyAnimation({
     scene.add(platformGroup);
 
     const buildPlacement = (p: ModulePlacement) => {
-      const g = buildProceduralModule(p.ref, concreteMat);
+      const g = buildProceduralModule(p.ref, concreteMat, coloris, p.rotateY ?? 0);
       if (p.mirror) g.scale.x = -1;
       if (p.flipZ) g.scale.z = -1;
       if (p.rotateY) g.rotation.y = p.rotateY;

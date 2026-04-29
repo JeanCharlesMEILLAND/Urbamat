@@ -1,6 +1,4 @@
-import { ArrowRight } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
-import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { getCmsOverrides } from "@/lib/cms";
 
@@ -11,7 +9,6 @@ export async function Hero() {
 
   const titre = cms.hero_titre || t("titre");
   const description = cms.hero_description || t("description");
-  const cta = cms.hero_cta || t("cta");
   const eyebrow = cms.hero_sous_titre || t("sousTitre");
 
   return (
@@ -31,25 +28,6 @@ export async function Hero() {
             />
           </div>
 
-          <div className="mb-6 flex items-center justify-center w-20 h-20 rounded-2xl bg-accent shadow-lg shadow-accent/30">
-            <svg
-              className="w-10 h-10 text-white"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="6" width="18" height="12" rx="2" />
-              <path d="M3 12h18" />
-              <path d="M7 18v2" />
-              <path d="M17 18v2" />
-              <circle cx="7.5" cy="14.5" r="0.5" fill="currentColor" />
-              <circle cx="16.5" cy="14.5" r="0.5" fill="currentColor" />
-            </svg>
-          </div>
-
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-dark leading-[1.1] tracking-tight">
             {titre}
           </h1>
@@ -58,15 +36,9 @@ export async function Hero() {
             {description}
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
-            <Button href="/contact" variant="secondary" size="lg" className="rounded-full text-white">
-              {cta}
-              <ArrowRight size={18} className="ml-2" />
-            </Button>
-            <span className="text-sm text-gray-500">
-              {eyebrow}
-            </span>
-          </div>
+          <p className="mt-10 text-sm text-gray-500">
+            {eyebrow}
+          </p>
         </div>
       </Container>
     </section>

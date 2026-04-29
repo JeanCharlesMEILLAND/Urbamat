@@ -16,10 +16,12 @@
     "contact": "Contact",
     "links": {
       "urbaquai": "URBAQUAI — Quai bus",
+      "configurateur": "Configurateur 3D",
+      "telechargements": "Téléchargements",
+      "apropos": "À propos d'URBAMAT",
       "urbaterra": "URBATERRA — Terrasse",
       "configurations": "Configurations",
       "realisations": "Réalisations",
-      "telechargements": "Téléchargements",
       "reglementation": "Réglementation",
       "contact": "Contact"
     },
@@ -29,8 +31,8 @@
   },
   "hero": {
     "titre": "Garantir l'accessibilité aux bus et aux cars.",
-    "sousTitre": "Système breveté URBAMAT Environnement",
-    "description": "URBAQUAI est le système modulaire en béton haute performance pour la mise en accessibilité des arrêts de bus. Provisoire ou définitif, conforme à toutes les normes en vigueur.",
+    "sousTitre": "Innovation protégée par dépôt de brevet — URBAMAT Environnement",
+    "description": "Pour favoriser des transports publics plus attractifs et une mobilité urbaine mieux organisée. URBAQUAI® est un système innovant de quais bus modulaires conçu pour créer rapidement des points d'arrêt provisoires durables, accessibles et réemployables.",
     "cta": "Demander un devis",
     "ficheTechnique": "Fiche technique"
   },

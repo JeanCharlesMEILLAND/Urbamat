@@ -29,10 +29,14 @@ export function StepOptions({ coloris, onColorisChange }: StepOptionsProps) {
                   : "border-gray-200 hover:border-gray-300"
               )}
             >
-              <div
-                className="w-12 h-12 rounded-lg border border-gray-200 shadow-sm"
-                style={{ backgroundColor: c.hex }}
-              />
+              <div className="w-12 h-12 rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/images/urbamat/coloris-${c.id}.png`}
+                  alt={c.nom}
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <span className={cn(
                 "text-xs font-medium",
                 coloris === c.id ? "text-primary" : "text-gray-600"

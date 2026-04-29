@@ -16,6 +16,12 @@ interface ModuleViewerProps {
   coloris?: ColorisId;
   autoRotate?: boolean;
   className?: string;
+  /** Hide the "aperçu schématique" badge (utile en thumbnail) */
+  hideBadge?: boolean;
+  /** Désactive le zoom à la molette (utile dans des thumbnails inline) */
+  enableZoom?: boolean;
+  /** Vue strictement d'en haut (caméra orientée -Y) pour un plan 2D du module */
+  topView?: boolean;
 }
 
 function getCatalogSpec(ref: string) {
@@ -25,6 +31,79 @@ function getCatalogSpec(ref: string) {
 export function getConcreteColor(coloris: ColorisId | undefined): string {
   const found = COLORIS.find((c) => c.id === coloris);
   return found?.hex ?? "#C8C2B5";
+}
+
+// Cache de textures béton — chargées une seule fois par coloris (texture de base, repeat=1).
+const concreteTextureCache: Partial<Record<ColorisId, THREE.Texture>> = {};
+export function getConcreteTexture(coloris: ColorisId | undefined): THREE.Texture | undefined {
+  if (typeof window === "undefined") return undefined;
+  const id: ColorisId = coloris ?? "granit-gris";
+  if (!concreteTextureCache[id]) {
+    const loader = new THREE.TextureLoader();
+    const tex = loader.load(`/images/urbamat/coloris-${id}.png`);
+    // MirroredRepeatWrapping cache les coutures de tiles sans toucher à la densité.
+    tex.wrapS = THREE.MirroredRepeatWrapping;
+    tex.wrapT = THREE.MirroredRepeatWrapping;
+    tex.colorSpace = THREE.SRGBColorSpace;
+    concreteTextureCache[id] = tex;
+  }
+  return concreteTextureCache[id];
+}
+
+/** Densité de tile fixe en répétitions par mètre — garantit la même finesse de granulat
+ * sur tous les modules quelle que soit leur taille. Réglage validé : 1 motif/m + miroirs. */
+const TILE_DENSITY_PER_METER = 1;
+
+/** Crée le matériau béton plat — aplat de couleur du coloris, sans texture (validé : la texture
+ * photo donnait des artefacts de tiling et un rendu incohérent entre modules). */
+export function createConcreteMaterial(coloris: ColorisId | undefined): THREE.MeshStandardMaterial {
+  return new THREE.MeshStandardMaterial({
+    color: getConcreteColor(coloris),
+    roughness: 0.92,
+    metalness: 0.02,
+  });
+}
+
+/** Crée un matériau béton spécifique à un slab — clone la texture avec un repeat
+ * proportionnel aux dimensions physiques (L × W en mètres) + offset aléatoire pour
+ * que les blocs adjacents ne soient pas des clones identiques.
+ * `textureCounterRotation` (en radians) compense la rotation Y appliquée au module
+ * par le caller, pour que la photo apparaisse toujours dans le même sens visuel
+ * peu importe l'orientation du bloc. */
+export function makeSlabConcreteMaterial(
+  coloris: ColorisId | undefined,
+  Lmeters: number,
+  Wmeters: number,
+  textureCounterRotation = 0
+): THREE.MeshStandardMaterial {
+  const baseMap = getConcreteTexture(coloris);
+  if (!baseMap) {
+    return new THREE.MeshStandardMaterial({
+      color: getConcreteColor(coloris),
+      roughness: 0.92,
+      metalness: 0.02,
+    });
+  }
+  const clonedTex = baseMap.clone();
+  // Si on contre-tourne, on doit aussi swapper L/W pour que le repeat reste correct
+  // dans l'orientation visuelle (90° → l'axe long du repeat passe sur l'autre axe).
+  const isRotated90 = Math.abs(Math.abs(textureCounterRotation) - Math.PI / 2) < 0.01;
+  const repeatX = isRotated90 ? Wmeters : Lmeters;
+  const repeatY = isRotated90 ? Lmeters : Wmeters;
+  clonedTex.repeat.set(
+    Math.max(repeatX * TILE_DENSITY_PER_METER, 1),
+    Math.max(repeatY * TILE_DENSITY_PER_METER, 1)
+  );
+  clonedTex.offset.set(Math.random(), Math.random());
+  clonedTex.center.set(0.5, 0.5);
+  clonedTex.rotation = textureCounterRotation;
+  clonedTex.needsUpdate = true;
+  return new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    map: clonedTex,
+    roughness: 0.92,
+    metalness: 0.02,
+  });
 }
 
 export const MM_TO_M_EXPORT = 1 / 1000;
@@ -122,9 +201,25 @@ function makeConcreteTexture(baseHex: string, size = 512): {
  * NOTE : inserts d'ancrage, trous de levage, texture sablée non rendus
  *        — en attente des specs dimensionnelles réelles URBAMAT.
  */
+/** Couleur des rainures/rubans adaptée au coloris du bloc — contraste maximal avec
+ * la couleur du béton pour rester lisibles à toute distance. */
+export function getGrooveColor(coloris: ColorisId | undefined): string {
+  switch (coloris) {
+    case "basalte-noir":   return "#f0ebde"; // crème très claire sur béton presque noir
+    case "granit-gris":    return "#e8e2d2"; // beige clair sur béton gris (contraste fort)
+    case "calcaire-jaune": return "#15110d"; // noir profond sur béton sablé
+    case "quartz-blanc":   return "#0a0805"; // noir profond sur béton blanc
+    default:                return "#1a1612";
+  }
+}
+
 export function buildProceduralModule(
   ref: ModuleRef,
-  concreteMat: THREE.Material
+  concreteMat: THREE.Material,
+  coloris?: ColorisId,
+  /** Rotation Y (rad) prévue par le caller — sert à contre-tourner la texture
+   * pour que la photo béton garde le même sens sur tous les blocs. */
+  upcomingRotateY = 0
 ): THREE.Group {
   const spec = MODULE_CATALOG[ref];
   // D-004 = miroir de D-003 (fin de quai gauche)
@@ -339,8 +434,13 @@ export function buildProceduralModule(
   });
   // Inserts à 750mm des extrémités le long de L (pour 3m → ±750 du centre = inset 750mm/edge)
   // Et à 300mm des bords le long de W (pour 1500 → ±450 du centre)
-  const liftOffsetXMm = spec.longueur >= 3000 ? 750 : Math.max(spec.longueur / 4, 200);
-  const liftOffsetZMm = spec.largeur >= 1500 ? 450 : spec.largeur / 4;
+  let liftOffsetXMm = spec.longueur >= 3000 ? 750 : Math.max(spec.longueur / 4, 200);
+  let liftOffsetZMm = spec.largeur >= 1500 ? 450 : spec.largeur / 4;
+  // Pour D-007, swapDims a inversé la géométrie ; il faut inverser aussi les offsets
+  // pour que les inserts/pads tombent aux mêmes positions visuelles que D-007a.
+  if (swapDims) {
+    [liftOffsetXMm, liftOffsetZMm] = [liftOffsetZMm, liftOffsetXMm];
+  }
   const liftX = liftOffsetXMm * MM_TO_M;
   const liftZ = liftOffsetZMm * MM_TO_M;
   // Pour D-009a, le top suit une pente de 170mm (X=0) à 220mm (X=L), Hmax=220mm
@@ -400,7 +500,7 @@ export function buildProceduralModule(
   // Autres : 2 rainures de guidage
   const grooveDepth = 0.006;
   const grooveMat = new THREE.MeshStandardMaterial({
-    color: "#1f1c19",
+    color: getGrooveColor(coloris),
     roughness: 1,
     metalness: 0,
   });
@@ -533,7 +633,7 @@ export function buildProceduralModule(
 
 type Source = "glb" | "obj" | "procedural";
 
-export function ModuleViewer({ moduleRef, coloris = "quartz-blanc", autoRotate = false, className }: ModuleViewerProps) {
+export function ModuleViewer({ moduleRef, coloris = "quartz-blanc", autoRotate = false, className, hideBadge = false, enableZoom = true, topView = false }: ModuleViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [source, setSource] = useState<Source | null>(null);
 
@@ -589,11 +689,7 @@ export function ModuleViewer({ moduleRef, coloris = "quartz-blanc", autoRotate =
     shadowCatcher.receiveShadow = true;
     scene.add(shadowCatcher);
 
-    const concreteMat = new THREE.MeshStandardMaterial({
-      color: getConcreteColor(coloris),
-      roughness: 0.92,
-      metalness: 0.02,
-    });
+    const concreteMat = createConcreteMaterial(coloris);
 
     const pivot = new THREE.Group();
     scene.add(pivot);
@@ -601,7 +697,18 @@ export function ModuleViewer({ moduleRef, coloris = "quartz-blanc", autoRotate =
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
+    controls.enableZoom = enableZoom;
+    controls.enablePan = enableZoom;
     controls.target.set(0, 0, 0);
+
+    // Pause auto-rotate quand l'utilisateur interagit
+    let isInteracting = false;
+    controls.addEventListener("start", () => {
+      isInteracting = true;
+    });
+    controls.addEventListener("end", () => {
+      isInteracting = false;
+    });
 
     // Initial camera fit based on catalog dimensions if available (refined after load)
     const initSpec = catalogSpec ?? { longueur: 1500, largeur: 1500, hauteur: 180 };
@@ -765,7 +872,7 @@ export function ModuleViewer({ moduleRef, coloris = "quartz-blanc", autoRotate =
 
     let raf = 0;
     const animate = () => {
-      if (autoRotate) pivot.rotation.y += 0.0035;
+      if (autoRotate && !isInteracting) pivot.rotation.y += 0.0035;
       controls.update();
       renderer.render(scene, camera);
       raf = requestAnimationFrame(animate);
@@ -804,12 +911,12 @@ export function ModuleViewer({ moduleRef, coloris = "quartz-blanc", autoRotate =
         }
       });
     };
-  }, [moduleRef, autoRotate, coloris]);
+  }, [moduleRef, autoRotate, coloris, enableZoom]);
 
   return (
     <div ref={containerRef} className={className ?? "relative w-full h-full"}>
-      {source === "procedural" && (
-        <span className="absolute bottom-2 right-3 text-[10px] uppercase tracking-wider text-neutral-dark/50 pointer-events-none">
+      {source === "procedural" && !hideBadge && (
+        <span className="absolute bottom-2 right-3 text-[9px] uppercase tracking-wider text-neutral-dark/50 pointer-events-none">
           aperçu schématique
         </span>
       )}

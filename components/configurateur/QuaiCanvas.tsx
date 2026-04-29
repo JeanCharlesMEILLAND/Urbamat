@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus, X, GripVertical } from "lucide-react";
-import { MODULE_CATALOG, COLORIS, type PlacedModule, type ModuleRef, type ModuleRow, type NbRangees } from "@/lib/configurateur";
+import { MODULE_CATALOG, COLORIS, getModuleXLength, type PlacedModule, type ModuleRef, type ModuleRow, type NbRangees } from "@/lib/configurateur";
 import { cn } from "@/lib/utils";
 
 interface QuaiCanvasProps {
@@ -92,7 +92,9 @@ function ModuleTile({
 }) {
   const spec = module.spec;
   const isRampe = spec.role === "rampe";
-  const widthRatio = spec.longueur / 3000;
+  // Largeur visuelle de la tuile = longueur effective le long du rang (compte pour les modules rotatés 90°)
+  const xLength = getModuleXLength(module.ref);
+  const widthRatio = xLength / 3000;
   const tileWidth = Math.max(widthRatio * 180, 50);
 
   return (
@@ -339,10 +341,10 @@ export function QuaiCanvas({
   onInsertModule,
   onMoveModule,
 }: QuaiCanvasProps) {
-  // Compute max longueur across all active rows
+  // Compute max longueur across all active rows (utilise la longueur X effective)
   const longueurMax = Array.from({ length: nbRangees }, (_, i) => {
     const row = (i + 1) as ModuleRow;
-    return (modulesByRow[row] ?? []).reduce((s, m) => s + m.spec.longueur, 0);
+    return (modulesByRow[row] ?? []).reduce((s, m) => s + getModuleXLength(m.ref), 0);
   }).reduce((a, b) => Math.max(a, b), 0);
 
   function handleDrop(row: ModuleRow, dropIndex: number, data: string) {
@@ -374,7 +376,7 @@ export function QuaiCanvas({
       {Array.from({ length: nbRangees }, (_, i) => {
         const row = (i + 1) as ModuleRow; // rang 1 en haut, 2 en dessous, etc.
         const modules = modulesByRow[row] ?? [];
-        const longueur = modules.reduce((s, m) => s + m.spec.longueur, 0);
+        const longueur = modules.reduce((s, m) => s + getModuleXLength(m.ref), 0);
         return (
           <RowCanvas
             key={row}
