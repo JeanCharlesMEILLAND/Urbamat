@@ -726,9 +726,10 @@ export function QuaiAssemblyAnimation({
         setBusPos({ x: p.x, z: p.z, ry: r.y });
       }
     });
-    transformControls.visible = false;
+    const tcHelper = transformControls.getHelper();
+    tcHelper.visible = false;
     transformControls.enabled = false;
-    scene.add(transformControls.getHelper());
+    scene.add(tcHelper);
 
     let busEdited = false; // une fois édité, garder le bus visible à busTargetX
     editToggleRef.current = (mode) => {
@@ -739,7 +740,7 @@ export function QuaiAssemblyAnimation({
         busTargetRY = busPivot.rotation.y;
         busOffscreenX = busTargetX - 25;
         busEdited = true;
-        transformControls.visible = false;
+        tcHelper.visible = false;
         transformControls.enabled = false;
         transformControls.detach();
         console.log("[bus saved]", { x: busTargetX, z: busTargetZ, ry: busTargetRY });
@@ -752,7 +753,7 @@ export function QuaiAssemblyAnimation({
           busPivot.rotation.y = busTargetRY;
           transformControls.attach(busPivot);
           transformControls.setMode(mode);
-          transformControls.visible = true;
+          tcHelper.visible = true;
           transformControls.enabled = true;
           setBusPos({ x: busPivot.position.x, z: busPivot.position.z, ry: busPivot.rotation.y });
         }
