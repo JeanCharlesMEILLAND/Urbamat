@@ -1,10 +1,9 @@
 {
   "nav": {
-    "urbaquai": "URBAQUAI",
-    "urbaterra": "URBATERRA",
+    "concept": "URBAQUAI® Konzept",
+    "produit": "Produkt",
     "configurateur": "Konfigurator",
-    "realisations": "Referenzen",
-    "reglementation": "Vorschriften",
+    "apropos": "Über uns",
     "telechargements": "Downloads",
     "contact": "Kontakt",
     "devis": "Angebot anfordern"
@@ -29,11 +28,22 @@
     "confidentialite": "Datenschutz"
   },
   "hero": {
-    "titre": "Die barrierefreie Bushaltestelle. In 48h.",
+    "titre": "Barrierefreier Zugang zu Bus und Reisebus.",
     "sousTitre": "Patentiertes System von URBAMAT Environnement",
     "description": "URBAQUAI ist das modulare Hochleistungsbeton-System für die barrierefreie Gestaltung von Bushaltestellen. Temporär oder dauerhaft, konform mit allen geltenden Normen.",
-    "cta": "System ansehen",
+    "cta": "Angebot anfordern",
     "ficheTechnique": "Datenblatt"
+  },
+  "usp": {
+    "miseEnOeuvre": { "title": "Schnelle Umsetzung und Inbetriebnahme" },
+    "poseDirecte": { "title": "Direkte Verlegung auf jedem Untergrund" },
+    "logistique": { "title": "Vereinfachte Logistik und Wiederverwendung" },
+    "accessibilite": { "title": "Barrierefreiheit und Nutzungssicherheit" }
+  },
+  "concept": {
+    "titre": "URBAQUAI Konzept",
+    "description": "URBAQUAI ist ein modulares System aus Hochleistungs-Fertigbeton für barrierefreie Bushaltestellen. Unsere Lösung verbindet die Robustheit von Beton, die Geschwindigkeit modularer Verlegung und die Flexibilität eines wiederverwendbaren Systems.",
+    "visuelLegende": "URBAQUAI Modul — Hochleistungs-Fertigbeton"
   },
   "stats": {
     "expertise": "Beton-Expertise",
@@ -45,6 +55,7 @@
     "sousTitre": "In Frankreich sind Tausende von Bushaltestellen für Menschen mit eingeschränkter Mobilität nicht zugänglich. URBAQUAI ändert das.",
     "constat": "Die Situation",
     "reponse": "Die URBAQUAI-Antwort",
+    "reponseTitre": "Eine vollständige und zertifizierte Lösung",
     "problems": {
       "inaccessibles": {
         "title": "Nicht barrierefreie Haltestellen",
@@ -89,7 +100,19 @@
   "configurationsGrid": {
     "titre": "4 Konfigurationen für jede Situation",
     "sousTitre": "Jede Bushaltestelle ist einzigartig. URBAQUAI passt sich mit 4 modularen Konfigurationen an jedes Szenario an.",
-    "voirTout": "Alle Konfigurationen im Detail ansehen"
+    "voirTout": "Alle Konfigurationen im Detail ansehen",
+    "detail": "Details ansehen"
+  },
+  "documentation": {
+    "titre": "Unsere Dokumentation herunterladen",
+    "fiche": { "titre": "Datenblatt", "format": "PDF — 4 Seiten" },
+    "guide": { "titre": "Verlegungs- und Wartungsanleitung", "format": "PDF — 12 Seiten" },
+    "norme": { "titre": "Regulatorische Dokumentation", "format": "PDF — Konformität" }
+  },
+  "apropos": {
+    "titre": "Über URBAMAT Environnement",
+    "description": "Als Spezialist für urbane Barrierefreiheit entwickelt URBAMAT innovative modulare Lösungen für Kommunen. Seit über 35 Jahren begleiten wir Bushaltestellen-Betreiber bei der barrierefreien Aufrüstung ihrer Netze.",
+    "cta": "Mehr über das Unternehmen erfahren"
   },
   "configurations": {
     "avancee": {

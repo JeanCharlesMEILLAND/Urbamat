@@ -14,35 +14,41 @@ export function ReglementationBlock() {
   const t = useTranslations("reglementationBlock");
 
   return (
-    <section className="py-20 lg:py-28 bg-primary" ref={ref}>
+    <section className="py-20 lg:py-24 bg-white" ref={ref}>
       <Container>
-        <div className={cn(
-          "text-center mb-12 transition-all duration-700",
-          isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-        )}>
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-white/10 mb-6">
-            <ShieldCheck size={28} className="text-accent" />
+        <div
+          className={cn(
+            "text-center mb-12 transition-all duration-700",
+            isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          )}
+        >
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-accent-50 mb-5">
+            <ShieldCheck size={22} className="text-accent" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">
-            {t("titre")}
-          </h2>
-          <p className="mt-4 text-lg text-primary-100 max-w-2xl mx-auto leading-relaxed">
+          <h2 className="text-2xl md:text-3xl font-bold text-neutral-dark">{t("titre")}</h2>
+          <p className="mt-3 text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
             {t("sousTitre")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
           {NORMES_KEYS.map((key) => (
-            <div key={key} className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/10">
-              <BookOpen size={20} className="text-accent mb-3" />
-              <h3 className="text-lg font-bold text-white">{t(`${key}.titre`)}</h3>
-              <p className="mt-2 text-sm text-primary-100 leading-relaxed">{t(`${key}.description`)}</p>
+            <div
+              key={key}
+              className="rounded-2xl bg-surface-50 border border-surface-200 p-6 hover:border-accent/30 hover:shadow-md transition-all"
+            >
+              <BookOpen size={18} className="text-accent mb-3" />
+              <h3 className="text-base font-semibold text-neutral-dark">{t(`${key}.titre`)}</h3>
+              <p className="mt-2 text-sm text-gray-600 leading-relaxed">{t(`${key}.description`)}</p>
             </div>
           ))}
         </div>
 
         <div className="text-center mt-10">
-          <Link href="/reglementation" className="inline-flex items-center gap-2 text-accent font-semibold hover:text-accent-300 transition-colors">
+          <Link
+            href="/reglementation"
+            className="inline-flex items-center gap-2 text-accent font-semibold hover:gap-3 transition-all"
+          >
             {t("explorer")} <ArrowRight size={16} />
           </Link>
         </div>

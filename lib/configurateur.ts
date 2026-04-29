@@ -6,17 +6,20 @@
 // détermine la profondeur totale du quai.
 
 export type ModuleRef =
-  | "D-009"   // Rampe latérale (pente le long de X, en extrémité)
-  | "D-009a"  // Rampe arrière (pente le long de Z, quai vers trottoir)
-  | "D-004e"  // Latéral gauche
-  | "D-012"   // Latéral gauche (variante)
+  | "D-009"   // Rampe latérale + plaque métal galvanisé
+  | "D-009a"  // Rampe arrière (avec encoche)
+  | "D-009s"  // Rampe latérale "suite" — comme D-009 mais sans plaque métal
   | "D-005"   // Central standard (3000mm)
-  | "D-002"   // Central standard (variante, 3000mm)
+  | "D-002"   // Central standard (3000mm)
   | "D-006"   // Central (variante, 3000mm)
-  | "D-007e"  // Jonction (1000mm)
-  | "D-037"   // Jonction (variante, 1000mm)
-  | "D-003e"  // Fin de quai droit
-  | "D-003"   // Fin de quai droit (variante)
+  | "D-007"   // Jonction 1500×1000 (chanfrein/rainures sur le côté 1m)
+  | "D-007a"  // Jonction 1500×1000 nue
+  | "D-008"   // Jonction 1500×1000 (chanfrein/rainures sur le côté 1.5m, gauche)
+  | "D-008a"  // Miroir de D-008 (chanfrein/rainures sur le côté 1.5m, droite)
+  | "D-003"   // Fin de quai droit (angle)
+  | "D-003a"  // Latéral simple 1500x1500 (style central)
+  | "D-004"   // Fin de quai gauche (miroir de D-003)
+  | "D-004a"  // Latéral simple 1500x1500 + 4 rubans
   | "VIDE";   // Espaceur 1500mm
 
 export type ModuleRow = 1 | 2 | 3 | 4;
@@ -52,15 +55,15 @@ export const MODULE_CATALOG: Record<ModuleRef, ModuleSpec> = {
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
-    poids: 700,
+    poids: 746,
     rang: 1,
     role: "rampe",
     rampeType: "laterale",
-    description: "Rampe latérale biseau 40→180mm, pente le long de X, placée en extrémité",
+    description: "Rampe latérale 180→100mm (5,3%), placée en extrémité de quai",
   },
   "D-009a": {
     ref: "D-009a",
-    nom: "Rampe arrière",
+    nom: "Module de transition",
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
@@ -68,36 +71,36 @@ export const MODULE_CATALOG: Record<ModuleRef, ModuleSpec> = {
     rang: 1,
     role: "rampe",
     rampeType: "arriere",
-    description: "Rampe arrière biseau, pente le long de Z, transition quai vers trottoir",
+    description: "Module de transition entre la rampe latérale (D-009s) et un central (D-002/D-005)",
+  },
+  "D-009s": {
+    ref: "D-009s",
+    nom: "Rampe latérale suite",
+    longueur: 1500,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 746,
+    rang: 1,
+    role: "rampe",
+    rampeType: "laterale",
+    description: "Rampe latérale à biseau inversé (100→180mm), continuité de D-009",
   },
 
-  // ─── Latéraux gauches ──────────────────────────
-  "D-004e": {
-    ref: "D-004e",
-    nom: "Latéral gauche",
-    longueur: 1500,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 700,
-    rang: 1,
-    role: "lateral",
-    description: "Module latéral gauche",
-  },
-  "D-012": {
-    ref: "D-012",
-    nom: "Latéral gauche (variante)",
-    longueur: 1500,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 700,
-    rang: 1,
-    role: "lateral",
-    description: "Module latéral gauche, variante",
-  },
 
   // ─── Centraux (3000mm) ─────────────────────────
   "D-005": {
     ref: "D-005",
+    nom: "Central nu",
+    longueur: 3000,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 1400,
+    rang: 1,
+    role: "central",
+    description: "Module central 3m sans chanfrein ni rainures",
+  },
+  "D-002": {
+    ref: "D-002",
     nom: "Central standard",
     longueur: 3000,
     largeur: 1500,
@@ -107,56 +110,66 @@ export const MODULE_CATALOG: Record<ModuleRef, ModuleSpec> = {
     role: "central",
     description: "Module central standard 3m",
   },
-  "D-002": {
-    ref: "D-002",
-    nom: "Central standard (variante)",
-    longueur: 3000,
-    largeur: 1500,
-    hauteur: 180,
-    poids: 1400,
-    rang: 1,
-    role: "central",
-    description: "Module central standard 3m, variante",
-  },
   "D-006": {
     ref: "D-006",
-    nom: "Central (variante)",
-    longueur: 3000,
+    nom: "Fin de quai (angle) 1500×1500",
+    longueur: 1500,
     largeur: 1500,
     hauteur: 180,
-    poids: 1400,
+    poids: 700,
     rang: 1,
-    role: "central",
-    description: "Module central 3m, variante",
+    role: "fin",
+    description: "Module d'angle (fin de quai) 1500x1500, comme D-003",
   },
 
   // ─── Jonctions (1000mm) ────────────────────────
-  "D-007e": {
-    ref: "D-007e",
+  "D-007": {
+    ref: "D-007",
     nom: "Jonction",
-    longueur: 1000,
-    largeur: 1500,
+    longueur: 1500,
+    largeur: 1000,
     hauteur: 180,
     poids: 470,
     rang: 1,
     role: "jonction",
-    description: "Module de jonction 1m",
+    description: "Module de jonction 1.5×1m",
   },
-  "D-037": {
-    ref: "D-037",
-    nom: "Jonction (variante)",
-    longueur: 1000,
-    largeur: 1500,
+  "D-007a": {
+    ref: "D-007a",
+    nom: "Jonction nue",
+    longueur: 1500,
+    largeur: 1000,
     hauteur: 180,
     poids: 470,
     rang: 1,
     role: "jonction",
-    description: "Module de jonction 1m, variante",
+    description: "Module de jonction 1.5×1m sans chanfrein ni rainures",
   },
-
+  "D-008": {
+    ref: "D-008",
+    nom: "Jonction (côté long, gauche)",
+    longueur: 1500,
+    largeur: 1000,
+    hauteur: 180,
+    poids: 470,
+    rang: 1,
+    role: "jonction",
+    description: "Jonction 1.5×1m, chanfrein/rainures côté 1.5m gauche",
+  },
+  "D-008a": {
+    ref: "D-008a",
+    nom: "Jonction (côté long, droite)",
+    longueur: 1500,
+    largeur: 1000,
+    hauteur: 180,
+    poids: 470,
+    rang: 1,
+    role: "jonction",
+    description: "Jonction 1.5×1m, chanfrein/rainures côté 1.5m droite (miroir D-008)",
+  },
   // ─── Fin de quai droit ─────────────────────────
-  "D-003e": {
-    ref: "D-003e",
+  "D-003": {
+    ref: "D-003",
     nom: "Fin de quai droit",
     longueur: 1500,
     largeur: 1500,
@@ -164,18 +177,40 @@ export const MODULE_CATALOG: Record<ModuleRef, ModuleSpec> = {
     poids: 700,
     rang: 1,
     role: "fin",
-    description: "Module de terminaison droite",
+    description: "Module de terminaison droite (angle)",
   },
-  "D-003": {
-    ref: "D-003",
-    nom: "Fin de quai droit (variante)",
+  "D-003a": {
+    ref: "D-003a",
+    nom: "Latéral simple",
+    longueur: 1500,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 700,
+    rang: 1,
+    role: "central",
+    description: "Module style central 1500x1500 (rainures de guidage simples)",
+  },
+  "D-004": {
+    ref: "D-004",
+    nom: "Fin de quai gauche",
     longueur: 1500,
     largeur: 1500,
     hauteur: 180,
     poids: 700,
     rang: 1,
     role: "fin",
-    description: "Module de terminaison droite, variante",
+    description: "Module de terminaison gauche (angle, miroir de D-003)",
+  },
+  "D-004a": {
+    ref: "D-004a",
+    nom: "Latéral simple avec rubans",
+    longueur: 1500,
+    largeur: 1500,
+    hauteur: 180,
+    poids: 700,
+    rang: 1,
+    role: "central",
+    description: "Module style central 1500x1500 + 4 rubans partant du côté droit",
   },
 
   // ─── Espaceur (module vide) ────────────────────
@@ -242,10 +277,10 @@ export interface ConfigOptions {
  *
  * Le quai est composé de N rangées identiques (2 ou 3), chacune côté chaussée.
  * Chaque rangée suit la même structure :
- *   - Extrémité gauche : rampe latérale (D-009) + latéral (D-004e ou D-012)
+ *   - Extrémité gauche : rampe latérale (D-009) + latéral (D-003a)
  *   - Zone centrale : modules de 3000mm (D-005, D-002, D-006)
- *   - Ajustement : jonction de 1000mm (D-007e ou D-037) si nécessaire
- *   - Extrémité droite : fin de quai (D-003e ou D-003)
+ *   - Ajustement : jonction de 1000mm (D-007) si nécessaire
+ *   - Extrémité droite : fin de quai (D-003)
  *
  * Si rampeArriere est activée, des rampes D-009a sont ajoutées sur la
  * dernière rangée pour la transition quai vers trottoir.
@@ -269,13 +304,13 @@ export function buildQuai(options: ConfigOptions): QuaiConfig {
 
     // Extrémité gauche
     if (rampeGauche) refs.push("D-009");
-    refs.push(isVariante ? "D-012" : "D-004e");
+    refs.push("D-003a");
 
     // Calculer l'espace occupé par les extrémités
     const fixeGauche = refs.reduce((sum, r) => sum + MODULE_CATALOG[r].longueur, 0);
 
     const fixeDroiteRefs: ModuleRef[] = [];
-    fixeDroiteRefs.push(isVariante ? "D-003" : "D-003e");
+    fixeDroiteRefs.push("D-003");
     if (rampeDroite) fixeDroiteRefs.push("D-009");
     const fixeDroite = fixeDroiteRefs.reduce((sum, r) => sum + MODULE_CATALOG[r].longueur, 0);
 
@@ -292,16 +327,13 @@ export function buildQuai(options: ConfigOptions): QuaiConfig {
     // Modules centraux
     for (let i = 0; i < nbModules3m; i++) {
       // Alterner les variantes centrales
-      if (isVariante) {
-        refs.push("D-002");
-      } else {
-        refs.push(i === 0 ? "D-006" : "D-005");
-      }
+      // Alterne D-002 (rangées paires) et D-005 (rangées impaires) pour le réalisme
+      refs.push(isVariante ? "D-002" : "D-005");
     }
 
     // Jonction si nécessaire
     if (besoinJonction) {
-      refs.push(isVariante ? "D-037" : "D-007e");
+      refs.push("D-007");
     }
 
     // Extrémité droite

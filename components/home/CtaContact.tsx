@@ -40,7 +40,7 @@ export function CtaContact() {
   }
 
   return (
-    <section className="py-20 lg:py-28 bg-neutral-light">
+    <section className="py-20 lg:py-28 bg-white">
       <Container>
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-dark">
@@ -131,7 +131,7 @@ export function CtaContact() {
               </div>
 
               <div className="pt-2">
-                <Button type="submit" size="lg" className="w-full sm:w-auto">
+                <Button type="submit" variant="secondary" size="lg" className="w-full sm:w-auto rounded-full text-white">
                   <Send size={16} className="mr-2" />
                   {t("envoyer")}
                 </Button>

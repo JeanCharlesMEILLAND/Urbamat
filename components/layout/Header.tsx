@@ -11,11 +11,10 @@ import { MobileMenu } from "./MobileMenu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const NAV_KEYS = [
-  { key: "urbaquai", href: "/produit" },
-  { key: "urbaterra", href: "/urbaterra" },
+  { key: "concept", href: "/#concept" },
+  { key: "produit", href: "/produit" },
   { key: "configurateur", href: "/configurateur" },
-  { key: "realisations", href: "/realisations" },
-  { key: "reglementation", href: "/reglementation" },
+  { key: "apropos", href: "/#apropos" },
   { key: "telechargements", href: "/telechargements" },
   { key: "contact", href: "/contact" },
 ] as const;
@@ -35,12 +34,12 @@ export function Header() {
       <Container>
         <nav className="flex items-center justify-between h-16 lg:h-20" aria-label="Navigation principale">
           {/* Logo */}
-          <Link href="/" className="shrink-0" aria-label="URBAQUAI - Accueil">
+          <Link href="/" className="shrink-0" aria-label="URBAMAT - Accueil">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/logo-urbaquai.png"
-              alt="URBAQUAI®"
-              className="h-8 lg:h-10 w-auto"
+              src="/images/logo-urbamat.svg"
+              alt="URBAMAT"
+              className="h-6 lg:h-7 w-auto"
             />
           </Link>
 

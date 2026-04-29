@@ -1,10 +1,9 @@
 {
   "nav": {
-    "urbaquai": "URBAQUAI",
-    "urbaterra": "URBATERRA",
+    "concept": "URBAQUAI® Concept",
+    "produit": "Product",
     "configurateur": "Configurator",
-    "realisations": "Projects",
-    "reglementation": "Regulations",
+    "apropos": "About",
     "telechargements": "Downloads",
     "contact": "Contact",
     "devis": "Request a quote"
@@ -29,11 +28,22 @@
     "confidentialite": "Privacy policy"
   },
   "hero": {
-    "titre": "The accessible bus platform. In 48h.",
+    "titre": "Make every bus and coach stop accessible.",
     "sousTitre": "Patented system by URBAMAT Environnement",
     "description": "URBAQUAI is a high-performance modular concrete system for making bus stops accessible. Temporary or permanent, compliant with all current standards.",
-    "cta": "See the system",
+    "cta": "Request a quote",
     "ficheTechnique": "Technical sheet"
+  },
+  "usp": {
+    "miseEnOeuvre": { "title": "Fast deployment and commissioning" },
+    "poseDirecte": { "title": "Direct installation on any surface" },
+    "logistique": { "title": "Simplified logistics and reuse" },
+    "accessibilite": { "title": "PMR accessibility and user safety" }
+  },
+  "concept": {
+    "titre": "URBAQUAI Concept",
+    "description": "URBAQUAI is a modular system of high-performance precast concrete bus platforms for making bus stops accessible. Our solution combines the strength of concrete, the speed of modular installation and the flexibility of a reusable system.",
+    "visuelLegende": "URBAQUAI module — high-performance precast concrete"
   },
   "stats": {
     "expertise": "of concrete expertise",
@@ -45,6 +55,7 @@
     "sousTitre": "In France, thousands of bus stops remain inaccessible to people with reduced mobility. URBAQUAI changes the game.",
     "constat": "The situation",
     "reponse": "The URBAQUAI answer",
+    "reponseTitre": "A complete and certified solution",
     "problems": {
       "inaccessibles": {
         "title": "Inaccessible stops",
@@ -89,7 +100,19 @@
   "configurationsGrid": {
     "titre": "4 configurations for every situation",
     "sousTitre": "Every bus stop is unique. URBAQUAI adapts with 4 modular configurations to meet every scenario.",
-    "voirTout": "See all configurations in detail"
+    "voirTout": "See all configurations in detail",
+    "detail": "View details"
+  },
+  "documentation": {
+    "titre": "Download our documentation",
+    "fiche": { "titre": "Technical sheet", "format": "PDF — 4 pages" },
+    "guide": { "titre": "Installation and maintenance guide", "format": "PDF — 12 pages" },
+    "norme": { "titre": "Regulatory documentation", "format": "PDF — Compliance" }
+  },
+  "apropos": {
+    "titre": "About URBAMAT Environnement",
+    "description": "Specialist in urban accessibility, URBAMAT designs innovative modular solutions for local authorities. For over 35 years, we have supported bus stop operators in upgrading their networks for PMR accessibility.",
+    "cta": "Learn more about the company"
   },
   "configurations": {
     "avancee": {

@@ -8,12 +8,13 @@ interface ModulePaletteProps {
   onSelect: (ref: ModuleRef) => void;
 }
 
-/** Modules manuels (D-009a est auto-généré derrière les modules plats du rang 1) */
+/** Modules manuels du catalog actuel */
 const ALL_MODULES: ModuleRef[] = [
-  "D-009", "D-004e", "D-012",
+  "D-009", "D-009s",
+  "D-004", "D-004a",
   "D-005", "D-002", "D-006",
-  "D-007e", "D-037",
-  "D-003e", "D-003",
+  "D-007", "D-007a", "D-008", "D-008a",
+  "D-003", "D-003a",
   "VIDE",
 ];
 

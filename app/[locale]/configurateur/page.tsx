@@ -116,21 +116,20 @@ export default function ConfigurateurPage() {
   // ─── Template : plan de référence 19 m ─────────────────────────
   function handleLoadTemplate() {
     const template: { ref: ModuleRef; rang: ModuleRow }[] = [
-      // Rang 1 (Voirie — côté trottoir)
+      // Rang 1 (trottoir)
       { ref: "D-009", rang: 1 },
-      { ref: "D-004e", rang: 1 },
-      { ref: "D-005", rang: 1 },
-      { ref: "D-006", rang: 1 },
-      { ref: "D-007e", rang: 1 },
+      { ref: "D-004a", rang: 1 },
       { ref: "D-005", rang: 1 },
       { ref: "D-005", rang: 1 },
-      { ref: "D-003e", rang: 1 },
-      // Rang 2 (côté bus)
-      { ref: "D-009", rang: 2 },
-      { ref: "D-012", rang: 2 },
+      { ref: "D-007a", rang: 1 },
+      { ref: "D-005", rang: 1 },
+      { ref: "D-005", rang: 1 },
+      { ref: "D-003a", rang: 1 },
+      // Rang 2 (chaussée)
+      { ref: "D-004", rang: 2 },
       { ref: "D-002", rang: 2 },
       { ref: "D-002", rang: 2 },
-      { ref: "D-037", rang: 2 },
+      { ref: "D-007", rang: 2 },
       { ref: "D-002", rang: 2 },
       { ref: "D-002", rang: 2 },
       { ref: "D-003", rang: 2 },

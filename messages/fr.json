@@ -1,10 +1,9 @@
 {
   "nav": {
-    "urbaquai": "URBAQUAI",
-    "urbaterra": "URBATERRA",
+    "concept": "Concept URBAQUAI®",
+    "produit": "Produit",
     "configurateur": "Configurateur",
-    "realisations": "Réalisations",
-    "reglementation": "Réglementation",
+    "apropos": "À propos",
     "telechargements": "Téléchargements",
     "contact": "Contact",
     "devis": "Demander un devis"
@@ -29,11 +28,22 @@
     "confidentialite": "Politique de confidentialité"
   },
   "hero": {
-    "titre": "Le quai bus accessible. En 48h.",
+    "titre": "Garantir l'accessibilité aux bus et aux cars.",
     "sousTitre": "Système breveté URBAMAT Environnement",
     "description": "URBAQUAI est le système modulaire en béton haute performance pour la mise en accessibilité des arrêts de bus. Provisoire ou définitif, conforme à toutes les normes en vigueur.",
-    "cta": "Voir le système",
+    "cta": "Demander un devis",
     "ficheTechnique": "Fiche technique"
+  },
+  "usp": {
+    "miseEnOeuvre": { "title": "Mise en œuvre et mise en service rapides" },
+    "poseDirecte": { "title": "Pose directe sur tout type de support" },
+    "logistique": { "title": "Logistique et réemploi simplifiés" },
+    "accessibilite": { "title": "Accessibilité PMR et sécurité d'usage" }
+  },
+  "concept": {
+    "titre": "Concept URBAQUAI",
+    "description": "URBAQUAI est un système modulaire de quais bus en béton préfabriqué haute performance pour la mise en accessibilité des arrêts de bus. Notre solution combine la robustesse du béton, la rapidité d'une pose modulaire et la flexibilité d'un système réemployable.",
+    "visuelLegende": "Module URBAQUAI — béton préfabriqué haute performance"
   },
   "stats": {
     "expertise": "d'expertise béton",
@@ -45,6 +55,7 @@
     "sousTitre": "En France, des milliers d'arrêts de bus restent inaccessibles aux personnes à mobilité réduite. URBAQUAI change la donne.",
     "constat": "Le constat",
     "reponse": "La réponse URBAQUAI",
+    "reponseTitre": "Une solution complète et certifiée",
     "problems": {
       "inaccessibles": {
         "title": "Arrêts inaccessibles",
@@ -89,7 +100,19 @@
   "configurationsGrid": {
     "titre": "4 configurations, toutes les situations",
     "sousTitre": "Chaque arrêt de bus est unique. URBAQUAI s'adapte avec 4 configurations modulaires pour répondre à tous les cas de figure.",
-    "voirTout": "Voir toutes les configurations en détail"
+    "voirTout": "Voir toutes les configurations en détail",
+    "detail": "Voir le détail"
+  },
+  "documentation": {
+    "titre": "Télécharger notre documentation",
+    "fiche": { "titre": "Fiche technique", "format": "PDF — 4 pages" },
+    "guide": { "titre": "Guide de pose et d'entretien", "format": "PDF — 12 pages" },
+    "norme": { "titre": "Documentation réglementaire", "format": "PDF — Conformité" }
+  },
+  "apropos": {
+    "titre": "À propos d'URBAMAT Environnement",
+    "description": "Spécialiste de l'accessibilité urbaine, URBAMAT conçoit des solutions modulaires innovantes pour les collectivités. Depuis plus de 35 ans, nous accompagnons les exploitants d'arrêts de bus dans la mise en accessibilité PMR de leurs réseaux.",
+    "cta": "En savoir plus sur l'entreprise"
   },
   "configurations": {
     "avancee": {

@@ -1,4 +1,4 @@
-import { ArrowRight, Download } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -9,78 +9,66 @@ export async function Hero() {
   const locale = await getLocale();
   const cms = await getCmsOverrides("home", locale);
 
-  // CMS overrides i18n defaults
   const titre = cms.hero_titre || t("titre");
-  const sousTitre = cms.hero_sous_titre || t("sousTitre");
   const description = cms.hero_description || t("description");
   const cta = cms.hero_cta || t("cta");
-  const heroImage = cms.hero_image;
-
-  // Séparer le titre pour colorer la fin en accent
-  const parts = titre.split(".");
-  const mainTitle = parts.slice(0, -1).join(".") + ".";
-  const accentTitle = parts[parts.length - 1]?.trim();
+  const eyebrow = cms.hero_sous_titre || t("sousTitre");
 
   return (
-    <section className="relative bg-neutral-dark min-h-[85vh] flex items-center overflow-hidden">
-      <div className="absolute inset-0">
-        {heroImage ? (
-          <>
+    <section className="relative overflow-hidden bg-surface">
+      <div className="absolute inset-x-0 top-0 h-[480px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent-100/60 via-surface to-surface" />
+      <div className="absolute -top-32 -right-24 h-96 w-96 rounded-full bg-accent/15 blur-3xl" />
+      <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-accent-200/40 blur-3xl" />
+
+      <Container className="relative z-10 pt-20 pb-24 lg:pt-28 lg:pb-32">
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto animate-fade-in">
+          <div className="mb-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-neutral-dark/70" />
-          </>
-        ) : (
-          <>
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/30 via-neutral-dark to-neutral-dark" />
-            <div
-              className="absolute inset-0 opacity-[0.03]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
-                backgroundSize: "60px 60px",
-              }}
+            <img
+              src="/images/logo-urbaquai.png"
+              alt="URBAQUAI®"
+              className="h-16 lg:h-20 w-auto mx-auto"
             />
-          </>
-        )}
-      </div>
+          </div>
 
-      <Container className="relative z-10 py-20 lg:py-28">
-        <div className="max-w-3xl animate-fade-in">
-          <span className="inline-block px-3 py-1 mb-6 text-sm font-medium text-accent bg-accent/10 rounded-full border border-accent/20">
-            {sousTitre}
-          </span>
+          <div className="mb-6 flex items-center justify-center w-20 h-20 rounded-2xl bg-accent shadow-lg shadow-accent/30">
+            <svg
+              className="w-10 h-10 text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="6" width="18" height="12" rx="2" />
+              <path d="M3 12h18" />
+              <path d="M7 18v2" />
+              <path d="M17 18v2" />
+              <circle cx="7.5" cy="14.5" r="0.5" fill="currentColor" />
+              <circle cx="16.5" cy="14.5" r="0.5" fill="currentColor" />
+            </svg>
+          </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.1]">
-            {mainTitle}{" "}
-            {accentTitle && (
-              <span className="text-accent">{accentTitle}</span>
-            )}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-dark leading-[1.1] tracking-tight">
+            {titre}
           </h1>
 
-          <p className="mt-6 text-lg md:text-xl text-gray-300 leading-relaxed max-w-2xl">
+          <p className="mt-6 text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl">
             {description}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4 animate-slide-up">
-            <Button href="/produit" size="lg">
+          <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+            <Button href="/contact" variant="secondary" size="lg" className="rounded-full text-white">
               {cta}
               <ArrowRight size={18} className="ml-2" />
             </Button>
-            <Button
-              href="/telechargements"
-              variant="outline"
-              size="lg"
-              className="border-white/30 text-white hover:bg-white hover:text-neutral-dark"
-            >
-              <Download size={18} className="mr-2" />
-              {t("ficheTechnique")}
-            </Button>
+            <span className="text-sm text-gray-500">
+              {eyebrow}
+            </span>
           </div>
         </div>
       </Container>
-
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-primary to-transparent" />
     </section>
   );
 }

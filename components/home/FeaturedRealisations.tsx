@@ -51,7 +51,7 @@ export function FeaturedRealisations() {
   const t = useTranslations("featuredRealisations");
 
   return (
-    <section className="py-20 lg:py-28 bg-neutral-light" ref={ref}>
+    <section className="py-20 lg:py-28 bg-white" ref={ref}>
       <Container>
         <SectionHeader
           titre={t("titre")}
