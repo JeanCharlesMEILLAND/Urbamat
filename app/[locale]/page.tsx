@@ -56,8 +56,28 @@ export default async function HomePage({ params }: Props) {
         legende={cms.concept_legende}
         visualUrl={cms.concept_visual}
       />
-      <Constat />
-      <Reponse />
+      <Constat
+        titre={cms.constat_titre}
+        sousTitre={cms.constat_sous_titre}
+        eyebrow={cms.constat_eyebrow}
+        cards={[
+          { titre: cms.constat_card1_titre, texte: cms.constat_card1_texte },
+          { titre: cms.constat_card2_titre, texte: cms.constat_card2_texte },
+          { titre: cms.constat_card3_titre, texte: cms.constat_card3_texte },
+        ]}
+      />
+      <Reponse
+        eyebrow={cms.reponse_eyebrow}
+        titre={cms.reponse_titre}
+        cards={[
+          { titre: cms.reponse_card1_titre, texte: cms.reponse_card1_texte, icon: cms.reponse_card1_icon },
+          { titre: cms.reponse_card2_titre, texte: cms.reponse_card2_texte, icon: cms.reponse_card2_icon },
+          { titre: cms.reponse_card3_titre, texte: cms.reponse_card3_texte, icon: cms.reponse_card3_icon },
+          { titre: cms.reponse_card4_titre, texte: cms.reponse_card4_texte, icon: cms.reponse_card4_icon },
+          { titre: cms.reponse_card5_titre, texte: cms.reponse_card5_texte, icon: cms.reponse_card5_icon },
+          { titre: cms.reponse_card6_titre, texte: cms.reponse_card6_texte, icon: cms.reponse_card6_icon },
+        ]}
+      />
       <ConfigurationsGrid
         titre={cms.configs_titre}
         sousTitre={cms.configs_sous_titre}
@@ -90,7 +110,23 @@ export default async function HomePage({ params }: Props) {
           },
         }}
       />
-      <ComparisonTable />
+      <ComparisonTable
+        titre={cms.comparison_titre}
+        sousTitre={cms.comparison_sous_titre}
+        critereLabel={cms.comparison_critere_label}
+        urbaquaiLabel={cms.comparison_urbaquai_label}
+        urbaquaiSubLabel={cms.comparison_urbaquai_sub}
+        plastiqueLabel={cms.comparison_plastique_label}
+        plastiqueSubLabel={cms.comparison_plastique_sub}
+        traditionnelLabel={cms.comparison_traditionnel_label}
+        traditionnelSubLabel={cms.comparison_traditionnel_sub}
+        rows={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((n) => ({
+          libelle: cms[`comparison_row${n}_libelle`],
+          urbaquai: cms[`comparison_row${n}_urbaquai`],
+          zicla: cms[`comparison_row${n}_plastique`],
+          traditionnel: cms[`comparison_row${n}_traditionnel`],
+        }))}
+      />
       <FeaturedRealisations
         realisations={featuredRealisations}
         titre={cms.realisations_titre}
@@ -100,8 +136,31 @@ export default async function HomePage({ params }: Props) {
         documents={featuredDocuments}
         titre={cms.documentation_titre}
       />
-      <APropos />
-      <ReglementationBlock />
+      <APropos
+        eyebrow={cms.apropos_eyebrow}
+        titre={cms.apropos_titre}
+        intro={cms.apropos_intro}
+        ctaPrimaryLabel={cms.apropos_cta_primaire}
+        ctaSecondaryLabel={cms.apropos_cta_secondaire}
+        cards={[
+          { titre: cms.apropos_card1_titre, texte: cms.apropos_card1_texte, icon: cms.apropos_card1_icon },
+          { titre: cms.apropos_card2_titre, texte: cms.apropos_card2_texte, icon: cms.apropos_card2_icon },
+          { titre: cms.apropos_card3_titre, texte: cms.apropos_card3_texte, icon: cms.apropos_card3_icon },
+          { titre: cms.apropos_card4_titre, texte: cms.apropos_card4_texte, icon: cms.apropos_card4_icon },
+          { titre: cms.apropos_card5_titre, texte: cms.apropos_card5_texte, icon: cms.apropos_card5_icon },
+        ]}
+        logosClients={cms.apropos_logos_clients?.split("|").map((s) => s.trim()).filter(Boolean)}
+      />
+      <ReglementationBlock
+        titre={cms.reglementation_titre}
+        sousTitre={cms.reglementation_sous_titre}
+        ctaLabel={cms.reglementation_cta_label}
+        cards={[
+          { titre: cms.reglementation_card1_titre, description: cms.reglementation_card1_description },
+          { titre: cms.reglementation_card2_titre, description: cms.reglementation_card2_description },
+          { titre: cms.reglementation_card3_titre, description: cms.reglementation_card3_description },
+        ]}
+      />
       <CtaContact
         titre={cms.cta_titre}
         description={cms.cta_description}

@@ -30,27 +30,64 @@ const ROWS: ComparisonRow[] = [
   { key: "delai", urbaquai: "48h", zicla: "24-48h", traditionnel: "2-4 sem." },
 ];
 
+interface ComparisonRowOverride {
+  /** Libellé de la ligne (colonne « Critère ») */
+  libelle?: string;
+  /** Cellule URBAQUAI : laisse vide = défaut. Pour mettre une icône à la place
+   *  d'un texte, écris `yes`, `no` ou `partial`. */
+  urbaquai?: string;
+  zicla?: string;
+  traditionnel?: string;
+}
+
+interface ComparisonTableProps {
+  titre?: string;
+  sousTitre?: string;
+  /** Libellés des en-têtes de colonnes */
+  critereLabel?: string;
+  urbaquaiLabel?: string;
+  urbaquaiSubLabel?: string;
+  plastiqueLabel?: string;
+  plastiqueSubLabel?: string;
+  traditionnelLabel?: string;
+  traditionnelSubLabel?: string;
+  /** Override de chaque ligne (11 lignes au total) */
+  rows?: ComparisonRowOverride[];
+}
+
 function CellContent({ value, t }: { value: CellValue; t: (key: string) => string }) {
   if (value === "yes") return <Check size={18} className="text-success mx-auto" />;
   if (value === "no") return <X size={18} className="text-red-500 mx-auto" />;
   if (value === "partial") return <Minus size={18} className="text-accent mx-auto" />;
-  // Check if value is a translation key
+  // Si la valeur est un alias i18n connu, on traduit (compat avec l'ancien
+  // schéma) ; sinon on rend tel quel — utile pour les overrides CMS bruts.
   const translated = ["cimentBasCarbone", "plastiqueRecycle", "betonStandard", "surfacePlastique", "variable", "massif"].includes(value)
     ? t(`values.${value}`)
     : value;
   return <span className="text-sm">{translated}</span>;
 }
 
-export function ComparisonTable() {
+export function ComparisonTable({
+  titre,
+  sousTitre,
+  critereLabel,
+  urbaquaiLabel,
+  urbaquaiSubLabel,
+  plastiqueLabel,
+  plastiqueSubLabel,
+  traditionnelLabel,
+  traditionnelSubLabel,
+  rows,
+}: ComparisonTableProps = {}) {
   const { ref, isInView } = useInView<HTMLDivElement>();
   const t = useTranslations("comparison");
 
   return (
-    <section className="py-20 lg:py-28 bg-white" ref={ref}>
+    <section id="comparison" className="py-20 lg:py-28 bg-white scroll-mt-24" ref={ref}>
       <Container>
         <SectionHeader
-          titre={t("titre")}
-          sousTitre={t("sousTitre")}
+          titre={titre || t("titre")}
+          sousTitre={sousTitre || t("sousTitre")}
         />
         <div className={cn(
           "mt-12 overflow-x-auto transition-all duration-700",
@@ -59,30 +96,39 @@ export function ComparisonTable() {
           <table className="w-full min-w-[650px] border-collapse">
             <thead>
               <tr>
-                <th className="text-left py-4 px-4 text-sm font-semibold text-gray-500 border-b-2 border-gray-100 w-[30%]">{t("critere")}</th>
+                <th className="text-left py-4 px-4 text-sm font-semibold text-gray-500 border-b-2 border-gray-100 w-[30%]">{critereLabel || t("critere")}</th>
                 <th className="py-4 px-4 text-center border-b-2 border-primary w-[25%]">
-                  <div className="text-base font-bold text-primary">{t("urbaquai")}</div>
-                  <div className="text-xs text-gray-500 font-normal mt-0.5">{t("urbaquaiSub")}</div>
+                  <div className="text-base font-bold text-primary">{urbaquaiLabel || t("urbaquai")}</div>
+                  <div className="text-xs text-gray-500 font-normal mt-0.5">{urbaquaiSubLabel || t("urbaquaiSub")}</div>
                 </th>
                 <th className="py-4 px-4 text-center text-sm font-semibold text-gray-500 border-b-2 border-gray-100 w-[22%]">
-                  <div>{t("plastique")}</div>
-                  <div className="text-xs font-normal mt-0.5">{t("plastiqueSub")}</div>
+                  <div>{plastiqueLabel || t("plastique")}</div>
+                  <div className="text-xs font-normal mt-0.5">{plastiqueSubLabel || t("plastiqueSub")}</div>
                 </th>
                 <th className="py-4 px-4 text-center text-sm font-semibold text-gray-500 border-b-2 border-gray-100 w-[23%]">
-                  <div>{t("traditionnel")}</div>
-                  <div className="text-xs font-normal mt-0.5">{t("traditionnelSub")}</div>
+                  <div>{traditionnelLabel || t("traditionnel")}</div>
+                  <div className="text-xs font-normal mt-0.5">{traditionnelSubLabel || t("traditionnelSub")}</div>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {ROWS.map((row, i) => (
-                <tr key={row.key} className={cn("border-b border-gray-50", i % 2 === 0 && "bg-gray-50/50")}>
-                  <td className="py-3.5 px-4 text-sm font-medium text-neutral-dark">{t(`rows.${row.key}`)}</td>
-                  <td className="py-3.5 px-4 text-center font-semibold text-primary bg-primary/[0.03]"><CellContent value={row.urbaquai} t={t} /></td>
-                  <td className="py-3.5 px-4 text-center text-gray-600"><CellContent value={row.zicla} t={t} /></td>
-                  <td className="py-3.5 px-4 text-center text-gray-600"><CellContent value={row.traditionnel} t={t} /></td>
-                </tr>
-              ))}
+              {ROWS.map((row, i) => {
+                const ov = rows?.[i];
+                return (
+                  <tr key={row.key} className={cn("border-b border-gray-50", i % 2 === 0 && "bg-gray-50/50")}>
+                    <td className="py-3.5 px-4 text-sm font-medium text-neutral-dark">{ov?.libelle || t(`rows.${row.key}`)}</td>
+                    <td className="py-3.5 px-4 text-center font-semibold text-primary bg-primary/[0.03]">
+                      <CellContent value={ov?.urbaquai || row.urbaquai} t={t} />
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-gray-600">
+                      <CellContent value={ov?.zicla || row.zicla} t={t} />
+                    </td>
+                    <td className="py-3.5 px-4 text-center text-gray-600">
+                      <CellContent value={ov?.traditionnel || row.traditionnel} t={t} />
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
