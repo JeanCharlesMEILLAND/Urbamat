@@ -2,7 +2,7 @@ import { prisma } from "./prisma";
 
 // ─── Types ─────────────────────────────────────────────────────
 
-export type FieldType = "texte" | "html" | "image";
+export type FieldType = "texte" | "html" | "image" | "icon";
 
 export interface SectionDef {
   key: string;
@@ -145,19 +145,19 @@ export const EDITABLE_PAGES: Record<string, PageDef> = {
           // Carte 1
           { key: "usp_card1_titre", label: "Carte 1 — Titre", type: "texte", placeholder: "Mise en œuvre et mise en service rapides" },
           { key: "usp_card1_description", label: "Carte 1 — Description", type: "texte", placeholder: "Pose en 24 h, mise en service immédiate, sans coulage de béton sur site." },
-          { key: "usp_card1_icon", label: "Carte 1 — Icône Lucide (ex: Zap, Truck, Layers, ShieldCheck, Recycle, Accessibility)", type: "texte", placeholder: "Zap" },
+          { key: "usp_card1_icon", label: "Carte 1 — Icône", type: "icon", placeholder: "Zap" },
           // Carte 2
           { key: "usp_card2_titre", label: "Carte 2 — Titre", type: "texte", placeholder: "Pose directe sur tout type de support" },
           { key: "usp_card2_description", label: "Carte 2 — Description", type: "texte", placeholder: "Compatible chaussée souple ou rigide, sans préparation lourde du sol." },
-          { key: "usp_card2_icon", label: "Carte 2 — Icône Lucide", type: "texte", placeholder: "Layers" },
+          { key: "usp_card2_icon", label: "Carte 2 — Icône", type: "icon", placeholder: "Layers" },
           // Carte 3
           { key: "usp_card3_titre", label: "Carte 3 — Titre", type: "texte", placeholder: "Logistique et réemploi simplifiés" },
           { key: "usp_card3_description", label: "Carte 3 — Description", type: "texte", placeholder: "Modules réutilisables, démontables, transportables sans engins lourds." },
-          { key: "usp_card3_icon", label: "Carte 3 — Icône Lucide", type: "texte", placeholder: "Recycle" },
+          { key: "usp_card3_icon", label: "Carte 3 — Icône", type: "icon", placeholder: "Recycle" },
           // Carte 4
           { key: "usp_card4_titre", label: "Carte 4 — Titre", type: "texte", placeholder: "Accessibilité PMR et sécurité d'usage" },
           { key: "usp_card4_description", label: "Carte 4 — Description", type: "texte", placeholder: "Hauteur d'accostage normée, surface antidérapante, conformité PMR." },
-          { key: "usp_card4_icon", label: "Carte 4 — Icône Lucide", type: "texte", placeholder: "Accessibility" },
+          { key: "usp_card4_icon", label: "Carte 4 — Icône", type: "icon", placeholder: "Accessibility" },
         ],
       },
       {
@@ -189,22 +189,22 @@ export const EDITABLE_PAGES: Record<string, PageDef> = {
           // 6 cartes
           { key: "reponse_card1_titre", label: "Carte 1 — Titre", type: "texte", placeholder: "Accessibilité PMR" },
           { key: "reponse_card1_texte", label: "Carte 1 — Texte", type: "texte", placeholder: "Hauteur d'accostage normée 21 cm…" },
-          { key: "reponse_card1_icon", label: "Carte 1 — Icône Lucide", type: "texte", placeholder: "Accessibility" },
+          { key: "reponse_card1_icon", label: "Carte 1 — Icône", type: "icon", placeholder: "Accessibility" },
           { key: "reponse_card2_titre", label: "Carte 2 — Titre", type: "texte", placeholder: "Pose en 48h" },
           { key: "reponse_card2_texte", label: "Carte 2 — Texte", type: "texte", placeholder: "Modules préfabriqués, pose à sec…" },
-          { key: "reponse_card2_icon", label: "Carte 2 — Icône Lucide", type: "texte", placeholder: "Zap" },
+          { key: "reponse_card2_icon", label: "Carte 2 — Icône", type: "icon", placeholder: "Zap" },
           { key: "reponse_card3_titre", label: "Carte 3 — Titre", type: "texte", placeholder: "Modulaire & démontable" },
           { key: "reponse_card3_texte", label: "Carte 3 — Texte", type: "texte", placeholder: "Réutilisable, transportable, adaptable…" },
-          { key: "reponse_card3_icon", label: "Carte 3 — Icône Lucide", type: "texte", placeholder: "Wrench" },
+          { key: "reponse_card3_icon", label: "Carte 3 — Icône", type: "icon", placeholder: "Wrench" },
           { key: "reponse_card4_titre", label: "Carte 4 — Titre", type: "texte", placeholder: "Transparence hydraulique" },
           { key: "reponse_card4_texte", label: "Carte 4 — Texte", type: "texte", placeholder: "Permet l'écoulement des eaux pluviales…" },
-          { key: "reponse_card4_icon", label: "Carte 4 — Icône Lucide", type: "texte", placeholder: "Droplets" },
+          { key: "reponse_card4_icon", label: "Carte 4 — Icône", type: "icon", placeholder: "Droplets" },
           { key: "reponse_card5_titre", label: "Carte 5 — Titre", type: "texte", placeholder: "Albédo élevé" },
           { key: "reponse_card5_texte", label: "Carte 5 — Texte", type: "texte", placeholder: "Surface claire, confort thermique…" },
-          { key: "reponse_card5_icon", label: "Carte 5 — Icône Lucide", type: "texte", placeholder: "Sun" },
+          { key: "reponse_card5_icon", label: "Carte 5 — Icône", type: "icon", placeholder: "Sun" },
           { key: "reponse_card6_titre", label: "Carte 6 — Titre", type: "texte", placeholder: "Certifié CERIB" },
           { key: "reponse_card6_texte", label: "Carte 6 — Texte", type: "texte", placeholder: "Béton C40/50 XF4 conforme aux normes…" },
-          { key: "reponse_card6_icon", label: "Carte 6 — Icône Lucide", type: "texte", placeholder: "BadgeCheck" },
+          { key: "reponse_card6_icon", label: "Carte 6 — Icône", type: "icon", placeholder: "BadgeCheck" },
         ],
       },
       {
@@ -295,26 +295,29 @@ export const EDITABLE_PAGES: Record<string, PageDef> = {
         icon: "Users",
         sections: [
           { key: "apropos_eyebrow", label: "Eyebrow (au-dessus du titre)", type: "texte", placeholder: "URBAMAT Environnement" },
-          { key: "apropos_titre", label: "Titre", type: "texte", placeholder: "À propos d'URBAMAT" },
-          { key: "apropos_intro", label: "Introduction (HTML — autorise <strong>, <br/>)", type: "html", placeholder: "PME familiale basée en Alsace…" },
-          { key: "apropos_cta_primaire", label: "Libellé bouton principal", type: "texte", placeholder: "Découvrir l'entreprise" },
-          { key: "apropos_cta_secondaire", label: "Libellé bouton secondaire", type: "texte", placeholder: "Nous contacter" },
+          { key: "apropos_titre", label: "Titre", type: "texte", placeholder: "À propos d'URBAMAT Environnement" },
+          { key: "apropos_intro", label: "Introduction (HTML — autorise <strong>, <br/>)", type: "html", placeholder: "PME familiale basée en Alsace, URBAMAT Environnement conçoit et développe depuis le début des années 2000 des solutions en béton préfabriqué dédiées à la mobilité urbaine.<br/><br/>Sa philosophie s'inscrit dans une démarche d'amélioration de la qualité de service des transports publics afin de garantir une mobilité accessible, sûre et sans obstacle pour l'ensemble des usagers." },
+          { key: "apropos_visuel", label: "Visuel décoratif (image carrée à droite — par défaut : mosaïque emoji)", type: "image" },
+          { key: "apropos_cta_primaire", label: "Bouton principal — Libellé", type: "texte", placeholder: "Découvrir l'entreprise" },
+          { key: "apropos_cta_primaire_url", label: "Bouton principal — URL", type: "texte", placeholder: "/apropos" },
+          { key: "apropos_cta_secondaire", label: "Bouton secondaire — Libellé", type: "texte", placeholder: "En savoir plus sur l'entreprise" },
+          { key: "apropos_cta_secondaire_url", label: "Bouton secondaire — URL", type: "texte", placeholder: "/contact" },
           // 5 cartes
           { key: "apropos_card1_titre", label: "Carte 1 — Titre", type: "texte", placeholder: "Une expertise historique de l'accessibilité bus" },
           { key: "apropos_card1_texte", label: "Carte 1 — Texte (HTML)", type: "html", placeholder: "Forte d'une expertise reconnue…" },
-          { key: "apropos_card1_icon", label: "Carte 1 — Icône Lucide", type: "texte", placeholder: "Award" },
+          { key: "apropos_card1_icon", label: "Carte 1 — Icône", type: "icon", placeholder: "Award" },
           { key: "apropos_card2_titre", label: "Carte 2 — Titre", type: "texte", placeholder: "URBAQUAI® : une réponse issue des retours d'expérience" },
           { key: "apropos_card2_texte", label: "Carte 2 — Texte (HTML)", type: "html", placeholder: "C'est dans cette continuité…" },
-          { key: "apropos_card2_icon", label: "Carte 2 — Icône Lucide", type: "texte", placeholder: "Wrench" },
+          { key: "apropos_card2_icon", label: "Carte 2 — Icône", type: "icon", placeholder: "Wrench" },
           { key: "apropos_card3_titre", label: "Carte 3 — Titre", type: "texte", placeholder: "Un niveau d'exigence élevé" },
           { key: "apropos_card3_texte", label: "Carte 3 — Texte (HTML)", type: "html", placeholder: "URBAMAT applique des standards rigoureux…" },
-          { key: "apropos_card3_icon", label: "Carte 3 — Icône Lucide", type: "texte", placeholder: "ShieldCheck" },
+          { key: "apropos_card3_icon", label: "Carte 3 — Icône", type: "icon", placeholder: "ShieldCheck" },
           { key: "apropos_card4_titre", label: "Carte 4 — Titre", type: "texte", placeholder: "Un ancrage reconnu dans la filière" },
           { key: "apropos_card4_texte", label: "Carte 4 — Texte (HTML)", type: "html", placeholder: "URBAMAT Environnement est adhérent…" },
-          { key: "apropos_card4_icon", label: "Carte 4 — Icône Lucide", type: "texte", placeholder: "Train" },
+          { key: "apropos_card4_icon", label: "Carte 4 — Icône", type: "icon", placeholder: "Train" },
           { key: "apropos_card5_titre", label: "Carte 5 — Titre", type: "texte", placeholder: "Une confiance renouvelée" },
           { key: "apropos_card5_texte", label: "Carte 5 — Texte (HTML)", type: "html", placeholder: "La confiance accordée aux solutions URBAMAT…" },
-          { key: "apropos_card5_icon", label: "Carte 5 — Icône Lucide", type: "texte", placeholder: "Users" },
+          { key: "apropos_card5_icon", label: "Carte 5 — Icône", type: "icon", placeholder: "Users" },
           { key: "apropos_logos_clients", label: "Logos clients (séparés par |, ex: SNCF Réseau|Nice Métropole)", type: "texte", placeholder: "SNCF Réseau|SNCF Gares & Connexions|Nice Métropole" },
         ],
       },

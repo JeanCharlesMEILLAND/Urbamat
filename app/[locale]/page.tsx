@@ -141,7 +141,10 @@ export default async function HomePage({ params }: Props) {
         titre={cms.apropos_titre}
         intro={cms.apropos_intro}
         ctaPrimaryLabel={cms.apropos_cta_primaire}
+        ctaPrimaryUrl={cms.apropos_cta_primaire_url}
         ctaSecondaryLabel={cms.apropos_cta_secondaire}
+        ctaSecondaryUrl={cms.apropos_cta_secondaire_url}
+        visuelUrl={cms.apropos_visuel}
         cards={[
           { titre: cms.apropos_card1_titre, texte: cms.apropos_card1_texte, icon: cms.apropos_card1_icon },
           { titre: cms.apropos_card2_titre, texte: cms.apropos_card2_texte, icon: cms.apropos_card2_icon },

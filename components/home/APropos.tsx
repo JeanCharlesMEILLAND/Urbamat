@@ -22,8 +22,14 @@ interface AProposProps {
   intro?: string;
   /** Libellé du CTA "Découvrir l'entreprise" */
   ctaPrimaryLabel?: string;
-  /** Libellé du CTA secondaire (par défaut : "Nous contacter") */
+  /** URL du CTA primaire (par défaut /apropos) */
+  ctaPrimaryUrl?: string;
+  /** Libellé du CTA secondaire (par défaut : "En savoir plus sur l'entreprise") */
   ctaSecondaryLabel?: string;
+  /** URL du CTA secondaire (par défaut /contact) */
+  ctaSecondaryUrl?: string;
+  /** Image carrée affichée à droite. Si vide, fallback sur la mosaïque emoji décorative. */
+  visuelUrl?: string;
   /** 5 cartes (texte HTML accepté). Index : expertise, urbaquai, exigence, ancrage, confiance. */
   cards?: [
     AProposCardOverride | undefined,
@@ -69,7 +75,10 @@ export function APropos({
   titre,
   intro,
   ctaPrimaryLabel,
+  ctaPrimaryUrl,
   ctaSecondaryLabel,
+  ctaSecondaryUrl,
+  visuelUrl,
   cards,
   logosClients,
 }: AProposProps = {}) {
@@ -109,7 +118,7 @@ export function APropos({
             )}
             <div className="mt-8 flex items-center gap-4">
               <Link
-                href="/apropos"
+                href={ctaPrimaryUrl || "/apropos"}
                 className="inline-flex items-center gap-2 text-accent font-semibold hover:gap-3 transition-all"
               >
                 {ctaPrimaryLabel || "Découvrir l'entreprise"}
@@ -117,7 +126,7 @@ export function APropos({
               </Link>
               <span className="text-gray-300">·</span>
               <Link
-                href="/contact"
+                href={ctaSecondaryUrl || "/contact"}
                 className="inline-flex items-center gap-2 text-gray-600 font-medium hover:text-accent transition-colors"
               >
                 {ctaSecondaryLabel || t("cta")}
@@ -127,20 +136,31 @@ export function APropos({
 
           <div className="lg:col-span-5">
             <div className="relative aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-accent-100 via-accent-50 to-white border border-surface-200">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="grid grid-cols-2 gap-4 p-8">
-                  {[0, 1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className="aspect-square rounded-2xl bg-white/80 backdrop-blur-sm shadow-sm flex items-center justify-center text-3xl"
-                    >
-                      {["🏗️", "🚌", "♿", "🧱"][i]}
+              {visuelUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={visuelUrl}
+                  alt="URBAMAT Environnement"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              ) : (
+                <>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="grid grid-cols-2 gap-4 p-8">
+                      {[0, 1, 2, 3].map((i) => (
+                        <div
+                          key={i}
+                          className="aspect-square rounded-2xl bg-white/80 backdrop-blur-sm shadow-sm flex items-center justify-center text-3xl"
+                        >
+                          {["🏗️", "🚌", "♿", "🧱"][i]}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-accent/30 blur-2xl" />
-              <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-accent-200/40 blur-2xl" />
+                  </div>
+                  <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-accent/30 blur-2xl" />
+                  <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-accent-200/40 blur-2xl" />
+                </>
+              )}
             </div>
           </div>
         </div>

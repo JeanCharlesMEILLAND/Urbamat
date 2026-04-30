@@ -7,8 +7,9 @@ import {
   Sparkles, BarChart3, AlertTriangle, Grid3x3, Table,
   MapPin, ShieldCheck, Send, Package, Settings, Wrench,
   ArrowRight, UtensilsCrossed, Users, Mail, FileText,
-  Download, Scale, Upload, X, Eye,
+  Download, Scale, Upload, X, Eye, Smile,
 } from "lucide-react";
+import { IconPicker } from "@/components/admin/IconPicker";
 
 // Icon map from string name to component
 const ICONS: Record<string, any> = {
@@ -21,7 +22,7 @@ const ICONS: Record<string, any> = {
 interface SectionDef {
   key: string;
   label: string;
-  type: "texte" | "html" | "image";
+  type: "texte" | "html" | "image" | "icon";
   placeholder?: string;
 }
 
@@ -584,6 +585,8 @@ export default function AdminPagesPage() {
                                 <ImageIcon size={14} className="text-gray-400" />
                               ) : section.type === "html" ? (
                                 <Code2 size={14} className="text-gray-400" />
+                              ) : section.type === "icon" ? (
+                                <Smile size={14} className="text-gray-400" />
                               ) : (
                                 <Type size={14} className="text-gray-400" />
                               )}
@@ -598,6 +601,12 @@ export default function AdminPagesPage() {
                                   handleImageUpload(activePage, section.key, f)
                                 }
                                 uploading={uploading === section.key}
+                              />
+                            ) : section.type === "icon" ? (
+                              <IconPicker
+                                value={getInputValue(activePage, section)}
+                                onChange={(v) => setValue(activePage, section.key, v)}
+                                fallback={section.placeholder}
                               />
                             ) : section.type === "html" ? (
                               <textarea
