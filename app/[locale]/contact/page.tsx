@@ -26,11 +26,37 @@ export default async function ContactPage({ params }: Props) {
   const t = await getTranslations("contact");
   const cms = await getCmsOverrides("contact", locale);
 
+  // Téléphone affiché — par défaut SITE_CONFIG.tel. Le href tel: est dérivé en
+  // retirant les espaces du numéro pour rester cliquable même si le client
+  // change le format.
+  const phoneDisplay = cms.contact_telephone || SITE_CONFIG.tel;
+  const emailDisplay = cms.contact_email || SITE_CONFIG.email;
+  const phoneHref = `tel:${phoneDisplay.replace(/\s/g, "")}`;
+  const emailHref = `mailto:${emailDisplay}`;
+
   const CONTACT_INFO = [
-    { icon: Phone, label: t("telephone"), value: SITE_CONFIG.tel, href: "tel:+33388010961" },
-    { icon: Mail, label: t("emailLabel"), value: SITE_CONFIG.email, href: `mailto:${SITE_CONFIG.email}` },
-    { icon: MapPin, label: t("adresse"), value: "URBAMAT Environnement\n4 rue d'Altenheim\n67490 Lupstein, France" },
-    { icon: Clock, label: t("horaires"), value: t("horairesValue") },
+    {
+      icon: Phone,
+      label: cms.contact_telephone_label || t("telephone"),
+      value: phoneDisplay,
+      href: phoneHref,
+    },
+    {
+      icon: Mail,
+      label: cms.contact_email_label || t("emailLabel"),
+      value: emailDisplay,
+      href: emailHref,
+    },
+    {
+      icon: MapPin,
+      label: cms.contact_adresse_label || t("adresse"),
+      value: cms.contact_adresse || "URBAMAT Environnement\n4 rue d'Altenheim\n67490 Lupstein, France",
+    },
+    {
+      icon: Clock,
+      label: cms.contact_horaires_label || t("horaires"),
+      value: cms.contact_horaires || t("horairesValue"),
+    },
   ];
 
   return (
@@ -45,11 +71,15 @@ export default async function ContactPage({ params }: Props) {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="lg:col-span-2">
-              <h2 className="text-xl font-bold text-neutral-dark mb-6">{t("formulaire")}</h2>
+              <h2 className="text-xl font-bold text-neutral-dark mb-6">
+                {cms.contact_formulaire_titre || t("formulaire")}
+              </h2>
               <LeadForm />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-neutral-dark mb-6">{t("coordonnees")}</h2>
+              <h2 className="text-xl font-bold text-neutral-dark mb-6">
+                {cms.contact_coordonnees_titre || t("coordonnees")}
+              </h2>
               <div className="space-y-6">
                 {CONTACT_INFO.map((info) => (
                   <div key={info.label} className="flex gap-3">
@@ -68,10 +98,17 @@ export default async function ContactPage({ params }: Props) {
                 ))}
               </div>
               <div className="mt-8 bg-accent/10 border border-accent/20 rounded-lg p-5">
-                <h3 className="font-semibold text-neutral-dark text-sm">{t("prescripteur")}</h3>
-                <p className="text-sm text-gray-600 mt-2 leading-relaxed">{t("prescripteurTexte")}</p>
-                <a href="/telechargements" className="inline-block mt-3 text-sm font-medium text-primary hover:text-primary-600 transition-colors">
-                  {t("accesTelechargements")} &rarr;
+                <h3 className="font-semibold text-neutral-dark text-sm">
+                  {cms.prescripteur_titre || t("prescripteur")}
+                </h3>
+                <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+                  {cms.prescripteur_texte || t("prescripteurTexte")}
+                </p>
+                <a
+                  href={cms.prescripteur_cta_url || "/telechargements"}
+                  className="inline-block mt-3 text-sm font-medium text-primary hover:text-primary-600 transition-colors"
+                >
+                  {cms.prescripteur_cta_label || t("accesTelechargements")} &rarr;
                 </a>
               </div>
             </div>

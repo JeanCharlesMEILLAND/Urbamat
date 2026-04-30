@@ -107,6 +107,20 @@ const I18N_KEY_MAP: Record<string, string> = {
   // Contact page
   prescripteur_titre: "contact.prescripteur.titre",
   prescripteur_texte: "contact.prescripteur.texte",
+  prescripteur_cta_label: "contact.accesTelechargements",
+  contact_telephone_label: "contact.telephone",
+  contact_email_label: "contact.emailLabel",
+  contact_adresse_label: "contact.adresse",
+  contact_horaires_label: "contact.horaires",
+  contact_horaires: "contact.horairesValue",
+  contact_formulaire_titre: "contact.formulaire",
+  contact_coordonnees_titre: "contact.coordonnees",
+  // Téléchargements
+  documents_disponibles: "telechargements.documentsDisponibles",
+  acces_documents: "telechargements.accesDocuments",
+  acces_debloque: "telechargements.accesDebloque",
+  cliquez_telecharger: "telechargements.cliquezTelecharger",
+  remplissez_formulaire: "telechargements.remplissezFormulaire",
   // Layout
   navbar_concept: "nav.concept",
   navbar_produit: "nav.produit",
