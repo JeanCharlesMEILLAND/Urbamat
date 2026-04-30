@@ -577,59 +577,101 @@ export default function AdminPagesPage() {
 
                     {/* Block fields */}
                     {isExpanded && (
-                      <div className="border-t border-gray-100 bg-gray-50/30 px-5 py-5 space-y-5">
-                        {block.sections.map((section) => (
-                          <div key={section.key}>
-                            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
-                              {section.type === "image" ? (
-                                <ImageIcon size={14} className="text-gray-400" />
-                              ) : section.type === "html" ? (
-                                <Code2 size={14} className="text-gray-400" />
-                              ) : section.type === "icon" ? (
-                                <Smile size={14} className="text-gray-400" />
-                              ) : (
-                                <Type size={14} className="text-gray-400" />
-                              )}
-                              {section.label}
-                            </label>
+                      <div className="border-t border-gray-100 bg-gray-50/30 px-5 py-5 space-y-3">
+                        {(() => {
+                          // Détecte les groupes "Carte N", "Ligne N" ou "Bouton X" dans le label
+                          // pour regrouper visuellement les champs d'une même unité (titre/texte/icône
+                          // d'une carte, par exemple). Insère un séparateur quand le groupe change.
+                          const matchGroup = (label: string) => {
+                            const m = label.match(/^((?:Carte|Ligne|Bouton)\s+(?:\d+|principal|secondaire))\s*—\s*(.+)$/);
+                            return m ? { group: m[1], clean: m[2] } : { group: null as string | null, clean: label };
+                          };
+                          let lastGroup: string | null = null;
+                          const elements: React.ReactNode[] = [];
 
-                            {section.type === "image" ? (
-                              <ImageField
-                                value={getInputValue(activePage, section)}
-                                onChange={(v) => setValue(activePage, section.key, v)}
-                                onUpload={(f) =>
-                                  handleImageUpload(activePage, section.key, f)
-                                }
-                                uploading={uploading === section.key}
-                              />
-                            ) : section.type === "icon" ? (
-                              <IconPicker
-                                value={getInputValue(activePage, section)}
-                                onChange={(v) => setValue(activePage, section.key, v)}
-                                fallback={section.placeholder}
-                              />
-                            ) : section.type === "html" ? (
-                              <textarea
-                                value={getInputValue(activePage, section)}
-                                onChange={(e) =>
-                                  setValue(activePage, section.key, e.target.value)
-                                }
-                                rows={5}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors resize-y bg-white font-mono"
-                                placeholder={`Contenu HTML…`}
-                              />
-                            ) : (
-                              <input
-                                type="text"
-                                value={getInputValue(activePage, section)}
-                                onChange={(e) =>
-                                  setValue(activePage, section.key, e.target.value)
-                                }
-                                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors bg-white"
-                              />
-                            )}
-                          </div>
-                        ))}
+                          block.sections.forEach((section) => {
+                            const { group, clean } = matchGroup(section.label);
+
+                            if (group && group !== lastGroup) {
+                              // Header de groupe (ex. ── Carte 1 ──)
+                              elements.push(
+                                <div
+                                  key={`grp-${group}`}
+                                  className="flex items-center gap-2 pt-3 pb-1 first:pt-0"
+                                >
+                                  <span className="h-px flex-1 bg-gray-200" />
+                                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-2">
+                                    {group}
+                                  </span>
+                                  <span className="h-px flex-1 bg-gray-200" />
+                                </div>
+                              );
+                            } else if (!group && lastGroup) {
+                              // Sortie d'un groupe vers du non-groupé : marge supplémentaire
+                              elements.push(<div key={`gap-${section.key}`} className="h-1" />);
+                            }
+                            lastGroup = group;
+
+                            const inGroup = group !== null;
+
+                            elements.push(
+                              <div
+                                key={section.key}
+                                className={inGroup ? "pl-3 border-l-2 border-gray-200" : ""}
+                              >
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-1.5">
+                                  {section.type === "image" ? (
+                                    <ImageIcon size={14} className="text-gray-400" />
+                                  ) : section.type === "html" ? (
+                                    <Code2 size={14} className="text-gray-400" />
+                                  ) : section.type === "icon" ? (
+                                    <Smile size={14} className="text-gray-400" />
+                                  ) : (
+                                    <Type size={14} className="text-gray-400" />
+                                  )}
+                                  {clean}
+                                </label>
+
+                                {section.type === "image" ? (
+                                  <ImageField
+                                    value={getInputValue(activePage, section)}
+                                    onChange={(v) => setValue(activePage, section.key, v)}
+                                    onUpload={(f) =>
+                                      handleImageUpload(activePage, section.key, f)
+                                    }
+                                    uploading={uploading === section.key}
+                                  />
+                                ) : section.type === "icon" ? (
+                                  <IconPicker
+                                    value={getInputValue(activePage, section)}
+                                    onChange={(v) => setValue(activePage, section.key, v)}
+                                    fallback={section.placeholder}
+                                  />
+                                ) : section.type === "html" ? (
+                                  <textarea
+                                    value={getInputValue(activePage, section)}
+                                    onChange={(e) =>
+                                      setValue(activePage, section.key, e.target.value)
+                                    }
+                                    rows={5}
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors resize-y bg-white font-mono"
+                                    placeholder={`Contenu HTML…`}
+                                  />
+                                ) : (
+                                  <input
+                                    type="text"
+                                    value={getInputValue(activePage, section)}
+                                    onChange={(e) =>
+                                      setValue(activePage, section.key, e.target.value)
+                                    }
+                                    className="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors bg-white"
+                                  />
+                                )}
+                              </div>
+                            );
+                          });
+                          return elements;
+                        })()}
                       </div>
                     )}
                   </div>
