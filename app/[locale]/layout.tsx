@@ -68,6 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         fr: "/",
         en: "/en",
         de: "/de",
+        nl: "/nl",
       },
     },
   };
@@ -101,6 +102,12 @@ export default async function LocaleLayout({ children, params }: Props) {
               devis: layoutCms.navbar_devis_cta,
             }}
             devisUrl={layoutCms.navbar_devis_url}
+            langLabels={{
+              fr: layoutCms.navbar_lang_fr,
+              en: layoutCms.navbar_lang_en,
+              de: layoutCms.navbar_lang_de,
+              nl: layoutCms.navbar_lang_nl,
+            }}
           />
           <main className="flex-1">{children}</main>
           <Footer description={layoutCms.footer_description} />

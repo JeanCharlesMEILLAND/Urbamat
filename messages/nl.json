@@ -1,0 +1,655 @@
+{
+  "nav": {
+    "concept": "URBAQUAI® Concept",
+    "produit": "Product",
+    "configurateur": "Configurator",
+    "apropos": "Over ons",
+    "telechargements": "Downloads",
+    "contact": "Contact",
+    "devis": "Offerte aanvragen"
+  },
+  "footer": {
+    "description": "Hoogwaardig modulair betonnen bushaltesysteem. Tijdelijk of permanent, rolstoeltoegankelijk, geplaatst in 48 uur.",
+    "solution": "Een {company}-oplossing",
+    "produit": "Producten",
+    "ressources": "Bronnen",
+    "contact": "Contact",
+    "links": {
+      "urbaquai": "URBAQUAI — Bushalte",
+      "configurateur": "3D-configurator",
+      "telechargements": "Downloads",
+      "apropos": "Over URBAMAT",
+      "urbaterra": "URBATERRA — Terras",
+      "configurations": "Configuraties",
+      "realisations": "Realisaties",
+      "reglementation": "Regelgeving",
+      "contact": "Contact"
+    },
+    "legal": "Alle rechten voorbehouden.",
+    "mentionsLegales": "Wettelijke vermeldingen",
+    "confidentialite": "Privacybeleid"
+  },
+  "hero": {
+    "titre": "Maak elke bushalte en touringcarhalte toegankelijk.",
+    "sousTitre": "Gepatenteerd systeem van URBAMAT Environnement",
+    "description": "URBAQUAI is een hoogwaardig modulair betonsysteem voor toegankelijke bushaltes. Tijdelijk of permanent, conform alle geldende normen.",
+    "cta": "Offerte aanvragen",
+    "ficheTechnique": "Technische fiche"
+  },
+  "usp": {
+    "miseEnOeuvre": {
+      "title": "Snelle uitvoering en ingebruikname"
+    },
+    "poseDirecte": {
+      "title": "Directe plaatsing op elke ondergrond"
+    },
+    "logistique": {
+      "title": "Eenvoudige logistiek en hergebruik"
+    },
+    "accessibilite": {
+      "title": "PBM-toegankelijkheid en gebruiksveiligheid"
+    }
+  },
+  "concept": {
+    "titre": "URBAQUAI Concept",
+    "description": "URBAQUAI is een modulair systeem van hoogwaardige geprefabriceerde betonnen bushaltes voor de toegankelijkheid van bushaltes. Onze oplossing combineert de sterkte van beton, de snelheid van modulaire montage en de flexibiliteit van een herbruikbaar systeem.",
+    "visuelLegende": "URBAQUAI-module — hoogwaardig geprefabriceerd beton"
+  },
+  "stats": {
+    "expertise": "ervaring in beton",
+    "pose": "installatie op locatie",
+    "quais": "bushaltes geïnstalleerd in Frankrijk"
+  },
+  "problemSolution": {
+    "titre": "Een nationaal probleem. Een concrete oplossing.",
+    "sousTitre": "In Frankrijk blijven duizenden bushaltes ontoegankelijk voor mensen met beperkte mobiliteit. URBAQUAI verandert dat.",
+    "constat": "De vaststelling",
+    "reponse": "Het URBAQUAI-antwoord",
+    "reponseTitre": "Een complete en gecertificeerde oplossing",
+    "problems": {
+      "inaccessibles": {
+        "title": "Ontoegankelijke haltes",
+        "text": "Duizenden bushaltes in Frankrijk voldoen nog steeds niet aan de toegankelijkheidswet van 2005."
+      },
+      "travaux": {
+        "title": "Lange en dure werken",
+        "text": "Gestorte betonoplossingen vereisen weken van bouw, grondwerk en uitharding."
+      },
+      "perturbation": {
+        "title": "Verkeershinder",
+        "text": "Traditionele bouwplaatsen vereisen omleidingen en langdurige onderbrekingen van de dienst."
+      }
+    },
+    "solutions": {
+      "accessibilite": {
+        "title": "Onmiddellijke toegankelijkheid",
+        "text": "Genormeerde hoogte voor gelijkvloerse instap, rolstoelvriendelijk vanaf de installatie."
+      },
+      "pose48h": {
+        "title": "Plaatsing in 48 uur",
+        "text": "Geprefabriceerde modules klaar voor montage. Geen bekisting, geen droogtijd, geen wachten."
+      },
+      "modulaire": {
+        "title": "Modulair en omkeerbaar",
+        "text": "Tijdelijke of permanente configuratie. Demonteerbaar en herplaatsbaar zonder afbraak."
+      },
+      "hydraulique": {
+        "title": "Hydraulische transparantie",
+        "text": "Continue functionele ruimte onder de plaat — laterale en longitudinale afvoer van regenwater, zonder retentie."
+      },
+      "albedo": {
+        "title": "Hoge albedo",
+        "text": "Vermindering van oppervlakte-opwarming en hitte-eilanden. 4 lichte natuurlijke kleuren beschikbaar."
+      },
+      "certifie": {
+        "title": "Gecertificeerd CERIB EN 1339",
+        "text": "Beton C40/50, koolstofarme NF-cement, gevalideerde CERIB-tests. Conform CEREMA 2018 en toegankelijkheidswet 2005."
+      }
+    }
+  },
+  "configurationsGrid": {
+    "titre": "4 configuraties, alle situaties",
+    "sousTitre": "Elke bushalte is uniek. URBAQUAI past zich aan met 4 modulaire configuraties voor elke mogelijke situatie.",
+    "voirTout": "Bekijk alle configuraties",
+    "detail": "Details bekijken"
+  },
+  "documentation": {
+    "titre": "Onze documentatie downloaden",
+    "fiche": {
+      "titre": "Technical sheet",
+      "format": "PDF — 4 pages"
+    },
+    "guide": {
+      "titre": "Installation and maintenance guide",
+      "format": "PDF — 12 pages"
+    },
+    "norme": {
+      "titre": "Regulatory documentation",
+      "format": "PDF — Compliance"
+    }
+  },
+  "apropos": {
+    "titre": "Over URBAMAT Environnement",
+    "description": "Specialist in stedelijke toegankelijkheid, URBAMAT ontwerpt innovatieve modulaire oplossingen voor gemeenten. Al meer dan 35 jaar begeleiden wij bushalte-exploitanten bij de PBM-toegankelijkheid van hun netwerk.",
+    "cta": "Meer over het bedrijf"
+  },
+  "configurations": {
+    "avancee": {
+      "titre": "Sidewalk extension",
+      "sousTitre": "Boarding bulb",
+      "description": "Sidewalk extension at the bus stop level, enabling optimal vehicle docking and step-free access for wheelchair users.",
+      "avantages": [
+        "Precise bus docking",
+        "Step-free wheelchair access",
+        "Traffic lane maintained",
+        "Quick installation without heavy earthwork"
+      ],
+      "casUsage": [
+        "Straight-line stops",
+        "Streets with lateral parking",
+        "Dense urban areas"
+      ]
+    },
+    "avancee_velo": {
+      "titre": "Extension with cycle lane",
+      "sousTitre": "Boarding bulb + cycle lane",
+      "description": "Advanced configuration integrating a secure cycle lane behind the platform, enabling bus-bicycle coexistence.",
+      "avantages": [
+        "Secure bus-bicycle coexistence",
+        "Integrated cycle lane",
+        "Cycling network continuity",
+        "Integrated signage"
+      ],
+      "casUsage": [
+        "Routes with existing cycle lane",
+        "Soft mobility projects",
+        "Multimodal developments"
+      ]
+    },
+    "ile": {
+      "titre": "Island configuration",
+      "sousTitre": "Island platform",
+      "description": "Central platform isolated from traffic, serving one or two directions. Ideal for bus corridors and BRT.",
+      "avantages": [
+        "Maximum passenger safety",
+        "Bidirectional service possible",
+        "BRT-adapted",
+        "Optimized footprint"
+      ],
+      "casUsage": [
+        "Dedicated bus corridors",
+        "BRT and tramways",
+        "High-traffic stops"
+      ]
+    },
+    "ile_velo": {
+      "titre": "Island with cycle lane",
+      "sousTitre": "Island platform + cycle lane",
+      "description": "Island configuration with cycle lane integration, ensuring cycling route continuity through the stop.",
+      "avantages": [
+        "Passenger + cyclist safety",
+        "Cycling continuity maintained",
+        "Integrated signage",
+        "Full modularity"
+      ],
+      "casUsage": [
+        "BRT with cycling network",
+        "Bicycle Plan projects",
+        "Complete urban developments"
+      ]
+    }
+  },
+  "comparison": {
+    "titre": "Waarom URBAQUAI?",
+    "sousTitre": "Objectieve vergelijking met modulaire kunststof oplossingen en traditionele gestorte betonconstructies.",
+    "critere": "Criteria",
+    "urbaquai": "URBAQUAI®",
+    "urbaquaiSub": "C40/50 modular concrete",
+    "plastique": "Modular plastic",
+    "plastiqueSub": "e.g., Zicla Vectorial",
+    "traditionnel": "Cast concrete",
+    "traditionnelSub": "Traditional solution",
+    "rows": {
+      "perennite": "Durability",
+      "gelDegel": "Freeze/thaw resistance",
+      "stabilite": "Stability (weight)",
+      "antiderapante": "Non-slip finish",
+      "reemploi": "Reuse / reversibility",
+      "certification": "CERIB certification",
+      "poseSol": "Installation on flexible AND rigid ground",
+      "hydraulique": "Hydraulic transparency",
+      "albedo": "High albedo (thermal comfort)",
+      "impact": "Environmental impact",
+      "delai": "Installation time"
+    },
+    "values": {
+      "cimentBasCarbone": "Low-carbon NF cement",
+      "plastiqueRecycle": "Recycled plastic",
+      "betonStandard": "Standard concrete",
+      "surfacePlastique": "Plastic surface",
+      "variable": "Variable",
+      "massif": "Massive"
+    }
+  },
+  "featuredRealisations": {
+    "titre": "Zij vertrouwen ons",
+    "sousTitre": "Ontdek onze realisaties in heel Frankrijk. Elk project is een maatwerkantwoord op de lokale toegankelijkheidsuitdagingen.",
+    "voirProjet": "Project bekijken",
+    "toutesRealisations": "Al onze realisaties",
+    "stations": "haltes"
+  },
+  "reglementationBlock": {
+    "titre": "100% conform. Zonder compromis.",
+    "sousTitre": "URBAQUAI is ontworpen om aan het volledige Franse regelgevende kader voor toegankelijkheid van het openbaar vervoer te voldoen.",
+    "loi2005": {
+      "titre": "Law of February 11, 2005",
+      "description": "Equal rights and opportunities: all public transport stops must be made accessible."
+    },
+    "cerema": {
+      "titre": "CEREMA Guide 2018",
+      "description": "Technical recommendations for accessible bus stop development. URBAQUAI meets every requirement."
+    },
+    "norme": {
+      "titre": "Standard NF P 98-352",
+      "description": "Strength and durability requirements for curbs and platform elements. Certified high-performance concrete."
+    },
+    "explorer": "Het regelgevingskader verkennen"
+  },
+  "ctaContact": {
+    "titre": "Een toegankelijkheidsproject?",
+    "sousTitre": "Vertel ons over uw behoefte. Ons team antwoordt binnen 24 uur met een aangepast technisch voorstel.",
+    "merci": "Thank you for your message!",
+    "recontact": "Our team will get back to you as soon as possible.",
+    "prenom": "First name",
+    "nom": "Last name",
+    "societe": "Company",
+    "email": "Professional email",
+    "message": "Describe your needs briefly",
+    "placeholder": "Number of stops, desired configuration, timeline...",
+    "envoyer": "Send my request",
+    "confidentialite": "Your data is processed solely to respond to your request. See our",
+    "politique": "privacy policy"
+  },
+  "leadForm": {
+    "prenom": "First name *",
+    "nom": "Last name *",
+    "societe": "Company *",
+    "email": "Professional email *",
+    "profil": "You are *",
+    "departement": "Department",
+    "messageLabel": "Message (optional)",
+    "messagePlaceholder": "Describe your project...",
+    "select": "— Select —",
+    "envoyer": "Send",
+    "accesDocuments": "Access documents",
+    "envoi": "Sending...",
+    "merci": "Thank you!",
+    "merciDescription": "Your documents are now accessible. A confirmation email has been sent.",
+    "champsObligatoires": "* Required fields. Your data is processed solely to respond to your request.",
+    "erreurServeur": "Server error",
+    "erreurGenerale": "An error occurred",
+    "placeholders": {
+      "prenom": "John",
+      "nom": "Smith",
+      "societe": "Engineering firm XYZ",
+      "email": "j.smith@example.com"
+    }
+  },
+  "profils": {
+    "moe": "Project Manager",
+    "moa": "Client / Owner",
+    "tp": "Civil Engineering Company",
+    "collectivite": "Local Authority / Transport Authority",
+    "autre": "Other"
+  },
+  "validation": {
+    "prenomRequis": "First name is required",
+    "nomRequis": "Last name is required",
+    "societeRequise": "Company is required",
+    "emailInvalide": "Invalid email",
+    "profilRequis": "Please select a profile",
+    "messageMin": "Message must be at least 10 characters"
+  },
+  "produit": {
+    "metaTitle": "URBAQUAI 140+50 — Modular concrete bus platform C40/50",
+    "metaDescription": "URBAQUAI 140+50 system: prefabricated modular bus platform in C40/50 concrete, direct installation on asphalt, wheelchair accessible. 3000×1500 mm modules, CERIB EN 1339 tested.",
+    "systemeBrevete": "Patented system",
+    "sousTitre": "Prefabricated modular bus & coach platform — Direct installation on asphalt",
+    "description1": "URBAQUAI® prefabricated modules enable rapid construction of bus & coach stops accessible to all passengers. Platform length and height adapt to rolling stock characteristics.",
+    "description2": "Each module is factory-made from high-strength monolithic {classe} concrete with low-carbon NF cement, ensuring consistent quality and superior durability. Immediately usable, reusable, minimal traffic disruption.",
+    "features": {
+      "hauteurs": "Heights",
+      "beton": "Concrete",
+      "tests": "Tests",
+      "gelDegel": "Freeze/thaw",
+      "coloris": "Colors",
+      "pose": "Installation"
+    },
+    "featureValues": {
+      "hauteurs": "18 / 21 cm",
+      "coloris": "4 natural",
+      "pose": "48h on site"
+    },
+    "ficheTechniquePdf": "Technical sheet PDF",
+    "demanderDevis": "Request a quote",
+    "specsTitre": "Technical specifications",
+    "specsSousTitre": "C40/50 concrete, CERIB EN 1339 tests, low-carbon NF cement. Every detail designed for durability and compliance.",
+    "miseEnOeuvre": "Installation",
+    "miseEnOeuvreSousTitre": "Direct installation on existing asphalt. Slings, Ø12 mm anchors, immediately usable.",
+    "ctaTitre": "Which configuration for your project?",
+    "ctaSousTitre": "Sidewalk extension, island, with cycle lane... Discover the 4 URBAQUAI configurations.",
+    "voirConfigurations": "See configurations",
+    "accordion": {
+      "gamme": "URBAQUAI 140+50 range — Modules and dimensions",
+      "reference": "Reference",
+      "module": "Module",
+      "dimensions": "Dimensions",
+      "poids": "Weight",
+      "hauteursDisponibles": "Available heights:",
+      "hauteur210": "Height h=210: central module ~1,715 kg, lateral ~860 kg",
+      "longueurQuai": "Platform length: custom by module combination (multiples of 1.5 m)",
+      "beton": "Concrete and composition",
+      "composition": "Composition:",
+      "classeResistance": "Strength class:",
+      "classeExposition": "Exposure class:",
+      "ciment": "Cement:",
+      "taquets": "Factory-mounted spacing studs",
+      "bandeGuidage": "Tactile guidance strip compliant with NF P 98-352",
+      "resistances": "Mechanical resistance — CERIB EN 1339 tests",
+      "gelDegel": "Freeze/thaw & de-icing salts:",
+      "abrasion": "Abrasion resistance:",
+      "chocs": "Hard impact resistance:",
+      "taches": "Stain resistance:",
+      "srtNeuf": "Slip resistance SRT new/wet:",
+      "srtUse": "Slip resistance SRT soiled/worn:",
+      "testsValides": "Tests validated by CERIB according to EN 1339",
+      "finition": "Finish and colors",
+      "finitionSurface": "Surface finish:",
+      "scoreSrt": "Average SRT score when new and wet",
+      "colorisNaturels": "4 natural colors:",
+      "rampes": "Access ramps and accessibility",
+      "zoneAttente": "Integrated secure waiting area",
+      "accessiblePMR": "100% wheelchair accessible",
+      "options": "Options and accessories",
+      "optionsList": {
+        "antisalissure": "Anti-stain treated concrete S.O.",
+        "mobilier": "Provisions for street furniture and railings",
+        "pmr": "Wheelchair access modules for bus stations",
+        "ile": "Modules for island platforms",
+        "terrasse": "Custom elements for temporary commercial terrace extension (URBATERRA range)"
+      }
+    }
+  },
+  "installation": {
+    "step1": {
+      "titre": "Surface preparation",
+      "description": "Cleaning of existing surface (asphalt, concrete or bitumen). No earthwork, no milling. The surface simply needs to be flat and stable. Marking anchor locations."
+    },
+    "step2": {
+      "titre": "Delivery and handling",
+      "description": "URBAQUAI modules arrive on site ready to install. Placement by slings (1,800 kg capacity). Central module M 1.18: ~1,400 kg, lateral modules: ~700 kg."
+    },
+    "step3": {
+      "titre": "Positioning and fixing",
+      "description": "Module alignment using factory-mounted spacing studs. Fixing with Ø12 mm anchors at 15 cm depth into existing surface. Inter-module assembly."
+    },
+    "step4": {
+      "titre": "Ramps and finishing",
+      "description": "Installation of wheelchair access ramps (concrete D-009a or galvanized steel with automatic height adjustment and tamper-proof hardware). Tactile guidance strip verification. Platform immediately usable."
+    }
+  },
+  "contact": {
+    "metaTitle": "Contact — Request a quote for URBAQUAI",
+    "metaDescription": "Contact URBAMAT Environnement for your modular bus platform project. Free quote within 24h, personalized technical support.",
+    "titre": "Let's talk about your project",
+    "sousTitre": "Tell us about your accessibility needs. Our team responds within 24h with a tailored technical proposal and quote.",
+    "formulaire": "Contact form",
+    "coordonnees": "Contact information",
+    "telephone": "Phone",
+    "emailLabel": "Email",
+    "adresse": "Address",
+    "horaires": "Opening hours",
+    "horairesValue": "Mon — Fri: 8:00 AM — 5:30 PM",
+    "prescripteur": "Are you a specifier?",
+    "prescripteurTexte": "We provide free standard CCTP/BPU extracts for your procurement documents, as well as DWG plans for your CAD projects.",
+    "accesTelechargements": "Access downloads"
+  },
+  "telechargements": {
+    "titre": "Downloads",
+    "sousTitre": "Access all URBAQUAI technical documentation: product sheets, installation guides, standard specifications and CAD plans.",
+    "documentsDisponibles": "Available documents",
+    "accesDebloque": "Access unlocked!",
+    "cliquezTelecharger": "Click the download icon next to each document to retrieve it.",
+    "accesDocuments": "Access documents",
+    "remplissezFormulaire": "Fill in the form below to unlock access to all URBAQUAI technical documents.",
+    "documents": {
+      "fiche": {
+        "titre": "URBAQUAI technical sheet",
+        "description": "Dimensions, resistance, materials, colors. The essential document for your specifications."
+      },
+      "guide": {
+        "titre": "Installation and assembly guide",
+        "description": "Detailed installation instructions, assembly diagrams, required tools."
+      },
+      "cctp": {
+        "titre": "Standard CCTP / BPU extract",
+        "description": "Standard technical clauses directly integrable into your public procurement documents."
+      },
+      "plan": {
+        "titre": "DWG / AutoCAD plans",
+        "description": "2D plans of the 4 configurations for integration into your CAD projects."
+      }
+    },
+    "types": {
+      "fiche": "Technical sheet",
+      "guide": "Installation guide",
+      "cctp": "CCTP / BPU extract",
+      "plan": "DWG plan"
+    }
+  },
+  "realisations": {
+    "metaTitle": "Projects — Our URBAQUAI installations across France",
+    "metaDescription": "Discover our URBAQUAI projects across France: detailed specifications of our modular bus platforms, stations and lengths deployed.",
+    "titre": "Our projects",
+    "sousTitre": "URBAQUAI modular platforms deployed across France. Each project is a tailor-made response to local accessibility challenges.",
+    "projets": "projects",
+    "stations": "stations",
+    "quaisPoses": "of platforms installed"
+  },
+  "reglementation": {
+    "metaTitle": "Regulations — Bus stop accessibility standards",
+    "metaDescription": "Regulatory framework for bus stop accessibility in France: law of February 11, 2005, CEREMA 2018 guide, NF standards. URBAQUAI compliant with all requirements.",
+    "titre": "Regulatory framework",
+    "sousTitre": "Bus stop accessibility is governed by a comprehensive set of legislative and normative texts. URBAQUAI complies with each of them.",
+    "conformiteUrbaquai": "URBAQUAI compliance",
+    "ressources": "Additional resources",
+    "ctaTitre": "Uncertain about compliance?",
+    "ctaSousTitre": "Our technical team supports you in verifying your project's compliance with current standards.",
+    "nousConsulter": "Consult us",
+    "loi2005": {
+      "titre": "Law of February 11, 2005",
+      "sousTitre": "Equal rights and opportunities",
+      "contenu": [
+        "Law No. 2005-102 of February 11, 2005 establishes the principle of generalized accessibility throughout the travel chain.",
+        "It requires that all public transport stops be made accessible to people with reduced mobility.",
+        "Accessibility Master Plans – Programmed Accessibility Agendas (SDA-Ad'AP) set compliance deadlines for each organizing authority."
+      ],
+      "conformite": [
+        "Standardized platform height (18-21 cm) for step-free access",
+        "Compliant tactile warning strips (BEV)",
+        "Access ramps under 5%",
+        "Non-slip and contrasted surfaces"
+      ]
+    },
+    "cerema": {
+      "titre": "CEREMA Guide 2018",
+      "sousTitre": "Accessible bus stop development",
+      "contenu": [
+        "The CEREMA guide \"Bus and coach stops accessible to all\" (2018) is the technical reference for project owners and designers.",
+        "It details geometric requirements, docking aids, and complementary facilities for each configuration type.",
+        "URBAQUAI was designed in strict compliance with all recommendations of this guide."
+      ],
+      "conformite": [
+        "Platform geometry compliant with CEREMA templates",
+        "2m × 1.40m boarding zone respected",
+        "Docking aid devices integrable",
+        "Accessible pathway continuity guaranteed"
+      ]
+    },
+    "normeNF": {
+      "titre": "Standards NF P 98-352",
+      "sousTitre": "Curbs and platform elements",
+      "contenu": [
+        "Standard NF P 98-352 defines mechanical strength, durability and sizing requirements for prefabricated concrete curbs.",
+        "It specifies flexural strength, abrasion, freeze/thaw and chemical attack (de-icing salts) tests.",
+        "URBAQUAI high-performance concrete exceeds the standard's minimum thresholds on every criterion."
+      ],
+      "conformite": [
+        "Flexural strength ≥ 5 MPa (NF threshold: 3.5 MPa)",
+        "Freeze/thaw certification F2 (severe environment)",
+        "Abrasion resistance Class 4 (heavy traffic)",
+        "Rolling load resistance Class T (60t)"
+      ]
+    },
+    "ressourcesList": {
+      "sdaAdap": {
+        "titre": "SDA-Ad'AP: obligations and schedule",
+        "description": "Understanding Accessibility Master Plans and Programmed Accessibility Agendas."
+      },
+      "subventions": {
+        "titre": "Grants and funding",
+        "description": "Available financial aids for transport stop accessibility (DSIL, DETR, green funds)."
+      },
+      "visaSncf": {
+        "titre": "SNCF Réseau approval",
+        "description": "URBAQUAI holds SNCF Réseau approval, enabling installation near railway tracks."
+      }
+    }
+  },
+  "configurationsPage": {
+    "metaTitle": "Configurations — 4 solutions for every bus stop",
+    "metaDescription": "Discover the 4 URBAQUAI configurations: sidewalk extension, extension with cycle lane, island platform and island with cycle lane. Modular solution for every situation.",
+    "titre": "URBAQUAI Configurations",
+    "sousTitre": "4 modular configurations to meet every bus stop situation. Choose the solution adapted to your project.",
+    "configuration": "Configuration {num}/4",
+    "vueSchematique": "Schematic plan view —",
+    "avantages": "Advantages",
+    "casUsage": "Use cases",
+    "besoinAide": "Need help choosing?",
+    "besoinAideSousTitre": "Our team supports you in choosing the optimal configuration for your project.",
+    "nousContacter": "Contact us",
+    "voirExemples": "See examples"
+  },
+  "urbaterra": {
+    "metaTitle": "URBATERRA — Modular commercial terrace extension",
+    "metaDescription": "URBATERRA: temporary modular concrete commercial terrace extension. Gain 9 to 18 m² in 48h, direct installation on asphalt, 100% wheelchair accessible.",
+    "badge": "New — URBATERRA Range",
+    "titre": "Gain 9 to 18 m² of terrace. In 48h.",
+    "description": "URBATERRA® is a modular high-performance concrete commercial terrace extension. Installed directly on existing asphalt, without heavy construction, it provides additional space immediately usable and 100% wheelchair accessible.",
+    "simuler": "Simulate my terrace",
+    "ficheTechnique": "Technical sheet",
+    "features": {
+      "surface": "Surface",
+      "beton": "Concrete",
+      "usage": "Use",
+      "coloris": "Colors",
+      "pose": "Installation",
+      "capacite": "Capacity"
+    },
+    "featureValues": {
+      "surface": "9 to 18 m²",
+      "usage": "Commercial",
+      "coloris": "4 natural",
+      "pose": "48h",
+      "capacite": "Up to 36 seats"
+    },
+    "pourQui": "For whom?",
+    "pourQuiSousTitre": "URBATERRA is designed for all professionals who need additional space, quickly and without constraints.",
+    "cibles": {
+      "restaurateurs": {
+        "titre": "Restaurant owners",
+        "description": "Expand your terrace by 9 to 18 m² to accommodate up to 36 additional seats. Immediately usable."
+      },
+      "mairies": {
+        "titre": "Municipalities & authorities",
+        "description": "Develop temporary or permanent public spaces: markets, events, accessible pedestrian areas."
+      },
+      "gestionnaires": {
+        "titre": "Space managers",
+        "description": "Create reusable modular platforms for any use: retail, waiting areas, events."
+      }
+    },
+    "configsTitre": "2 ready-to-install configurations",
+    "configsSousTitre": "Choose the surface adapted to your needs. Each configuration is expandable by adding modules.",
+    "config9": {
+      "titre": "9 m² configuration",
+      "modules": "1 central + 2 lateral",
+      "optimise": "6 to 9 tables for 2 (12-18 seats)",
+      "confortable": "4 tables for 2 or 3 tables for 4 (8-10 seats)"
+    },
+    "config18": {
+      "titre": "18 m² configuration",
+      "modules": "2 central + 2 lateral",
+      "optimise": "12 to 18 tables for 2 (24-36 seats)",
+      "confortable": "8 tables for 2 or 5-6 tables for 4 (16-24 seats)"
+    },
+    "optimise": "Optimized (bistro style)",
+    "confortable": "Comfortable (standard spacing)",
+    "specsTitre": "Technical specifications",
+    "ctaTitre": "Ready to expand your terrace?",
+    "ctaSousTitre": "Contact us for a free study. We'll propose the configuration adapted to your space and business.",
+    "voirUrbaquai": "See the URBAQUAI system"
+  },
+  "configurateur": {
+    "titre": "URBAQUAI Configurator",
+    "sousTitre": "Build your platform module by module — click, place, visualize.",
+    "ajouterRang": "+ Add a row",
+    "retirerRang": "− Remove row {rang}",
+    "chargerExemple": "Load an example",
+    "reinitialiser": "Reset",
+    "vue3D": "3D view",
+    "planQuai": "Platform plan",
+    "retirerModule": "Click on a placed module to remove it",
+    "chargement3D": "Loading 3D view...",
+    "orbiter": "Left click + drag to orbit · Scroll to zoom",
+    "masquerLabels": "Hide labels",
+    "afficherLabels": "Show labels",
+    "masquerAbribus": "Hide bus shelter",
+    "afficherAbribus": "Show bus shelter",
+    "commentCaMarche": "How does it work?",
+    "instructions": {
+      "step1": "Select a row in the palette",
+      "step2": "Click on a module to select it",
+      "step3": "Click on + in the plan to place it",
+      "step4": "Click on a placed module to remove it"
+    },
+    "chargerExemple19m": "Or load a 19 m platform example",
+    "nomenclature": "Bill of materials",
+    "recevoirPlan": "Receive your plan",
+    "nomenclatureEmail": "Bill of materials + personalized quote by email.",
+    "configPrete": "Configuration ready?",
+    "recevoirNomenclature": "Receive the bill of materials and a quote.",
+    "recevoirDevis": "Receive quote",
+    "nousContacter": "Contact us",
+    "environnement": "Environment",
+    "trottoir": "Sidewalk",
+    "parking": "Parking",
+    "pisteCyclable": "Cycle lane",
+    "voieCirculation": "Traffic lane"
+  },
+  "notFound": {
+    "titre": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "retour": "Back to home",
+    "contact": "Contact us"
+  },
+  "metadata": {
+    "defaultTitle": "{name} — Accessible modular bus platform | {company}",
+    "defaultDescription": "URBAQUAI: high-performance modular concrete bus platform system. Wheelchair accessible, installed in 48h, temporary or permanent. CEREMA 2018 and 2005 accessibility law compliant."
+  },
+  "languageSwitcher": {
+    "fr": "FR",
+    "en": "EN",
+    "de": "DE"
+  }
+}

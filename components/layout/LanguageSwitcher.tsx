@@ -11,17 +11,19 @@ const LOCALE_FLAGS: Record<string, string> = {
   fr: "🇫🇷",
   en: "🇬🇧",
   de: "🇩🇪",
+  nl: "🇳🇱",
 };
 
 const DEFAULT_LABELS: Record<string, string> = {
   fr: "Français",
   en: "English",
   de: "Deutsch",
+  nl: "Nederlands",
 };
 
 interface LanguageSwitcherProps {
   /** Libellés CMS personnalisés pour chaque langue (override des défauts) */
-  labels?: { fr?: string; en?: string; de?: string };
+  labels?: { fr?: string; en?: string; de?: string; nl?: string };
 }
 
 export function LanguageSwitcher({ labels }: LanguageSwitcherProps = {}) {
@@ -78,7 +80,7 @@ export function LanguageSwitcher({ labels }: LanguageSwitcherProps = {}) {
               )}
             >
               <span className="text-base">{LOCALE_FLAGS[loc]}</span>
-              <span>{labels?.[loc as "fr" | "en" | "de"] || DEFAULT_LABELS[loc] || loc}</span>
+              <span>{labels?.[loc as "fr" | "en" | "de" | "nl"] || DEFAULT_LABELS[loc] || loc}</span>
             </button>
           ))}
         </div>

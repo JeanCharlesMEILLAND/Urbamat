@@ -603,6 +603,7 @@ export const EDITABLE_PAGES: Record<string, PageDef> = {
           { key: "navbar_lang_fr", label: "Sélecteur langue — Libellé français", type: "texte", placeholder: "Français" },
           { key: "navbar_lang_en", label: "Sélecteur langue — Libellé anglais", type: "texte", placeholder: "English" },
           { key: "navbar_lang_de", label: "Sélecteur langue — Libellé allemand", type: "texte", placeholder: "Deutsch" },
+          { key: "navbar_lang_nl", label: "Sélecteur langue — Libellé néerlandais", type: "texte", placeholder: "Nederlands" },
         ],
       },
       {

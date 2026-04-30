@@ -4,7 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { Hero } from "@/components/home/Hero";
 import { UspCards } from "@/components/home/UspCards";
 import { ConceptUrbaquai } from "@/components/home/ConceptUrbaquai";
-import { Constat } from "@/components/home/Constat";
+// Constat masqué côté client — import retiré pour éviter le warning unused-var.
+// Pour réactiver : restaurer l'import + décommenter le <Constat … /> dans le JSX.
 import { Reponse } from "@/components/home/Reponse";
 import { ConfigurationsGrid } from "@/components/home/ConfigurationsGrid";
 import { Documentation } from "@/components/home/Documentation";
@@ -56,16 +57,9 @@ export default async function HomePage({ params }: Props) {
         legende={cms.concept_legende}
         visualUrl={cms.concept_visual}
       />
-      <Constat
-        titre={cms.constat_titre}
-        sousTitre={cms.constat_sous_titre}
-        eyebrow={cms.constat_eyebrow}
-        cards={[
-          { titre: cms.constat_card1_titre, texte: cms.constat_card1_texte },
-          { titre: cms.constat_card2_titre, texte: cms.constat_card2_texte },
-          { titre: cms.constat_card3_titre, texte: cms.constat_card3_texte },
-        ]}
-      />
+      {/* Bloc « Constat » masqué à la demande du client (2026-04-30). Le composant
+          et les champs CMS restent disponibles pour le réactiver plus tard. */}
+      {/* <Constat ... /> */}
       <Reponse
         eyebrow={cms.reponse_eyebrow}
         titre={cms.reponse_titre}

@@ -33,7 +33,7 @@ interface HeaderProps {
   /** URL de redirection du bouton « Devis » — fallback /contact */
   devisUrl?: string;
   /** Libellés du sélecteur de langue */
-  langLabels?: { fr?: string; en?: string; de?: string };
+  langLabels?: { fr?: string; en?: string; de?: string; nl?: string };
 }
 
 export function Header({ logoUrl, labels, devisUrl, langLabels }: HeaderProps = {}) {
