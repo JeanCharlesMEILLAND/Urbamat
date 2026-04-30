@@ -89,7 +89,10 @@ const I18N_KEY_MAP: Record<string, string> = {
   documentation_titre: "documentation.titre",
   // À propos (home)
   apropos_titre: "apropos.titre",
-  apropos_intro: "apropos.description",
+  // ⚠ apropos_intro N'EST PAS mappé : i18n.apropos.description est une version
+  // courte (1 paragraphe) qui ne correspond PAS aux 2 paragraphes hardcodés
+  // affichés par défaut dans <APropos>. On laisse le placeholder de content.ts
+  // (qui contient les 2 paragraphes complets) servir de pré-remplissage.
   apropos_cta_secondaire: "apropos.cta",
   // Réglementation (titre + sous-titre + 3 cartes + CTA)
   reglementation_titre: "reglementationBlock.titre",

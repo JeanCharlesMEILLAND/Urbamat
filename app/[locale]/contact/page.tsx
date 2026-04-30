@@ -91,7 +91,14 @@ export default async function ContactPage({ params }: Props) {
                       {info.href ? (
                         <a href={info.href} className="text-sm text-primary hover:text-primary-600 transition-colors whitespace-pre-line">{info.value}</a>
                       ) : (
-                        <p className="text-sm text-neutral-dark whitespace-pre-line">{info.value}</p>
+                        // L'adresse est de type "html" → on rend en dangerouslySetInnerHTML pour
+                        // accepter les retours à la ligne ET d'éventuels <strong>/<br>. Pour les
+                        // horaires (texte simple), pareil — le passage par innerHTML ne change
+                        // rien au rendu d'un texte sans balise.
+                        <div
+                          className="text-sm text-neutral-dark whitespace-pre-line [&_strong]:font-semibold"
+                          dangerouslySetInnerHTML={{ __html: info.value }}
+                        />
                       )}
                     </div>
                   </div>
@@ -101,9 +108,12 @@ export default async function ContactPage({ params }: Props) {
                 <h3 className="font-semibold text-neutral-dark text-sm">
                   {cms.prescripteur_titre || t("prescripteur")}
                 </h3>
-                <p className="text-sm text-gray-600 mt-2 leading-relaxed">
-                  {cms.prescripteur_texte || t("prescripteurTexte")}
-                </p>
+                <div
+                  className="text-sm text-gray-600 mt-2 leading-relaxed [&_strong]:text-neutral-dark"
+                  dangerouslySetInnerHTML={{
+                    __html: cms.prescripteur_texte || t("prescripteurTexte"),
+                  }}
+                />
                 <a
                   href={cms.prescripteur_cta_url || "/telechargements"}
                   className="inline-block mt-3 text-sm font-medium text-primary hover:text-primary-600 transition-colors"

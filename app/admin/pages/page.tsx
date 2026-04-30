@@ -579,12 +579,16 @@ export default function AdminPagesPage() {
                     {isExpanded && (
                       <div className="border-t border-gray-100 bg-gray-50/30 px-5 py-5 space-y-3">
                         {(() => {
-                          // Détecte les groupes "Carte N", "Ligne N" ou "Bouton X" dans le label
-                          // pour regrouper visuellement les champs d'une même unité (titre/texte/icône
-                          // d'une carte, par exemple). Insère un séparateur quand le groupe change.
+                          // Détecte les groupes via le pattern « PRÉFIXE — Suite » dans le label
+                          // pour regrouper visuellement les champs d'une même unité.
+                          // Exemples : "Carte 1 — Titre", "Ligne 5 — Cellule", "Téléphone — Libellé",
+                          // "1. Avancée — Description", "Bouton principal — URL".
+                          // Limité à 40 caractères pour éviter de matcher des phrases longues.
                           const matchGroup = (label: string) => {
-                            const m = label.match(/^((?:Carte|Ligne|Bouton)\s+(?:\d+|principal|secondaire))\s*—\s*(.+)$/);
-                            return m ? { group: m[1], clean: m[2] } : { group: null as string | null, clean: label };
+                            const m = label.match(/^([^—\n]{1,40}?)\s+—\s+(.+)$/);
+                            return m
+                              ? { group: m[1].trim(), clean: m[2].trim() }
+                              : { group: null as string | null, clean: label };
                           };
                           let lastGroup: string | null = null;
                           const elements: React.ReactNode[] = [];

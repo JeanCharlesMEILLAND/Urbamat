@@ -33,9 +33,13 @@ export async function Hero() {
             {titre}
           </h1>
 
-          <p className="mt-6 text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl">
-            {description}
-          </p>
+          {/* hero_description est type "html" en CMS — le rendu via
+              dangerouslySetInnerHTML permet au client d'utiliser <strong>,
+              <em>, <br/> sans que ça ne s'affiche en littéral. */}
+          <div
+            className="mt-6 text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl [&_strong]:text-neutral-dark"
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
 
           <p className="mt-10 text-sm text-gray-500">
             {eyebrow}
