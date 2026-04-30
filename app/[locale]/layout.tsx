@@ -93,7 +93,6 @@ export default async function LocaleLayout({ children, params }: Props) {
           <Header
             logoUrl={layoutCms.navbar_logo}
             labels={{
-              concept: layoutCms.navbar_concept,
               produit: layoutCms.navbar_produit,
               configurateur: layoutCms.navbar_configurateur,
               apropos: layoutCms.navbar_apropos,

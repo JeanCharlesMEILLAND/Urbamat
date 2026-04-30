@@ -125,7 +125,6 @@ const I18N_KEY_MAP: Record<string, string> = {
   cliquez_telecharger: "telechargements.cliquezTelecharger",
   remplissez_formulaire: "telechargements.remplissezFormulaire",
   // Layout
-  navbar_concept: "nav.concept",
   navbar_produit: "nav.produit",
   navbar_configurateur: "nav.configurateur",
   navbar_apropos: "nav.apropos",

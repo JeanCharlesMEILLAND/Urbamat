@@ -11,7 +11,6 @@ import { MobileMenu } from "./MobileMenu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const NAV_KEYS = [
-  { key: "concept", href: "/#concept" },
   { key: "produit", href: "/produit" },
   { key: "configurateur", href: "/configurateur" },
   { key: "apropos", href: "/apropos" },
@@ -24,7 +23,6 @@ interface HeaderProps {
   logoUrl?: string;
   /** Libellés CMS pour chaque lien navbar — fallback i18n si non défini */
   labels?: {
-    concept?: string;
     produit?: string;
     configurateur?: string;
     apropos?: string;
