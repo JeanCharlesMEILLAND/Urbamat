@@ -116,22 +116,22 @@ export const EDITABLE_PAGES: Record<string, PageDef> = {
           { key: "config_avancee_titre", label: "1. Avancée — Titre", type: "texte", placeholder: "Avancée de trottoir" },
           { key: "config_avancee_sous_titre", label: "1. Avancée — Sous-titre", type: "texte", placeholder: "Boarding bulb" },
           { key: "config_avancee_description", label: "1. Avancée — Description", type: "html", placeholder: "Extension du trottoir au niveau de l'arrêt de bus, permettant un accostage optimal du véhicule et un accès de plain-pied pour les PMR." },
-          { key: "configs_image_avancee", label: "1. Avancée — Image (laisse vide pour le schéma SVG par défaut)", type: "image", placeholder: "/api/images/configs/avancee" },
+          { key: "configs_image_avancee", label: "1. Avancée — Image custom (laisse vide pour le schéma Style B par défaut)", type: "image" },
           // ── Carte 2 : Avancée + vélo ────────────────────────────
           { key: "config_avancee_velo_titre", label: "2. Avancée + vélo — Titre", type: "texte", placeholder: "Avancée avec piste cyclable" },
           { key: "config_avancee_velo_sous_titre", label: "2. Avancée + vélo — Sous-titre", type: "texte", placeholder: "Boarding bulb + cycle lane" },
           { key: "config_avancee_velo_description", label: "2. Avancée + vélo — Description", type: "html", placeholder: "Configuration avancée intégrant une piste cyclable sécurisée à l'arrière du quai, permettant la cohabitation bus-vélo." },
-          { key: "configs_image_avancee_velo", label: "2. Avancée + vélo — Image", type: "image", placeholder: "/api/images/configs/avancee_velo" },
+          { key: "configs_image_avancee_velo", label: "2. Avancée + vélo — Image custom (laisse vide pour le schéma Style B par défaut)", type: "image" },
           // ── Carte 3 : Île ───────────────────────────────────────
           { key: "config_ile_titre", label: "3. Île — Titre", type: "texte", placeholder: "Configuration en île" },
           { key: "config_ile_sous_titre", label: "3. Île — Sous-titre", type: "texte", placeholder: "Island platform" },
           { key: "config_ile_description", label: "3. Île — Description", type: "html", placeholder: "Quai central isolé de la circulation, desservant une ou deux directions. Idéal pour les couloirs bus et BHNS." },
-          { key: "configs_image_ile", label: "3. Île — Image", type: "image", placeholder: "/api/images/configs/ile" },
+          { key: "configs_image_ile", label: "3. Île — Image custom (laisse vide pour le schéma Style B par défaut)", type: "image" },
           // ── Carte 4 : Île + vélo ────────────────────────────────
           { key: "config_ile_velo_titre", label: "4. Île + vélo — Titre", type: "texte", placeholder: "Île avec piste cyclable" },
           { key: "config_ile_velo_sous_titre", label: "4. Île + vélo — Sous-titre", type: "texte", placeholder: "Island platform + cycle lane" },
           { key: "config_ile_velo_description", label: "4. Île + vélo — Description", type: "html", placeholder: "Configuration en île avec intégration d'une piste cyclable, assurant la continuité des itinéraires vélo à travers l'arrêt." },
-          { key: "configs_image_ile_velo", label: "4. Île + vélo — Image", type: "image", placeholder: "/api/images/configs/ile_velo" },
+          { key: "configs_image_ile_velo", label: "4. Île + vélo — Image custom (laisse vide pour le schéma Style B par défaut)", type: "image" },
         ],
       },
       {
