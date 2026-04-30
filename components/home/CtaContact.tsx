@@ -6,7 +6,14 @@ import { useTranslations } from "next-intl";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 
-export function CtaContact() {
+interface CtaContactProps {
+  /** Override titre */
+  titre?: string;
+  /** Override description (sous-titre) */
+  description?: string;
+}
+
+export function CtaContact({ titre, description }: CtaContactProps = {}) {
   const [submitted, setSubmitted] = useState(false);
   const t = useTranslations("ctaContact");
 
@@ -40,14 +47,14 @@ export function CtaContact() {
   }
 
   return (
-    <section className="py-20 lg:py-28 bg-white">
+    <section id="cta" className="py-20 lg:py-28 bg-white scroll-mt-24">
       <Container>
         <div className="max-w-2xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-neutral-dark">
-            {t("titre")}
+            {titre || t("titre")}
           </h2>
           <p className="mt-4 text-lg text-gray-600 leading-relaxed">
-            {t("sousTitre")}
+            {description || t("sousTitre")}
           </p>
 
           {submitted ? (

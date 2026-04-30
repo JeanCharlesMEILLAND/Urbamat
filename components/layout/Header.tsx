@@ -19,25 +19,44 @@ const NAV_KEYS = [
   { key: "contact", href: "/contact" },
 ] as const;
 
-export function Header() {
+interface HeaderProps {
+  /** URL du logo (override CMS — fallback : /images/logo-urbamat.svg) */
+  logoUrl?: string;
+  /** Libellés CMS pour chaque lien navbar — fallback i18n si non défini */
+  labels?: {
+    concept?: string;
+    produit?: string;
+    configurateur?: string;
+    apropos?: string;
+    telechargements?: string;
+    contact?: string;
+    devis?: string;
+  };
+  /** URL de redirection du bouton « Devis » — fallback /contact */
+  devisUrl?: string;
+  /** Libellés du sélecteur de langue */
+  langLabels?: { fr?: string; en?: string; de?: string };
+}
+
+export function Header({ logoUrl, labels, devisUrl, langLabels }: HeaderProps = {}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const t = useTranslations("nav");
 
   const navItems = NAV_KEYS.map((item) => ({
-    label: t(item.key),
+    label: labels?.[item.key] || t(item.key),
     href: item.href,
   }));
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+    <header id="navbar" className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
       <Container>
         <nav className="flex items-center justify-between h-16 lg:h-20" aria-label="Navigation principale">
           {/* Logo */}
           <Link href="/" className="shrink-0" aria-label="URBAMAT - Accueil">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/logo-urbamat.svg"
+              src={logoUrl || "/images/logo-urbamat.svg"}
               alt="URBAMAT"
               className="h-6 lg:h-7 w-auto"
             />
@@ -67,15 +86,15 @@ export function Header() {
 
           {/* CTA desktop + Language Switcher */}
           <div className="hidden lg:flex items-center gap-3">
-            <LanguageSwitcher />
-            <Button href="/contact" size="sm">
-              {t("devis")}
+            <LanguageSwitcher labels={langLabels} />
+            <Button href={devisUrl || "/contact"} size="sm">
+              {labels?.devis || t("devis")}
             </Button>
           </div>
 
           {/* Burger mobile */}
           <div className="flex lg:hidden items-center gap-2">
-            <LanguageSwitcher />
+            <LanguageSwitcher labels={langLabels} />
             <button
               className="p-2 text-neutral-dark hover:text-primary transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}

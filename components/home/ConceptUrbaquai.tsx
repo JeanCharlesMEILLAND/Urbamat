@@ -28,7 +28,22 @@ function Stat({ value, suffix, label, started }: { value: number; suffix: string
   );
 }
 
-export function ConceptUrbaquai() {
+interface ConceptUrbaquaiProps {
+  /** Override titre venant du CMS (sinon fallback i18n) */
+  titre?: string;
+  /** Override description (HTML) — sinon fallback i18n */
+  description?: string;
+  /** Override légende sous l'animation */
+  legende?: string;
+  /** URL d'une image OU vidéo qui remplace l'animation 3D du quai */
+  visualUrl?: string;
+}
+
+function isVideoUrl(url: string): boolean {
+  return /\.(mp4|webm|mov|ogv)(\?|$)/i.test(url);
+}
+
+export function ConceptUrbaquai({ titre, description, legende, visualUrl }: ConceptUrbaquaiProps = {}) {
   const { ref, isInView } = useInView<HTMLDivElement>({ threshold: 0.3 });
   const t = useTranslations("concept");
   const tStats = useTranslations("stats");
@@ -65,11 +80,18 @@ export function ConceptUrbaquai() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           <div className="lg:col-span-7">
             <h2 className="text-3xl md:text-4xl font-bold leading-tight text-accent">
-              {t("titre")}
+              {titre || t("titre")}
             </h2>
-            <p className="mt-6 text-base lg:text-lg text-gray-600 leading-relaxed">
-              {t("description")}
-            </p>
+            {description ? (
+              <div
+                className="mt-6 text-base lg:text-lg text-gray-600 leading-relaxed [&_p]:mb-3 [&_strong]:text-neutral-dark"
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
+            ) : (
+              <p className="mt-6 text-base lg:text-lg text-gray-600 leading-relaxed">
+                {t("description")}
+              </p>
+            )}
           </div>
 
           <div className="lg:col-span-5">
@@ -82,7 +104,27 @@ export function ConceptUrbaquai() {
         </div>
 
         <div ref={videoRef} className="mt-14 aspect-[16/7] overflow-hidden relative scroll-mt-24">
-          <QuaiAssemblyAnimation coloris={selectedColoris} />
+          {visualUrl ? (
+            isVideoUrl(visualUrl) ? (
+              <video
+                src={visualUrl}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={visualUrl}
+                alt="Visuel URBAQUAI"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            )
+          ) : (
+            <QuaiAssemblyAnimation coloris={selectedColoris} />
+          )}
         </div>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -124,7 +166,7 @@ export function ConceptUrbaquai() {
           })}
         </div>
 
-        <p className="mt-6 text-center text-xs text-gray-500">{t("visuelLegende")}</p>
+        <p className="mt-6 text-center text-xs text-gray-500">{legende || t("visuelLegende")}</p>
       </Container>
     </section>
   );

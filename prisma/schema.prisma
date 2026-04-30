@@ -18,6 +18,8 @@ model Realisation {
   longueurMl    Float
   nbStations    Int
   slug          String @unique
+  // Mise en avant sur la home (section "Ils nous font confiance"). 3 max.
+  featured      Boolean @default(false)
 
   @@map("realisations")
 }
@@ -28,6 +30,8 @@ model Document {
   type        DocumentType
   fichierUrl  String
   description String?
+  // Mise en avant sur la home (bloc "Télécharger notre documentation"). 3 max.
+  featured    Boolean      @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
@@ -95,6 +99,23 @@ model PageContent {
 
   @@unique([page, section, locale])
   @@map("page_contents")
+}
+
+// ─── Presets caméra de l'animation 3D du concept (home) ────────
+// Une ligne par phase ("assembly", "arrival", "hold", "departure").
+// Configuré dans la home en mode admin, lu publiquement par tous les visiteurs
+// pour que la séquence cinématique soit la même pour tout le monde.
+model CamPreset {
+  phase     String   @id // "assembly" | "arrival" | "hold" | "departure"
+  posX      Float
+  posY      Float
+  posZ      Float
+  tgtX      Float
+  tgtY      Float
+  tgtZ      Float
+  updatedAt DateTime @updatedAt
+
+  @@map("cam_presets")
 }
 
 model Media {

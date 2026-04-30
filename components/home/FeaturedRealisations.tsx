@@ -10,59 +10,48 @@ import { Badge } from "@/components/ui/Badge";
 import { useInView } from "@/hooks/useInView";
 import { cn } from "@/lib/utils";
 
-const FEATURED = [
-  {
-    slug: "carquefou-44-mobilite-autonome",
-    titre: "Carquefou (44) — Mobilité autonome",
-    ville: "Carquefou",
-    departement: "44",
-    annee: 2025,
-    typologieQuai: "6 stations — 9ml à 16ml",
-    contexte: "Service expérimental mobilité autonome. Déploiement de quais modulaires pour véhicules autonomes.",
-    longueurMl: 72,
-    nbStations: 6,
-  },
-  {
-    slug: "strasbourg-67-cts-accessibilite",
-    titre: "Strasbourg (67) — Réseau CTS",
-    ville: "Strasbourg",
-    departement: "67",
-    annee: 2024,
-    typologieQuai: "12 arrêts — 12ml",
-    contexte: "Mise en accessibilité de 12 arrêts sur l'axe Route du Rhin dans le cadre du renouvellement du réseau CTS.",
-    longueurMl: 144,
-    nbStations: 12,
-  },
-  {
-    slug: "uckange-57-quai-provisoire",
-    titre: "Uckange (57) — Quai provisoire",
-    ville: "Uckange",
-    departement: "57",
-    annee: 2024,
-    typologieQuai: "2 stations — 12ml",
-    contexte: "Installation de quais provisoires pendant les travaux de réaménagement du centre-ville.",
-    longueurMl: 24,
-    nbStations: 2,
-  },
-];
+export interface FeaturedRealisationItem {
+  slug: string;
+  titre: string;
+  ville: string;
+  departement: string;
+  annee: number;
+  typologieQuai: string;
+  contexte: string;
+  longueurMl: number;
+  nbStations: number;
+}
 
-export function FeaturedRealisations() {
+interface FeaturedRealisationsProps {
+  /** Réalisations marquées `featured: true` en BDD (3 max). Si vide, la section
+   *  ne s'affiche pas. */
+  realisations: FeaturedRealisationItem[];
+  /** Override du titre depuis l'admin/CMS. */
+  titre?: string;
+  /** Override du sous-titre depuis l'admin/CMS. */
+  sousTitre?: string;
+}
+
+export function FeaturedRealisations({ realisations, titre, sousTitre }: FeaturedRealisationsProps) {
   const { ref, isInView } = useInView<HTMLDivElement>();
   const t = useTranslations("featuredRealisations");
 
+  // Pas de réalisations en avant → on masque la section pour éviter un bloc vide.
+  if (!realisations.length) return null;
+
   return (
-    <section className="py-20 lg:py-28 bg-white" ref={ref}>
+    <section id="realisations" className="py-20 lg:py-28 bg-white scroll-mt-24" ref={ref}>
       <Container>
         <SectionHeader
-          titre={t("titre")}
-          sousTitre={t("sousTitre")}
+          titre={titre || t("titre")}
+          sousTitre={sousTitre || t("sousTitre")}
         />
 
         <div className={cn(
           "grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 transition-all duration-700",
           isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
         )}>
-          {FEATURED.map((real) => (
+          {realisations.map((real) => (
             <Link key={real.slug} href={`/realisations/${real.slug}`}>
               <Card variant="realisation" className="h-full group cursor-pointer">
                 <div className="h-40 bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center">

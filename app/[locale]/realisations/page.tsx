@@ -16,11 +16,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const DEMO_REALISATIONS: Realisation[] = [
-  { id: "demo-1", titre: "Carquefou (44) — Mobilité autonome", ville: "Carquefou", departement: "44", annee: 2025, typologieQuai: "6 stations — 9ml à 16ml", contexte: "Service expérimental mobilité autonome.", longueurMl: 72, nbStations: 6, slug: "carquefou-44-mobilite-autonome" },
-  { id: "demo-2", titre: "Strasbourg (67) — Réseau CTS", ville: "Strasbourg", departement: "67", annee: 2024, typologieQuai: "12 arrêts — 12ml", contexte: "Mise en accessibilité de 12 arrêts.", longueurMl: 144, nbStations: 12, slug: "strasbourg-67-cts-accessibilite" },
-  { id: "demo-3", titre: "Uckange (57) — Quai provisoire", ville: "Uckange", departement: "57", annee: 2024, typologieQuai: "2 stations — 12ml", contexte: "Quais provisoires centre-ville.", longueurMl: 24, nbStations: 2, slug: "uckange-57-quai-provisoire" },
-  { id: "demo-4", titre: "Lyon (69) — BHNS C3", ville: "Lyon", departement: "69", annee: 2023, typologieQuai: "8 stations — 15ml", contexte: "Quais en île ligne C3 BHNS.", longueurMl: 120, nbStations: 8, slug: "lyon-69-bhns-c3" },
-  { id: "demo-5", titre: "Nantes (44) — Place du Commerce", ville: "Nantes", departement: "44", annee: 2024, typologieQuai: "6 arrêts — 12ml", contexte: "Quais modulaires multimodaux.", longueurMl: 72, nbStations: 6, slug: "nantes-44-place-commerce" },
+  { id: "demo-1", titre: "Carquefou (44) — Mobilité autonome", ville: "Carquefou", departement: "44", annee: 2025, typologieQuai: "6 stations — 9ml à 16ml", contexte: "Service expérimental mobilité autonome.", longueurMl: 72, nbStations: 6, slug: "carquefou-44-mobilite-autonome", featured: false },
+  { id: "demo-2", titre: "Strasbourg (67) — Réseau CTS", ville: "Strasbourg", departement: "67", annee: 2024, typologieQuai: "12 arrêts — 12ml", contexte: "Mise en accessibilité de 12 arrêts.", longueurMl: 144, nbStations: 12, slug: "strasbourg-67-cts-accessibilite", featured: false },
+  { id: "demo-3", titre: "Uckange (57) — Quai provisoire", ville: "Uckange", departement: "57", annee: 2024, typologieQuai: "2 stations — 12ml", contexte: "Quais provisoires centre-ville.", longueurMl: 24, nbStations: 2, slug: "uckange-57-quai-provisoire", featured: false },
+  { id: "demo-4", titre: "Lyon (69) — BHNS C3", ville: "Lyon", departement: "69", annee: 2023, typologieQuai: "8 stations — 15ml", contexte: "Quais en île ligne C3 BHNS.", longueurMl: 120, nbStations: 8, slug: "lyon-69-bhns-c3", featured: false },
+  { id: "demo-5", titre: "Nantes (44) — Place du Commerce", ville: "Nantes", departement: "44", annee: 2024, typologieQuai: "6 arrêts — 12ml", contexte: "Quais modulaires multimodaux.", longueurMl: 72, nbStations: 6, slug: "nantes-44-place-commerce", featured: false },
 ];
 
 async function getRealisations(): Promise<Realisation[]> {

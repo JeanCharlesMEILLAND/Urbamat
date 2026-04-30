@@ -4,18 +4,22 @@ import { prisma } from "@/lib/prisma";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { DeleteButton } from "@/components/admin/DeleteButton";
+import { FeaturedToggle } from "@/components/admin/FeaturedToggle";
 
 export default async function AdminRealisationsPage() {
   const realisations = await prisma.realisation.findMany({
-    orderBy: { annee: "desc" },
+    orderBy: [{ featured: "desc" }, { annee: "desc" }],
   });
+  const featuredCount = realisations.filter((r) => r.featured).length;
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-neutral-dark">Réalisations</h1>
-          <p className="text-sm text-gray-500 mt-1">{realisations.length} réalisation(s)</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {realisations.length} réalisation(s) — <span className="text-amber-600">{featuredCount} en avant sur la home</span>
+          </p>
         </div>
         <Button href="/admin/realisations/new" size="sm">
           <Plus size={16} className="mr-2" />
@@ -37,6 +41,7 @@ export default async function AdminRealisationsPage() {
             <table className="w-full text-sm min-w-[700px]">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50">
+                  <th className="text-left px-4 py-3 font-medium text-gray-500" title="Mise en avant sur la home">★</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Titre</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Ville</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500">Typologie</th>
@@ -49,6 +54,14 @@ export default async function AdminRealisationsPage() {
               <tbody className="divide-y divide-gray-50">
                 {realisations.map((r) => (
                   <tr key={r.id} className="hover:bg-gray-50">
+                    <td className="px-2 py-3">
+                      <FeaturedToggle
+                        id={r.id}
+                        initial={r.featured}
+                        endpoint="/api/admin/realisations"
+                        method="PUT"
+                      />
+                    </td>
                     <td className="px-4 py-3 font-medium text-neutral-dark">{r.titre}</td>
                     <td className="px-4 py-3 text-gray-600">{r.ville} ({r.departement})</td>
                     <td className="px-4 py-3">

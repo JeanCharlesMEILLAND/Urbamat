@@ -17,11 +17,16 @@ const FOOTER_RESOURCE_LINKS = [
   { key: "contact", href: "/contact" },
 ] as const;
 
-export function Footer() {
+interface FooterProps {
+  /** Description CMS (sous le logo) — fallback i18n si non définie */
+  description?: string;
+}
+
+export function Footer({ description }: FooterProps = {}) {
   const t = useTranslations("footer");
 
   return (
-    <footer className="bg-neutral-dark text-gray-300" role="contentinfo">
+    <footer id="footer" className="bg-neutral-dark text-gray-300" role="contentinfo">
       <Container>
         <div className="py-12 lg:py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -37,9 +42,16 @@ export function Footer() {
                   className="h-7 w-auto brightness-0 invert"
                 />
               </Link>
-              <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                {t("description")}
-              </p>
+              {description ? (
+                <div
+                  className="mt-4 text-sm leading-relaxed text-gray-400 [&_p]:mb-2 [&_strong]:text-gray-200"
+                  dangerouslySetInnerHTML={{ __html: description }}
+                />
+              ) : (
+                <p className="mt-4 text-sm leading-relaxed text-gray-400">
+                  {t("description")}
+                </p>
+              )}
               <p className="mt-4 text-sm font-medium text-gray-400">
                 {t("solution", { company: SITE_CONFIG.company })}
               </p>

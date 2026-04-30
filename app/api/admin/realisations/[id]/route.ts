@@ -13,6 +13,7 @@ const updateSchema = z.object({
   contexte: z.string().min(1).optional(),
   longueurMl: z.number().positive().optional(),
   nbStations: z.number().int().positive().optional(),
+  featured: z.boolean().optional(),
 });
 
 async function requireAuth() {

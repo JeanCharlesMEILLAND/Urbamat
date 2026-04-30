@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SITE_CONFIG } from "@/lib/constants";
 import { routing, type Locale } from "@/i18n/routing";
+import { getCmsOverrides } from "@/lib/cms";
 import "../globals.css";
 
 const inter = Inter({
@@ -83,14 +84,27 @@ export default async function LocaleLayout({ children, params }: Props) {
   setRequestLocale(locale);
 
   const messages = await getMessages();
+  const layoutCms = await getCmsOverrides("layout", locale);
 
   return (
     <html lang={locale} className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased min-h-screen flex flex-col" suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
-          <Header />
+          <Header
+            logoUrl={layoutCms.navbar_logo}
+            labels={{
+              concept: layoutCms.navbar_concept,
+              produit: layoutCms.navbar_produit,
+              configurateur: layoutCms.navbar_configurateur,
+              apropos: layoutCms.navbar_apropos,
+              telechargements: layoutCms.navbar_telechargements,
+              contact: layoutCms.navbar_contact,
+              devis: layoutCms.navbar_devis_cta,
+            }}
+            devisUrl={layoutCms.navbar_devis_url}
+          />
           <main className="flex-1">{children}</main>
-          <Footer />
+          <Footer description={layoutCms.footer_description} />
         </NextIntlClientProvider>
       </body>
     </html>

@@ -62,13 +62,15 @@ export function QuaiAssemblyAnimation({
   const resetCamRef = useRef<() => void>(() => {});
   const togglePauseRef = useRef<() => void>(() => {});
   const seekRef = useRef<(t01: number) => void>(() => {});
-  // Presets caméra persistés en ref + localStorage (survit aux refresh + StrictMode)
+  // Presets caméra : source de vérité = BDD (table CamPreset) pour que tous les
+  // visiteurs voient la même séquence cinématique. localStorage sert juste de
+  // cache rapide pour éviter un flash au remount.
   type CamKeyframeData = {
     position: { x: number; y: number; z: number };
     target: { x: number; y: number; z: number };
   };
-  const STORAGE_KEY = "urbaquai_concept_cam_presets_v1";
-  const loadCamPresets = (): Record<CamPhase, CamKeyframeData | null> => {
+  const STORAGE_KEY = "urbaquai_concept_cam_presets_v1"; // cache local
+  const loadFromCache = (): Record<CamPhase, CamKeyframeData | null> => {
     if (typeof window === "undefined") {
       return { assembly: null, arrival: null, hold: null, departure: null };
     }
@@ -86,7 +88,56 @@ export function QuaiAssemblyAnimation({
       return { assembly: null, arrival: null, hold: null, departure: null };
     }
   };
-  const camPresetsRef = useRef<Record<CamPhase, CamKeyframeData | null>>(loadCamPresets());
+  // Démarre avec le cache local pour éviter un flash sans caméra animée. Sera
+  // remplacé par les données serveur dès qu'elles arrivent.
+  const camPresetsRef = useRef<Record<CamPhase, CamKeyframeData | null>>(loadFromCache());
+  const [presetsLoaded, setPresetsLoaded] = useState(false);
+
+  // Charge les presets depuis le serveur au mount. Auto-migre le localStorage
+  // vers la BDD si la BDD est vide et le cache local contient des données
+  // (cas du dev qui avait déjà sauvegardé sa séquence avant la migration BDD).
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/cam-presets", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then(async (data: Record<CamPhase, CamKeyframeData | null> | null) => {
+        if (cancelled || !data) {
+          setPresetsLoaded(true);
+          return;
+        }
+        const cache = camPresetsRef.current;
+        const dbHasAnything = Object.values(data).some((v) => v !== null);
+        const cacheHasAnything = Object.values(cache).some((v) => v !== null);
+
+        if (dbHasAnything) {
+          // BDD prioritaire : tous les visiteurs voient la même séquence.
+          camPresetsRef.current = data;
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          }
+        } else if (cacheHasAnything) {
+          // BDD vide + cache rempli → on tente la migration. Si l'admin n'est
+          // pas connecté, le PUT renverra 401 et on garde juste le cache local.
+          try {
+            const res = await fetch("/api/cam-presets", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ batch: cache }),
+            });
+            if (res.ok) {
+              console.log("[cam-presets] migrated localStorage → BDD");
+            }
+          } catch {
+            /* offline ou pas admin — pas grave, on garde le cache */
+          }
+        }
+        setPresetsLoaded(true);
+      })
+      .catch(() => setPresetsLoaded(true));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const [hasStarted, setHasStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [seekT01, setSeekT01] = useState(0);
@@ -104,6 +155,11 @@ export function QuaiAssemblyAnimation({
   const isInHoldPhase = seekT01 >= phaseMarkers.s3 && seekT01 < phaseMarkers.s4;
 
   useEffect(() => {
+    // Attend que les presets caméra soient chargés depuis la BDD avant
+    // d'initialiser la scène Three.js, sinon la séquence cinématique
+    // démarrerait avec des valeurs vides puis sauterait au moment du fetch.
+    if (!presetsLoaded) return;
+
     const container = containerRef.current;
     if (!container) return;
 
@@ -806,13 +862,32 @@ export function QuaiAssemblyAnimation({
     };
 
     saveCamRef.current = (phase) => {
-      camPresets[phase] = {
+      const keyframe = {
         position: fromVec3(camera.position),
         target: fromVec3(controls.target),
       };
+      camPresets[phase] = keyframe;
       persistCamPresets();
       setSavedPhases((prev) => ({ ...prev, [phase]: true }));
-      console.log("[camera saved]", phase, camPresets[phase]);
+      // Push aussi en BDD pour que tous les visiteurs aient la même séquence.
+      // Si l'admin n'est pas connecté, le PUT sera 401 et seul le cache local
+      // sera mis à jour — c'est OK pour les sessions de tuning.
+      fetch("/api/cam-presets", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phase, keyframe }),
+      })
+        .then((r) => {
+          if (r.ok) {
+            console.log("[camera saved → DB]", phase);
+          } else if (r.status === 401) {
+            console.warn("[camera saved → local only — connecte-toi à /admin pour pousser en BDD]");
+          }
+        })
+        .catch(() => {
+          /* offline — cache local seulement */
+        });
+      console.log("[camera saved]", phase, keyframe);
     };
     resetCamRef.current = () => {
       camPresets.assembly = null;
@@ -821,6 +896,8 @@ export function QuaiAssemblyAnimation({
       camPresets.departure = null;
       persistCamPresets();
       setSavedPhases({ assembly: false, arrival: false, hold: false, departure: false });
+      // Vide aussi la BDD (admin requis)
+      fetch("/api/cam-presets", { method: "DELETE" }).catch(() => {});
     };
 
     // Lerp utilitaires
@@ -1165,7 +1242,7 @@ export function QuaiAssemblyAnimation({
         }
       });
     };
-  }, [coloris, loop]);
+  }, [coloris, loop, presetsLoaded]);
 
   const handlePlay = () => {
     setHasStarted(true);

@@ -13,7 +13,18 @@ const LOCALE_FLAGS: Record<string, string> = {
   de: "🇩🇪",
 };
 
-export function LanguageSwitcher() {
+const DEFAULT_LABELS: Record<string, string> = {
+  fr: "Français",
+  en: "English",
+  de: "Deutsch",
+};
+
+interface LanguageSwitcherProps {
+  /** Libellés CMS personnalisés pour chaque langue (override des défauts) */
+  labels?: { fr?: string; en?: string; de?: string };
+}
+
+export function LanguageSwitcher({ labels }: LanguageSwitcherProps = {}) {
   const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
@@ -67,7 +78,7 @@ export function LanguageSwitcher() {
               )}
             >
               <span className="text-base">{LOCALE_FLAGS[loc]}</span>
-              <span>{loc === "fr" ? "Français" : loc === "en" ? "English" : "Deutsch"}</span>
+              <span>{labels?.[loc as "fr" | "en" | "de"] || DEFAULT_LABELS[loc] || loc}</span>
             </button>
           ))}
         </div>

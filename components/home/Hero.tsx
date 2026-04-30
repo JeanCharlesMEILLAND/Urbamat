@@ -10,9 +10,10 @@ export async function Hero() {
   const titre = cms.hero_titre || t("titre");
   const description = cms.hero_description || t("description");
   const eyebrow = cms.hero_sous_titre || t("sousTitre");
+  const logo = cms.hero_logo || "/images/logo-urbaquai.png";
 
   return (
-    <section className="relative overflow-hidden bg-surface">
+    <section id="hero" className="relative overflow-hidden bg-surface scroll-mt-24">
       <div className="absolute inset-x-0 top-0 h-[480px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent-100/60 via-surface to-surface" />
       <div className="absolute -top-32 -right-24 h-96 w-96 rounded-full bg-accent/15 blur-3xl" />
       <div className="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-accent-200/40 blur-3xl" />
@@ -22,7 +23,7 @@ export async function Hero() {
           <div className="mb-10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/images/logo-urbaquai.png"
+              src={logo}
               alt="URBAQUAI®"
               className="h-16 lg:h-20 w-auto mx-auto"
             />
